@@ -1,0 +1,54 @@
+# Sources: bls.gov/schedule/news_release (cpi, ppi, empsit) and federalreserve.gov FOMC calendar, read 2026-11-04.
+# Times are US Eastern. FOMC = statement on the meeting's 2nd day. Refresh before Dec 2027; dates can change.
+datetime_et,event,impact
+2026-11-06 08:30,NFP (Employment Situation),high
+2026-11-10 08:30,CPI,high
+2026-11-13 08:30,PPI,high
+2026-12-04 08:30,NFP (Employment Situation),high
+2026-12-09 14:00,FOMC rate decision,high
+2026-12-10 08:30,CPI,high
+2026-12-15 08:30,PPI,high
+2027-01-08 08:30,NFP (Employment Situation),high
+2027-01-13 08:30,CPI,high
+2027-01-14 08:30,PPI,high
+2027-01-27 14:00,FOMC rate decision,high
+2027-02-05 08:30,NFP (Employment Situation),high
+2027-02-11 08:30,CPI,high
+2027-02-12 08:30,PPI,high
+2027-03-05 08:30,NFP (Employment Situation),high
+2027-03-10 08:30,CPI,high
+2027-03-12 08:30,PPI,high
+2027-03-17 14:00,FOMC rate decision,high
+2027-04-02 08:30,NFP (Employment Situation),high
+2027-04-13 08:30,CPI,high
+2027-04-14 08:30,PPI,high
+2027-04-28 14:00,FOMC rate decision,high
+2027-05-07 08:30,NFP (Employment Situation),high
+2027-05-12 08:30,CPI,high
+2027-05-13 08:30,PPI,high
+2027-06-04 08:30,NFP (Employment Situation),high
+2027-06-09 14:00,FOMC rate decision,high
+2027-06-10 08:30,CPI,high
+2027-06-11 08:30,PPI,high
+2027-07-02 08:30,NFP (Employment Situation),high
+2027-07-14 08:30,CPI,high
+2027-07-15 08:30,PPI,high
+2027-07-28 14:00,FOMC rate decision,high
+2027-08-06 08:30,NFP (Employment Situation),high
+2027-08-10 08:30,PPI,high
+2027-08-11 08:30,CPI,high
+2027-09-03 08:30,NFP (Employment Situation),high
+2027-09-10 08:30,PPI,high
+2027-09-14 08:30,CPI,high
+2027-09-15 14:00,FOMC rate decision,high
+2027-10-08 08:30,NFP (Employment Situation),high
+2027-10-14 08:30,CPI,high
+2027-10-15 08:30,PPI,high
+2027-10-27 14:00,FOMC rate decision,high
+2027-11-05 08:30,NFP (Employment Situation),high
+2027-11-10 08:30,CPI,high
+2027-11-12 08:30,PPI,high
+2027-12-03 08:30,NFP (Employment Situation),high
+2027-12-08 14:00,FOMC rate decision,high
+2027-12-10 08:30,CPI,high
+2027-12-15 08:30,PPI,high

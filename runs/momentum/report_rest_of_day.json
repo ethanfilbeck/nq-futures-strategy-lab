@@ -1,0 +1,82 @@
+{
+  "variant": "rest_of_day",
+  "edge_1tick": {
+    "trades": 1277,
+    "net_profit": -2610.98,
+    "win_rate_pct": 44.8,
+    "profit_factor": 0.93,
+    "avg_win": 60.42,
+    "avg_loss": -52.73,
+    "expectancy_per_trade": -2.04,
+    "avg_r": -0.026,
+    "max_drawdown_usd": -6292.8,
+    "max_drawdown_pct": -6.07,
+    "sharpe_daily_ann": -0.43,
+    "sortino_daily_ann": -0.81,
+    "commissions": 1583.48,
+    "ending_equity": 97389.02
+  },
+  "gross_before_commissions": -1027.5,
+  "t_stat_net": -0.97,
+  "post_publication_net": -4211.2,
+  "positive_full_years": "3 of 6",
+  "edge_2tick": {
+    "trades": 1277,
+    "net_profit": -3887.98,
+    "win_rate_pct": 44.1,
+    "profit_factor": 0.9,
+    "avg_win": 60.38,
+    "avg_loss": -53.06,
+    "expectancy_per_trade": -3.04,
+    "avg_r": -0.043,
+    "max_drawdown_usd": -6915.7,
+    "max_drawdown_pct": -6.71,
+    "sharpe_daily_ann": -0.64,
+    "sortino_daily_ann": -1.21,
+    "commissions": 1583.48,
+    "ending_equity": 96112.02
+  },
+  "account_10k_default": {
+    "trades": 238,
+    "net_profit": 181.38,
+    "win_rate_pct": 41.2,
+    "profit_factor": 1.05,
+    "avg_win": 39.16,
+    "avg_loss": -26.11,
+    "expectancy_per_trade": 0.76,
+    "avg_r": 0.036,
+    "max_drawdown_usd": -1142.56,
+    "max_drawdown_pct": -10.09,
+    "sharpe_daily_ann": 0.24,
+    "sortino_daily_ann": 0.85,
+    "commissions": 295.12,
+    "ending_equity": 10181.38
+  },
+  "plain_stats_before_costs": {
+    "days": 1534,
+    "corr": 0.0662,
+    "ols_slope": 0.01827,
+    "sign_hit_rate_pct": 50.59
+  },
+  "monte_carlo": {
+    "runs": 5000,
+    "p_losing": 84.4,
+    "net_p5": -6984.63,
+    "net_p50": -2613.98,
+    "net_p95": 1689.72,
+    "max_dd_pct_p50": -4.33,
+    "max_dd_pct_p95_worst": -7.92
+  },
+  "exit_kinds": {
+    "flatten": 864,
+    "stop": 413
+  },
+  "pass_checks": {
+    "1_profit_factor_ge_1.20": false,
+    "2_t_stat_ge_2.5": false,
+    "3a_positive_years_ge_4_of_6": false,
+    "3b_post_publication_net_positive": "False",
+    "4_positive_at_2_ticks": false
+  },
+  "PASS": false
+}

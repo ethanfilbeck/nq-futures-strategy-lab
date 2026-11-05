@@ -1,0 +1,9 @@
+pandas>=2.1
+numpy>=1.26
+PyYAML>=6.0
+python-dotenv>=1.0
+pytest>=8.0
+# real-time paper/live trading via Interactive Brokers (TWS or IB Gateway must be running)
+ib_async>=1.0
+# historical CME data download (needs DATABENTO_API_KEY)
+databento>=0.40

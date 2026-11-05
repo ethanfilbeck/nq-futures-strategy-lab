@@ -1,0 +1,528 @@
+2026-11-04 21:15:58,798 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 60.5 pts vs ATR 5.6
+2026-11-04 21:15:58,799 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.8 pts vs ATR 2.6
+2026-11-04 21:15:58,860 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.0 pts vs ATR 1.9
+2026-11-04 21:15:58,861 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.2 pts vs ATR 4.3
+2026-11-04 21:15:58,975 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 70.5 pts vs ATR 7.2
+2026-11-04 21:15:58,976 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.5 pts vs ATR 4.1
+2026-11-04 21:15:59,169 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.8 pts vs ATR 3.2
+2026-11-04 21:15:59,336 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.0 pts vs ATR 1.7
+2026-11-04 21:15:59,417 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:15:59,450 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 11.2 pts vs ATR 1.6
+2026-11-04 21:15:59,457 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.5 pts vs ATR 2.6
+2026-11-04 21:15:59,458 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.5 pts vs ATR 2.8
+2026-11-04 21:15:59,699 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:15:59,834 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:15:59,839 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.0 pts vs ATR 2.8
+2026-11-04 21:15:59,964 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.5 pts vs ATR 4.4
+2026-11-04 21:16:00,005 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:00,007 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 24.0 pts vs ATR 3.9
+2026-11-04 21:16:00,187 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.5 pts vs ATR 3.4
+2026-11-04 21:16:00,238 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:00,342 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.5 pts vs ATR 2.6
+2026-11-04 21:16:00,420 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.0 pts vs ATR 2.4
+2026-11-04 21:16:00,522 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.5 pts vs ATR 3.6
+2026-11-04 21:16:00,532 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.2 pts vs ATR 2.0
+2026-11-04 21:16:00,567 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.0 pts vs ATR 3.5
+2026-11-04 21:16:00,670 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 66.0 pts vs ATR 8.3
+2026-11-04 21:16:00,683 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.8 pts vs ATR 1.7
+2026-11-04 21:16:00,729 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.0 pts vs ATR 1.5
+2026-11-04 21:16:00,838 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 27.2 pts vs ATR 3.9
+2026-11-04 21:16:00,848 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.5 pts vs ATR 4.3
+2026-11-04 21:16:00,917 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:00,918 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.8 pts vs ATR 2.4
+2026-11-04 21:16:01,244 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 40.0 pts vs ATR 5.6
+2026-11-04 21:16:01,394 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.8 pts vs ATR 4.7
+2026-11-04 21:16:01,422 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 24.5 pts vs ATR 3.8
+2026-11-04 21:16:01,424 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 43.0 pts vs ATR 6.9
+2026-11-04 21:16:01,425 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.2 pts vs ATR 2.8
+2026-11-04 21:16:01,589 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.5 pts vs ATR 2.5
+2026-11-04 21:16:01,589 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.8 pts vs ATR 1.2
+2026-11-04 21:16:01,595 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.0 pts vs ATR 5.9
+2026-11-04 21:16:01,683 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 72.8 pts vs ATR 10.4
+2026-11-04 21:16:01,745 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.2 pts vs ATR 3.1
+2026-11-04 21:16:01,756 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.0 pts vs ATR 1.7
+2026-11-04 21:16:01,794 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.8 pts vs ATR 2.2
+2026-11-04 21:16:01,819 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.8 pts vs ATR 1.8
+2026-11-04 21:16:01,820 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 46.8 pts vs ATR 4.9
+2026-11-04 21:16:01,852 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.0 pts vs ATR 5.6
+2026-11-04 21:16:01,986 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:02,001 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.8 pts vs ATR 7.4
+2026-11-04 21:16:02,080 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.0 pts vs ATR 5.5
+2026-11-04 21:16:02,081 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.0 pts vs ATR 4.1
+2026-11-04 21:16:02,241 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.0 pts vs ATR 2.1
+2026-11-04 21:16:02,317 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.0 pts vs ATR 1.9
+2026-11-04 21:16:02,423 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 37.0 pts vs ATR 5.2
+2026-11-04 21:16:02,459 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.2 pts vs ATR 5.3
+2026-11-04 21:16:02,460 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.8 pts vs ATR 2.9
+2026-11-04 21:16:02,623 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.8 pts vs ATR 4.9
+2026-11-04 21:16:02,623 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.2 pts vs ATR 4.8
+2026-11-04 21:16:02,645 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.8 pts vs ATR 2.8
+2026-11-04 21:16:02,673 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.8 pts vs ATR 2.6
+2026-11-04 21:16:02,697 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.8 pts vs ATR 4.6
+2026-11-04 21:16:02,788 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:02,811 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.8 pts vs ATR 5.1
+2026-11-04 21:16:02,898 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.5 pts vs ATR 4.9
+2026-11-04 21:16:02,924 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.0 pts vs ATR 4.5
+2026-11-04 21:16:02,938 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.2 pts vs ATR 5.6
+2026-11-04 21:16:02,991 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.2 pts vs ATR 5.9
+2026-11-04 21:16:02,991 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 30.8 pts vs ATR 4.7
+2026-11-04 21:16:03,070 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:03,098 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.2 pts vs ATR 1.7
+2026-11-04 21:16:03,362 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:03,393 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 20.0 pts vs ATR 3.2
+2026-11-04 21:16:03,581 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.2 pts vs ATR 1.1
+2026-11-04 21:16:03,582 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.2 pts vs ATR 2.8
+2026-11-04 21:16:03,585 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.8 pts vs ATR 3.8
+2026-11-04 21:16:03,626 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.2 pts vs ATR 3.5
+2026-11-04 21:16:03,627 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.2 pts vs ATR 1.8
+2026-11-04 21:16:03,737 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.0 pts vs ATR 4.2
+2026-11-04 21:16:03,739 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 14.2 pts vs ATR 2.1
+2026-11-04 21:16:04,263 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.8 pts vs ATR 3.6
+2026-11-04 21:16:04,335 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:04,425 WARNING nq_bot.risk: HALT (rest of day): 2 consecutive losses
+2026-11-04 21:16:04,426 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.2 pts vs ATR 4.0
+2026-11-04 21:16:04,467 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.8 pts vs ATR 2.1
+2026-11-04 21:16:04,497 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.0 pts vs ATR 4.4
+2026-11-04 21:16:04,498 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.0 pts vs ATR 2.9
+2026-11-04 21:16:04,536 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.0 pts vs ATR 2.9
+2026-11-04 21:16:04,538 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 10.8 pts vs ATR 1.4
+2026-11-04 21:16:04,680 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 10.8 pts vs ATR 1.7
+2026-11-04 21:16:04,691 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 9.8 pts vs ATR 1.6
+2026-11-04 21:16:04,694 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.2 pts vs ATR 1.1
+2026-11-04 21:16:04,697 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 20.5 pts vs ATR 2.9
+2026-11-04 21:16:04,710 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.0 pts vs ATR 1.9
+2026-11-04 21:16:04,758 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.2 pts vs ATR 1.9
+2026-11-04 21:16:04,762 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 18.0 pts vs ATR 2.6
+2026-11-04 21:16:04,840 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 10.5 pts vs ATR 1.6
+2026-11-04 21:16:04,860 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 41.2 pts vs ATR 5.1
+2026-11-04 21:16:05,004 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.8 pts vs ATR 2.0
+2026-11-04 21:16:05,013 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 3.0 pts vs ATR 0.5
+2026-11-04 21:16:05,015 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 5.5 pts vs ATR 0.9
+2026-11-04 21:16:05,016 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 8.2 pts vs ATR 1.2
+2026-11-04 21:16:05,130 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.8 pts vs ATR 1.3
+2026-11-04 21:16:05,147 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.0 pts vs ATR 5.2
+2026-11-04 21:16:05,193 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 13.5 pts vs ATR 2.2
+2026-11-04 21:16:05,242 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.8 pts vs ATR 3.6
+2026-11-04 21:16:05,306 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.2 pts vs ATR 2.6
+2026-11-04 21:16:05,342 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.5 pts vs ATR 4.2
+2026-11-04 21:16:05,397 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 8.8 pts vs ATR 1.4
+2026-11-04 21:16:05,398 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.0 pts vs ATR 1.0
+2026-11-04 21:16:05,471 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 11.8 pts vs ATR 1.5
+2026-11-04 21:16:05,514 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.8 pts vs ATR 3.2
+2026-11-04 21:16:05,588 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.0 pts vs ATR 2.8
+2026-11-04 21:16:05,597 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 68.2 pts vs ATR 9.2
+2026-11-04 21:16:05,798 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.8 pts vs ATR 9.4
+2026-11-04 21:16:05,882 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.5 pts vs ATR 4.9
+2026-11-04 21:16:05,987 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.5 pts vs ATR 3.7
+2026-11-04 21:16:06,260 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.8 pts vs ATR 2.6
+2026-11-04 21:16:06,340 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.5 pts vs ATR 3.0
+2026-11-04 21:16:06,627 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.8 pts vs ATR 2.2
+2026-11-04 21:16:06,774 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.8 pts vs ATR 2.9
+2026-11-04 21:16:06,804 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.8 pts vs ATR 2.7
+2026-11-04 21:16:06,807 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.2 pts vs ATR 6.2
+2026-11-04 21:16:07,027 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 41.8 pts vs ATR 6.8
+2026-11-04 21:16:07,468 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 130.5 pts vs ATR 18.6
+2026-11-04 21:16:07,469 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 1.0 pts vs ATR 0.1
+2026-11-04 21:16:07,645 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 7.8 pts vs ATR 0.6
+2026-11-04 21:16:07,648 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 62.0 pts vs ATR 6.4
+2026-11-04 21:16:07,719 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 2.8 pts vs ATR 0.2
+2026-11-04 21:16:07,719 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 212.2 pts vs ATR 32.0
+2026-11-04 21:16:07,721 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 0.5 pts vs ATR 0.0
+2026-11-04 21:16:07,808 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 105.0 pts vs ATR 8.6
+2026-11-04 21:16:08,016 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 4.0 pts vs ATR 0.3
+2026-11-04 21:16:08,027 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 37.2 pts vs ATR 2.7
+2026-11-04 21:16:08,055 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.2 pts vs ATR 2.4
+2026-11-04 21:16:08,874 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 89.5 pts vs ATR 10.6
+2026-11-04 21:16:09,426 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.0 pts vs ATR 8.5
+2026-11-04 21:16:09,729 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.2 pts vs ATR 5.3
+2026-11-04 21:16:10,054 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 66.0 pts vs ATR 8.8
+2026-11-04 21:16:10,105 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 74.0 pts vs ATR 7.2
+2026-11-04 21:16:10,105 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.5 pts vs ATR 4.8
+2026-11-04 21:16:10,293 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 63.8 pts vs ATR 9.0
+2026-11-04 21:16:11,804 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.8 pts vs ATR 3.6
+2026-11-04 21:16:12,342 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 27.5 pts vs ATR 4.6
+2026-11-04 21:16:12,566 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 28.2 pts vs ATR 3.7
+2026-11-04 21:16:12,782 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.0 pts vs ATR 9.2
+2026-11-04 21:16:12,917 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 18.2 pts vs ATR 3.0
+2026-11-04 21:16:12,958 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.0 pts vs ATR 3.1
+2026-11-04 21:16:13,626 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.8 pts vs ATR 4.3
+2026-11-04 21:16:14,470 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 24.0 pts vs ATR 3.5
+2026-11-04 21:16:14,480 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 30.5 pts vs ATR 4.4
+2026-11-04 21:16:14,631 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 41.5 pts vs ATR 5.0
+2026-11-04 21:16:14,762 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.0 pts vs ATR 4.0
+2026-11-04 21:16:15,139 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.5 pts vs ATR 6.1
+2026-11-04 21:16:15,157 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.5 pts vs ATR 2.8
+2026-11-04 21:16:15,394 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.0 pts vs ATR 7.4
+2026-11-04 21:16:15,458 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 37.8 pts vs ATR 4.1
+2026-11-04 21:16:15,967 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.2 pts vs ATR 3.7
+2026-11-04 21:16:16,567 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 90.2 pts vs ATR 11.6
+2026-11-04 21:16:17,503 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.2 pts vs ATR 4.3
+2026-11-04 21:16:17,504 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.2 pts vs ATR 6.0
+2026-11-04 21:16:17,700 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.5 pts vs ATR 5.6
+2026-11-04 21:16:18,165 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 42.8 pts vs ATR 5.6
+2026-11-04 21:16:18,379 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.8 pts vs ATR 4.0
+2026-11-04 21:16:18,864 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.8 pts vs ATR 8.8
+2026-11-04 21:16:20,183 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 82.0 pts vs ATR 10.8
+2026-11-04 21:16:20,462 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 53.2 pts vs ATR 6.5
+2026-11-04 21:16:20,569 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.5 pts vs ATR 5.5
+2026-11-04 21:16:20,662 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.2 pts vs ATR 4.5
+2026-11-04 21:16:20,871 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.8 pts vs ATR 6.3
+2026-11-04 21:16:20,876 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 27.5 pts vs ATR 3.5
+2026-11-04 21:16:21,090 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.5 pts vs ATR 3.9
+2026-11-04 21:16:21,614 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 46.5 pts vs ATR 6.3
+2026-11-04 21:16:21,775 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 18.0 pts vs ATR 3.0
+2026-11-04 21:16:21,777 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.2 pts vs ATR 7.3
+2026-11-04 21:16:21,784 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.0 pts vs ATR 4.6
+2026-11-04 21:16:22,158 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 11.5 pts vs ATR 1.8
+2026-11-04 21:16:22,220 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.0 pts vs ATR 3.5
+2026-11-04 21:16:23,197 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 18.8 pts vs ATR 2.7
+2026-11-04 21:16:23,612 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.0 pts vs ATR 4.5
+2026-11-04 21:16:24,583 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 82.8 pts vs ATR 11.7
+2026-11-04 21:16:25,249 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 100.2 pts vs ATR 14.9
+2026-11-04 21:16:25,671 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.2 pts vs ATR 4.6
+2026-11-04 21:16:25,987 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.8 pts vs ATR 2.4
+2026-11-04 21:16:25,988 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.2 pts vs ATR 7.0
+2026-11-04 21:16:27,345 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 10.5 pts vs ATR 1.6
+2026-11-04 21:16:27,359 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 76.8 pts vs ATR 9.9
+2026-11-04 21:16:27,470 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 182.5 pts vs ATR 20.4
+2026-11-04 21:16:27,943 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.2 pts vs ATR 5.9
+2026-11-04 21:16:29,192 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.5 pts vs ATR 3.9
+2026-11-04 21:16:29,307 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 10.0 pts vs ATR 1.5
+2026-11-04 21:16:29,456 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 94.5 pts vs ATR 14.2
+2026-11-04 21:16:29,677 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 24.0 pts vs ATR 3.6
+2026-11-04 21:16:30,121 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 74.5 pts vs ATR 7.5
+2026-11-04 21:16:30,643 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.0 pts vs ATR 4.8
+2026-11-04 21:16:30,929 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 61.2 pts vs ATR 10.0
+2026-11-04 21:16:30,935 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.2 pts vs ATR 3.0
+2026-11-04 21:16:31,163 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.0 pts vs ATR 2.4
+2026-11-04 21:16:31,231 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 27.0 pts vs ATR 3.7
+2026-11-04 21:16:31,335 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.8 pts vs ATR 3.2
+2026-11-04 21:16:31,998 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 55.5 pts vs ATR 7.2
+2026-11-04 21:16:32,084 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 54.0 pts vs ATR 8.2
+2026-11-04 21:16:32,089 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.8 pts vs ATR 5.3
+2026-11-04 21:16:32,270 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.0 pts vs ATR 4.4
+2026-11-04 21:16:32,509 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.8 pts vs ATR 5.1
+2026-11-04 21:16:33,510 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.8 pts vs ATR 3.7
+2026-11-04 21:16:34,246 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 69.5 pts vs ATR 8.4
+2026-11-04 21:16:34,332 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.2 pts vs ATR 5.5
+2026-11-04 21:16:34,395 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.0 pts vs ATR 4.1
+2026-11-04 21:16:34,515 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.5 pts vs ATR 6.0
+2026-11-04 21:16:34,517 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.0 pts vs ATR 7.4
+2026-11-04 21:16:34,644 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 13.8 pts vs ATR 2.3
+2026-11-04 21:16:34,787 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.8 pts vs ATR 4.5
+2026-11-04 21:16:34,883 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 50.2 pts vs ATR 5.6
+2026-11-04 21:16:35,502 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 123.5 pts vs ATR 13.8
+2026-11-04 21:16:35,652 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.5 pts vs ATR 4.2
+2026-11-04 21:16:35,788 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 24.5 pts vs ATR 3.2
+2026-11-04 21:16:36,064 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.0 pts vs ATR 4.3
+2026-11-04 21:16:36,315 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 65.0 pts vs ATR 8.4
+2026-11-04 21:16:36,345 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.0 pts vs ATR 12.6
+2026-11-04 21:16:36,571 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 37.0 pts vs ATR 6.0
+2026-11-04 21:16:37,241 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.5 pts vs ATR 3.6
+2026-11-04 21:16:37,377 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 50.0 pts vs ATR 8.3
+2026-11-04 21:16:37,505 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.8 pts vs ATR 3.6
+2026-11-04 21:16:37,558 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 113.0 pts vs ATR 13.2
+2026-11-04 21:16:38,591 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 178.0 pts vs ATR 29.6
+2026-11-04 21:16:38,733 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 104.5 pts vs ATR 17.2
+2026-11-04 21:16:39,184 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 83.8 pts vs ATR 11.8
+2026-11-04 21:16:39,553 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 89.0 pts vs ATR 13.4
+2026-11-04 21:16:39,648 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 122.5 pts vs ATR 14.9
+2026-11-04 21:16:39,997 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 78.2 pts vs ATR 8.9
+2026-11-04 21:16:40,150 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 73.5 pts vs ATR 11.7
+2026-11-04 21:16:40,737 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.0 pts vs ATR 9.1
+2026-11-04 21:16:40,795 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.8 pts vs ATR 4.9
+2026-11-04 21:16:41,174 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.2 pts vs ATR 6.7
+2026-11-04 21:16:41,271 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 119.5 pts vs ATR 15.1
+2026-11-04 21:16:41,552 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 43.2 pts vs ATR 6.5
+2026-11-04 21:16:42,220 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 68.0 pts vs ATR 9.6
+2026-11-04 21:16:42,475 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 170.8 pts vs ATR 25.7
+2026-11-04 21:16:42,694 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 192.0 pts vs ATR 26.8
+2026-11-04 21:16:42,940 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 28.5 pts vs ATR 3.9
+2026-11-04 21:16:43,062 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.5 pts vs ATR 4.8
+2026-11-04 21:16:44,333 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.0 pts vs ATR 9.1
+2026-11-04 21:16:44,539 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 190.8 pts vs ATR 24.1
+2026-11-04 21:16:44,624 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 108.8 pts vs ATR 16.8
+2026-11-04 21:16:45,437 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.8 pts vs ATR 7.1
+2026-11-04 21:16:45,634 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 51.8 pts vs ATR 7.1
+2026-11-04 21:16:45,682 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.0 pts vs ATR 6.3
+2026-11-04 21:16:45,704 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 53.0 pts vs ATR 6.3
+2026-11-04 21:16:45,708 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.2 pts vs ATR 8.1
+2026-11-04 21:16:45,976 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 161.5 pts vs ATR 19.7
+2026-11-04 21:16:46,166 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.0 pts vs ATR 8.6
+2026-11-04 21:16:46,344 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 41.0 pts vs ATR 5.5
+2026-11-04 21:16:46,683 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 53.0 pts vs ATR 8.2
+2026-11-04 21:16:46,762 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.5 pts vs ATR 4.2
+2026-11-04 21:16:46,939 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 140.0 pts vs ATR 16.1
+2026-11-04 21:16:46,987 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 71.5 pts vs ATR 7.1
+2026-11-04 21:16:47,035 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 242.2 pts vs ATR 32.9
+2026-11-04 21:16:47,523 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 54.0 pts vs ATR 7.6
+2026-11-04 21:16:47,682 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 53.8 pts vs ATR 5.4
+2026-11-04 21:16:47,807 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 85.5 pts vs ATR 10.4
+2026-11-04 21:16:47,914 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 67.2 pts vs ATR 9.7
+2026-11-04 21:16:48,019 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 32.2 pts vs ATR 4.9
+2026-11-04 21:16:48,166 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 130.8 pts vs ATR 16.3
+2026-11-04 21:16:48,675 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 334.0 pts vs ATR 32.6
+2026-11-04 21:16:49,036 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 194.8 pts vs ATR 24.9
+2026-11-04 21:16:49,147 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.8 pts vs ATR 5.7
+2026-11-04 21:16:49,632 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 61.8 pts vs ATR 9.1
+2026-11-04 21:16:49,784 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 20.8 pts vs ATR 3.0
+2026-11-04 21:16:50,156 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 242.0 pts vs ATR 29.9
+2026-11-04 21:16:50,537 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 98.5 pts vs ATR 15.2
+2026-11-04 21:16:50,540 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 151.5 pts vs ATR 18.4
+2026-11-04 21:16:50,610 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 41.5 pts vs ATR 6.4
+2026-11-04 21:16:50,881 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.2 pts vs ATR 6.6
+2026-11-04 21:16:51,097 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 72.0 pts vs ATR 8.6
+2026-11-04 21:16:51,574 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 197.8 pts vs ATR 27.3
+2026-11-04 21:16:51,575 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 150.8 pts vs ATR 18.0
+2026-11-04 21:16:51,990 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 160.2 pts vs ATR 19.7
+2026-11-04 21:16:52,013 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.5 pts vs ATR 6.7
+2026-11-04 21:16:52,193 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 380.2 pts vs ATR 33.8
+2026-11-04 21:16:52,422 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 109.5 pts vs ATR 12.5
+2026-11-04 21:16:53,001 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.8 pts vs ATR 3.0
+2026-11-04 21:16:53,155 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 64.2 pts vs ATR 10.2
+2026-11-04 21:16:53,264 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 125.5 pts vs ATR 14.4
+2026-11-04 21:16:53,268 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 71.2 pts vs ATR 9.5
+2026-11-04 21:16:53,272 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 240.8 pts vs ATR 23.1
+2026-11-04 21:16:53,403 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.8 pts vs ATR 5.1
+2026-11-04 21:16:53,470 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 12.5 pts vs ATR 2.0
+2026-11-04 21:16:53,543 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 100.2 pts vs ATR 13.6
+2026-11-04 21:16:53,672 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 88.5 pts vs ATR 13.9
+2026-11-04 21:16:54,142 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 59.8 pts vs ATR 9.8
+2026-11-04 21:16:54,309 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 90.0 pts vs ATR 10.6
+2026-11-04 21:16:54,503 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.0 pts vs ATR 4.2
+2026-11-04 21:16:54,535 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 187.8 pts vs ATR 23.5
+2026-11-04 21:16:54,865 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 200.0 pts vs ATR 19.5
+2026-11-04 21:16:54,991 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 14.2 pts vs ATR 2.2
+2026-11-04 21:16:54,998 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.5 pts vs ATR 9.5
+2026-11-04 21:16:55,313 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 118.5 pts vs ATR 17.3
+2026-11-04 21:16:55,330 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 48.0 pts vs ATR 7.8
+2026-11-04 21:16:55,698 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 113.5 pts vs ATR 16.6
+2026-11-04 21:16:55,821 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 70.0 pts vs ATR 11.0
+2026-11-04 21:16:55,927 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.0 pts vs ATR 5.1
+2026-11-04 21:16:56,007 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.5 pts vs ATR 4.5
+2026-11-04 21:16:56,179 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 127.5 pts vs ATR 18.2
+2026-11-04 21:16:56,488 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.5 pts vs ATR 8.5
+2026-11-04 21:16:56,969 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.5 pts vs ATR 4.2
+2026-11-04 21:16:57,167 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.5 pts vs ATR 3.2
+2026-11-04 21:16:57,174 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.5 pts vs ATR 6.4
+2026-11-04 21:16:57,260 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 168.0 pts vs ATR 22.5
+2026-11-04 21:16:58,048 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.2 pts vs ATR 11.1
+2026-11-04 21:16:58,558 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.0 pts vs ATR 8.8
+2026-11-04 21:16:58,980 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.8 pts vs ATR 3.0
+2026-11-04 21:16:58,982 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.8 pts vs ATR 7.7
+2026-11-04 21:16:59,061 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 133.8 pts vs ATR 15.5
+2026-11-04 21:16:59,069 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 74.8 pts vs ATR 9.3
+2026-11-04 21:16:59,613 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.8 pts vs ATR 6.3
+2026-11-04 21:16:59,663 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 48.0 pts vs ATR 7.7
+2026-11-04 21:16:59,857 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 15.8 pts vs ATR 2.4
+2026-11-04 21:16:59,987 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 74.5 pts vs ATR 10.2
+2026-11-04 21:16:59,994 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 53.8 pts vs ATR 8.2
+2026-11-04 21:17:00,234 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 75.2 pts vs ATR 9.5
+2026-11-04 21:17:00,406 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 40.0 pts vs ATR 4.9
+2026-11-04 21:17:00,671 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.0 pts vs ATR 2.2
+2026-11-04 21:17:00,727 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 69.2 pts vs ATR 11.1
+2026-11-04 21:17:01,019 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 27.0 pts vs ATR 4.0
+2026-11-04 21:17:01,294 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 13.8 pts vs ATR 2.3
+2026-11-04 21:17:01,295 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 139.0 pts vs ATR 17.4
+2026-11-04 21:17:01,405 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 60.0 pts vs ATR 9.9
+2026-11-04 21:17:01,614 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.8 pts vs ATR 3.9
+2026-11-04 21:17:01,702 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 36.2 pts vs ATR 5.9
+2026-11-04 21:17:01,788 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.5 pts vs ATR 8.0
+2026-11-04 21:17:01,837 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 81.2 pts vs ATR 9.9
+2026-11-04 21:17:01,896 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.2 pts vs ATR 3.9
+2026-11-04 21:17:02,041 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 60.0 pts vs ATR 6.6
+2026-11-04 21:17:02,175 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 86.0 pts vs ATR 12.8
+2026-11-04 21:17:02,361 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 67.8 pts vs ATR 10.9
+2026-11-04 21:17:02,686 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 103.8 pts vs ATR 16.6
+2026-11-04 21:17:02,737 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.8 pts vs ATR 3.6
+2026-11-04 21:17:03,447 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 102.5 pts vs ATR 14.2
+2026-11-04 21:17:03,468 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.5 pts vs ATR 5.3
+2026-11-04 21:17:03,756 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.2 pts vs ATR 7.9
+2026-11-04 21:17:03,820 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 69.8 pts vs ATR 9.1
+2026-11-04 21:17:04,248 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 117.8 pts vs ATR 13.8
+2026-11-04 21:17:04,663 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 65.2 pts vs ATR 10.2
+2026-11-04 21:17:04,993 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 59.8 pts vs ATR 9.6
+2026-11-04 21:17:05,283 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 183.8 pts vs ATR 19.5
+2026-11-04 21:17:05,611 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 51.8 pts vs ATR 8.5
+2026-11-04 21:17:06,616 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 72.2 pts vs ATR 11.1
+2026-11-04 21:17:06,618 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 78.0 pts vs ATR 11.6
+2026-11-04 21:17:06,660 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.5 pts vs ATR 2.8
+2026-11-04 21:17:06,960 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 196.0 pts vs ATR 18.2
+2026-11-04 21:17:07,009 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 55.5 pts vs ATR 8.8
+2026-11-04 21:17:07,203 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.8 pts vs ATR 8.5
+2026-11-04 21:17:07,253 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.2 pts vs ATR 6.1
+2026-11-04 21:17:07,316 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 43.0 pts vs ATR 6.3
+2026-11-04 21:17:07,455 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 108.2 pts vs ATR 15.0
+2026-11-04 21:17:07,540 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 65.0 pts vs ATR 8.7
+2026-11-04 21:17:07,677 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.0 pts vs ATR 4.6
+2026-11-04 21:17:07,991 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.5 pts vs ATR 3.1
+2026-11-04 21:17:07,994 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 31.2 pts vs ATR 4.1
+2026-11-04 21:17:08,140 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 84.8 pts vs ATR 10.7
+2026-11-04 21:17:08,164 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.5 pts vs ATR 2.8
+2026-11-04 21:17:08,479 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 123.0 pts vs ATR 12.6
+2026-11-04 21:17:08,915 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 51.2 pts vs ATR 5.8
+2026-11-04 21:17:09,072 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 69.5 pts vs ATR 11.6
+2026-11-04 21:17:09,149 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 90.2 pts vs ATR 11.4
+2026-11-04 21:17:09,555 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 19.8 pts vs ATR 3.3
+2026-11-04 21:17:09,648 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 155.5 pts vs ATR 15.4
+2026-11-04 21:17:09,654 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 16.0 pts vs ATR 2.7
+2026-11-04 21:17:09,664 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.8 pts vs ATR 6.8
+2026-11-04 21:17:09,670 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.8 pts vs ATR 8.0
+2026-11-04 21:17:09,723 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 93.2 pts vs ATR 13.4
+2026-11-04 21:17:09,761 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 28.2 pts vs ATR 4.0
+2026-11-04 21:17:09,822 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 85.0 pts vs ATR 10.5
+2026-11-04 21:17:10,111 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 116.0 pts vs ATR 16.7
+2026-11-04 21:17:10,190 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 70.0 pts vs ATR 11.0
+2026-11-04 21:17:10,443 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 67.2 pts vs ATR 11.1
+2026-11-04 21:17:10,509 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.0 pts vs ATR 3.8
+2026-11-04 21:17:10,784 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 54.8 pts vs ATR 8.3
+2026-11-04 21:17:11,079 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 110.5 pts vs ATR 13.5
+2026-11-04 21:17:11,184 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 86.8 pts vs ATR 12.0
+2026-11-04 21:17:11,187 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 126.0 pts vs ATR 17.5
+2026-11-04 21:17:11,293 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.2 pts vs ATR 6.9
+2026-11-04 21:17:11,357 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 47.5 pts vs ATR 7.1
+2026-11-04 21:17:11,386 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 26.8 pts vs ATR 3.7
+2026-11-04 21:17:11,844 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.5 pts vs ATR 6.1
+2026-11-04 21:17:12,097 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 129.5 pts vs ATR 20.2
+2026-11-04 21:17:12,103 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 88.0 pts vs ATR 13.5
+2026-11-04 21:17:12,151 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 102.0 pts vs ATR 14.4
+2026-11-04 21:17:12,281 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 83.0 pts vs ATR 9.9
+2026-11-04 21:17:12,382 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 115.0 pts vs ATR 13.6
+2026-11-04 21:17:12,384 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 164.2 pts vs ATR 20.1
+2026-11-04 21:17:12,387 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 33.0 pts vs ATR 5.3
+2026-11-04 21:17:12,781 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 17.2 pts vs ATR 2.3
+2026-11-04 21:17:12,785 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 134.2 pts vs ATR 12.3
+2026-11-04 21:17:12,826 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 132.8 pts vs ATR 15.5
+2026-11-04 21:17:13,369 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 187.0 pts vs ATR 27.1
+2026-11-04 21:17:13,738 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 157.8 pts vs ATR 15.6
+2026-11-04 21:17:14,003 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.0 pts vs ATR 7.4
+2026-11-04 21:17:14,111 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.0 pts vs ATR 10.2
+2026-11-04 21:17:14,186 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 38.2 pts vs ATR 6.3
+2026-11-04 21:17:14,262 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.8 pts vs ATR 6.1
+2026-11-04 21:17:14,362 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 21.0 pts vs ATR 2.7
+2026-11-04 21:17:14,446 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 52.5 pts vs ATR 8.7
+2026-11-04 21:17:14,469 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.0 pts vs ATR 4.6
+2026-11-04 21:17:14,759 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 114.0 pts vs ATR 12.7
+2026-11-04 21:17:14,810 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 95.0 pts vs ATR 11.5
+2026-11-04 21:17:14,813 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 90.5 pts vs ATR 11.9
+2026-11-04 21:17:14,814 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 42.2 pts vs ATR 6.1
+2026-11-04 21:17:14,860 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 56.8 pts vs ATR 7.3
+2026-11-04 21:17:14,921 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 34.8 pts vs ATR 4.9
+2026-11-04 21:17:15,086 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 44.2 pts vs ATR 6.1
+2026-11-04 21:17:15,342 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 162.5 pts vs ATR 20.8
+2026-11-04 21:17:15,468 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 169.0 pts vs ATR 23.1
+2026-11-04 21:17:15,683 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 60.2 pts vs ATR 7.8
+2026-11-04 21:17:15,813 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 80.8 pts vs ATR 12.4
+2026-11-04 21:17:15,951 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 145.8 pts vs ATR 19.5
+2026-11-04 21:17:16,047 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 85.8 pts vs ATR 13.4
+2026-11-04 21:17:16,983 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 196.8 pts vs ATR 25.6
+2026-11-04 21:17:17,162 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 119.5 pts vs ATR 17.5
+2026-11-04 21:17:17,377 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 42.0 pts vs ATR 6.4
+2026-11-04 21:17:17,389 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 49.0 pts vs ATR 6.4
+2026-11-04 21:17:17,390 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 58.0 pts vs ATR 9.4
+2026-11-04 21:17:17,433 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 244.2 pts vs ATR 28.3
+2026-11-04 21:17:18,035 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 102.5 pts vs ATR 13.9
+2026-11-04 21:17:18,088 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 108.2 pts vs ATR 11.9
+2026-11-04 21:17:18,375 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 114.8 pts vs ATR 14.8
+2026-11-04 21:17:18,440 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 43.5 pts vs ATR 6.7
+2026-11-04 21:17:19,020 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 57.8 pts vs ATR 9.6
+2026-11-04 21:17:19,574 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.0 pts vs ATR 7.3
+2026-11-04 21:17:19,666 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 87.5 pts vs ATR 11.5
+2026-11-04 21:17:19,877 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 22.0 pts vs ATR 3.6
+2026-11-04 21:17:19,980 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 177.2 pts vs ATR 20.9
+2026-11-04 21:17:20,808 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 69.8 pts vs ATR 10.1
+2026-11-04 21:17:20,871 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 23.8 pts vs ATR 3.2
+2026-11-04 21:17:20,980 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 74.8 pts vs ATR 11.9
+2026-11-04 21:17:21,049 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 39.5 pts vs ATR 5.7
+2026-11-04 21:17:21,160 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 97.2 pts vs ATR 13.4
+2026-11-04 21:17:21,485 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 35.2 pts vs ATR 5.8
+2026-11-04 21:17:21,664 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 240.0 pts vs ATR 28.7
+2026-11-04 21:17:21,671 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 67.5 pts vs ATR 9.2
+2026-11-04 21:17:21,689 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 176.0 pts vs ATR 22.0
+2026-11-04 21:17:21,740 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 257.5 pts vs ATR 29.6
+2026-11-04 21:17:21,897 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 111.5 pts vs ATR 12.4
+2026-11-04 21:17:22,408 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 67.2 pts vs ATR 8.1
+2026-11-04 21:17:22,498 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 107.5 pts vs ATR 16.0
+2026-11-04 21:17:22,666 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 340.0 pts vs ATR 52.2
+2026-11-04 21:17:23,015 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 133.5 pts vs ATR 15.7
+2026-11-04 21:17:23,050 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 98.5 pts vs ATR 14.5
+2026-11-04 21:17:23,291 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 263.5 pts vs ATR 25.7
+2026-11-04 21:17:23,322 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 87.8 pts vs ATR 13.0
+2026-11-04 21:17:23,567 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 29.5 pts vs ATR 4.7
+2026-11-04 21:17:23,612 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 40.0 pts vs ATR 6.5
+2026-11-04 21:17:23,655 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 226.8 pts vs ATR 26.1
+2026-11-04 21:17:23,682 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 72.2 pts vs ATR 11.9
+2026-11-04 21:17:23,841 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 188.0 pts vs ATR 26.4
+2026-11-04 21:17:24,056 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 201.0 pts vs ATR 23.0
+2026-11-04 21:17:25,255 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 73.8 pts vs ATR 10.8
+2026-11-04 21:17:25,332 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 63.5 pts vs ATR 10.2
+2026-11-04 21:17:25,546 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 426.2 pts vs ATR 67.8
+2026-11-04 21:17:25,698 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 592.2 pts vs ATR 93.4
+2026-11-04 21:17:25,913 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 191.5 pts vs ATR 22.9
+2026-11-04 21:17:26,049 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 164.8 pts vs ATR 26.2
+2026-11-04 21:17:27,096 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 45.2 pts vs ATR 7.0
+2026-11-04 21:17:27,515 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 160.8 pts vs ATR 16.7
+2026-11-04 21:17:27,756 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 133.2 pts vs ATR 13.1
+2026-11-04 21:17:27,835 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 220.0 pts vs ATR 21.0
+2026-11-04 21:17:27,849 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 91.5 pts vs ATR 14.8
+2026-11-04 21:17:28,928 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 130.8 pts vs ATR 16.0
+2026-11-04 21:17:29,098 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 145.0 pts vs ATR 18.1
+2026-11-04 21:17:29,166 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 113.5 pts vs ATR 14.9
+2026-11-04 21:17:29,279 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 25.8 pts vs ATR 4.1
+2026-11-04 21:17:29,280 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 107.0 pts vs ATR 12.5
+2026-11-04 21:17:29,366 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 79.0 pts vs ATR 12.8
+2026-11-04 21:17:29,838 WARNING nq_bot.risk: HALT (rest of day): abnormal bar range 77.2 pts vs ATR 12.3
+
+== Summary ==
+{
+  "trades": 129,
+  "net_profit": -487.96,
+  "win_rate_pct": 30.2,
+  "profit_factor": 0.73,
+  "avg_win": 33.43,
+  "avg_loss": -19.91,
+  "expectancy_per_trade": -3.78,
+  "avg_r": -0.211,
+  "max_drawdown_usd": -513.26,
+  "max_drawdown_pct": -5.12,
+  "sharpe_daily_ann": -2.51,
+  "sortino_daily_ann": -8.91,
+  "commissions": 159.96,
+  "ending_equity": 9512.04
+}
+
+== by_regime ==
+         trades     net   avg  win_rate_pct
+regime                                     
+bearish      61 -294.64 -4.83          29.5
+bullish      68 -193.32 -2.84          30.9
+
+== by_side ==
+      trades     net   avg  win_rate_pct
+side                                    
+-1        61 -294.64 -4.83          29.5
+ 1        68 -193.32 -2.84          30.9
+
+== by_hour ==
+            trades     net    avg  win_rate_pct
+entry_hour                                     
+9               42 -244.58  -5.82          26.2
+10              73  -76.52  -1.05          35.6
+11              14 -166.86 -11.92          14.3
+
+== Monte Carlo (bootstrap of trade P&L) ==
+{
+  "runs": 5000,
+  "p_losing": 95.4,
+  "net_p5": -947.99,
+  "net_p50": -486.46,
+  "net_p95": -10.91,
+  "max_dd_pct_p50": -6.02,
+  "max_dd_pct_p95_worst": -10.11
+}
+
+trades -> runs/bt_default/trades.csv
+
+real	1m48.216s
+user	1m40.072s
+sys	0m1.714s

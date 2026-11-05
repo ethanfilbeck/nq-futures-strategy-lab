@@ -1,0 +1,22 @@
+{"fold": 0, "train_end": "2020-05-11", "test_end": "2021-05-20", "params": {"strategy.opening_range_minutes": 30, "strategy.reward_risk": 2.0, "strategy.max_stop_atr": 1.5}} {"trades": 247, "net_profit": -1479.28, "profit_factor": 0.79, "win_rate_pct": 31.6}
+{"fold": 1, "train_end": "2021-05-20", "test_end": "2022-05-30", "params": {"strategy.opening_range_minutes": 15, "strategy.reward_risk": 2.0, "strategy.max_stop_atr": 1.0}} {"trades": 290, "net_profit": -2272.6, "profit_factor": 0.73, "win_rate_pct": 29.3}
+{"fold": 2, "train_end": "2022-05-30", "test_end": "2023-06-08", "params": {"strategy.opening_range_minutes": 30, "strategy.reward_risk": 1.5, "strategy.max_stop_atr": 1.5}} {"trades": 225, "net_profit": -779.5, "profit_factor": 0.89, "win_rate_pct": 39.1}
+{"fold": 3, "train_end": "2023-06-08", "test_end": "2024-06-18", "params": {"strategy.opening_range_minutes": 30, "strategy.reward_risk": 1.5, "strategy.max_stop_atr": 1.5}} {"trades": 216, "net_profit": -423.84, "profit_factor": 0.92, "win_rate_pct": 39.8}
+{"fold": 4, "train_end": "2024-06-18", "test_end": "2025-06-30", "params": {"strategy.opening_range_minutes": 30, "strategy.reward_risk": 1.5, "strategy.max_stop_atr": 1.5}} {"trades": 226, "net_profit": -1165.24, "profit_factor": 0.87, "win_rate_pct": 39.4}
+OOS: {
+ "trades": 1204,
+ "net_profit": -6120.46,
+ "win_rate_pct": 35.4,
+ "profit_factor": 0.83,
+ "avg_win": 72.41,
+ "avg_loss": -47.52,
+ "expectancy_per_trade": -5.08,
+ "avg_r": -0.102,
+ "max_drawdown_usd": -6622.44,
+ "max_drawdown_pct": -6.61,
+ "sharpe_daily_ann": -1.39,
+ "sortino_daily_ann": -3.31,
+ "commissions": 1492.96,
+ "ending_equity": 93879.54
+}
+DONE

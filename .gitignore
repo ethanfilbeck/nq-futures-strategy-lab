@@ -1,0 +1,33 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# --- market data: Databento data is licensed; do not redistribute ---
+data/
+*.dbn
+*.dbn.zst
+*.parquet
+
+# --- trade-level outputs (contain prices derived from licensed data) ---
+logs/
+runs/**/*.csv
+runs/**/*.jsonl
+runs/bt_default*/
+runs/*trades*.csv
+
+# --- local state written by the bot (may include account-specific info) ---
+risk_state.json
+*.tmp
+
+# --- python / tooling ---
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+_to_delete/
+.vscode/
+.idea/

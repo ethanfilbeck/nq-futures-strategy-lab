@@ -1,0 +1,29 @@
+{
+  "summary": {
+    "trades": 1602,
+    "net_profit": -6720.98,
+    "win_rate_pct": 32.5,
+    "profit_factor": 0.88,
+    "avg_win": 93.29,
+    "avg_loss": -51.18,
+    "expectancy_per_trade": -4.2,
+    "avg_r": -0.077,
+    "max_drawdown_usd": -7537.06,
+    "max_drawdown_pct": -7.54,
+    "sharpe_daily_ann": -0.98,
+    "sortino_daily_ann": -2.23,
+    "commissions": 1986.48,
+    "ending_equity": 93279.02
+  },
+  "monte_carlo": {
+    "runs": 5000,
+    "p_losing": 99.0,
+    "net_p5": -11525.63,
+    "net_p50": -6673.48,
+    "net_p95": -1782.78,
+    "max_dd_pct_p50": -7.76,
+    "max_dd_pct_p95_worst": -12.3
+  },
+  "avg_r": -0.0765792759051186,
+  "median_risk_pts": 55.5
+}
