@@ -1,1 +1,2 @@
 PREREG_INTRADAY_MOMENTUM.md sha256=45d9de1b9b86761a6e50c785d64e3c3e8005ad4708c6df94bf6327427c4ea46f frozen_at=2026-11-04 21:39 CST (before any momentum backtest)
+PREREG_FAMILY2.md sha256=0c2e45cb1db1c7074a75fde0f00343afd887c1e3a24bebda1f8c557aa998e0d0 frozen_at=2026-11-06 12:06 CST (before any family-2 backtest)

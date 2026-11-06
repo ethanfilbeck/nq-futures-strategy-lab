@@ -22,7 +22,7 @@ COLS = ["open", "high", "low", "close", "minute_of_day", "session_date", "rth", 
         "ema_fast", "ema_slow", "ema_slow_slope", "vwap", "or_high", "or_low", "or_mid", "bar_range"]
 
 
-def run_backtest(bars: pd.DataFrame, cfg, journal_dir=None, quiet=True, featured=None) -> dict:
+def run_backtest(bars: pd.DataFrame, cfg, journal_dir=None, quiet=True, featured=None, trade_from=None) -> dict:
     spec = SPECS[cfg.instrument.root]
     feats = featured if featured is not None else add_features(bars, cfg)
     cols = COLS
@@ -31,12 +31,18 @@ def run_backtest(bars: pd.DataFrame, cfg, journal_dir=None, quiet=True, featured
         if "mom_prev_close" not in feats.columns:
             feats = add_momentum_features(feats, cfg)
         cols = COLS + MOM_COLS
+    elif cfg.strategy.name in ("sweep", "vwap_pullback"):
+        from .family2 import F2_COLS, add_family2_features
+        if "pdh" not in feats.columns:
+            feats = add_family2_features(feats, cfg)
+        cols = COLS + F2_COLS
     broker = SimBroker(spec, cfg.instrument.slippage_ticks)
     events = EventCalendar(cfg.events.file, cfg.session.timezone,
                            cfg.events.blackout_before_minutes, cfg.events.blackout_after_minutes)
     eng = Engine(cfg, broker, spec, Journal(journal_dir, enabled=journal_dir is not None),
                  Alerts(enabled=not quiet), events)
 
+    eng.entries_from = trade_from
     records = feats[cols].to_dict("records")
     for ts, row in zip(feats.index, records):
         broker.process_bar(ts, row["open"], row["high"], row["low"], row["close"])

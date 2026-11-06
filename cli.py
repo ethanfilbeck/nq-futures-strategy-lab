@@ -70,6 +70,15 @@ def main():
     f.add_argument("--start", required=True)
     f.add_argument("--end", required=True)
     f.add_argument("--out", required=True)
+    pr = sub.add_parser("paper-live", help="unattended PAPER trading on Databento live 1-minute bars (simulated orders)")
+    pr.add_argument("--strategy", default=None, help="override strategy.name (orb_vwap, sweep, vwap_pullback, intraday_momentum, none)")
+    pr.add_argument("--out", default="logs/paper")
+    rp = sub.add_parser("paper-replay", help="replay real historical sessions through the paper runner")
+    rp.add_argument("--csv", required=True)
+    rp.add_argument("--days", type=int, default=5)
+    rp.add_argument("--strategy", default=None)
+    rp.add_argument("--out", default="logs/paper_replay")
+    sub.add_parser("kill", help="emergency stop for a running paper-live session (creates logs/paper/KILL)")
     sub.add_parser("reset-kill", help="clear the drawdown kill switch after you've reviewed why it fired")
     dp = sub.add_parser("drill", help="IB PAPER drills for the execution mechanics (see docs/PAPER_DRILLS.md)")
     dp.add_argument("action", choices=["status", "bracket", "duplicate", "reconcile", "flatten"])
@@ -114,9 +123,52 @@ def main():
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
         df = fetch_databento(args.symbol, args.start, args.end, out_csv=args.out)
         print(f"saved {len(df):,} bars to {args.out}")
+    elif args.cmd in ("paper-live", "paper-replay"):
+        from nq_bot.config import override
+        from nq_bot.paper import PaperRunner, replay
+        if args.strategy:
+            cfg = override(cfg, {"strategy.name": args.strategy})
+        if cfg.mode != "paper":
+            raise SystemExit("paper commands only run with mode: paper")
+        print(f"SIMULATED ORDERS ONLY. Strategy: {cfg.strategy.name}. Output: {args.out}")
+        if args.cmd == "paper-replay":
+            from nq_bot.data import load_csv
+            import pandas as pd
+            bars = load_csv(args.csv)
+            sessions = sorted({d for d in bars.between_time("09:30", "15:59").index.date})[-args.days:]
+            start = pd.Timestamp(f"{sessions[0]} 00:00", tz=cfg.session.timezone)
+            hist = bars[(bars.index < start) & (bars.index >= start - pd.Timedelta(days=35))]
+            runner = PaperRunner(cfg, hist, args.out)
+            replay(runner, bars[bars.index >= start])
+        else:
+            import os
+            import pandas as pd
+            from nq_bot.contracts import front_month
+            from nq_bot.paper import databento_history, run_databento_live
+            key = os.environ.get("DATABENTO_API_KEY")
+            if not key:
+                raise SystemExit("Set DATABENTO_API_KEY in .env")
+            fm = front_month(cfg.instrument.root, date.today(), cfg.instrument.roll_days_before_expiry)
+            print(f"Contract: {fm.local_symbol} (roll on/after {fm.roll_date}). Loading warm-up history...")
+            hist = databento_history(key, fm.local_symbol)
+            gap = pd.Timestamp.now(tz="UTC") - hist.index[-1].tz_convert("UTC")
+            start = (hist.index[-1] + pd.Timedelta(minutes=1)).tz_convert("UTC").isoformat() if gap < pd.Timedelta(hours=23) else None
+            print(f"History: {len(hist):,} bars to {hist.index[-1]}. Live replay from: {start or 'now'}")
+            runner = PaperRunner(cfg, hist, args.out)
+            if runner.engine.risk.killed_reason:
+                raise SystemExit(f"Kill switch is set ({runner.engine.risk.killed_reason}). Run reset-kill first.")
+            try:
+                run_databento_live(runner, key, fm.local_symbol, start=start)
+            except KeyboardInterrupt:
+                runner.kill("stopped by user (Ctrl+C)")
+    elif args.cmd == "kill":
+        Path("logs/paper").mkdir(parents=True, exist_ok=True)
+        Path("logs/paper/KILL").write_text("emergency stop requested\n")
+        print("KILL file written. The running paper session will flatten and stop within ~5 seconds.")
     elif args.cmd == "reset-kill":
         from nq_bot.live import reset_kill
-        path = Path(cfg.journal.dir) / "risk_state.json"
+        path = Path(input("Which state file? [logs/paper/risk_state.json] ").strip() or "logs/paper/risk_state.json")
+        Path("logs/paper/KILL").unlink(missing_ok=True)
         if input("Type RESET to clear the kill switch: ").strip() == "RESET" and reset_kill(path):
             print("Kill switch cleared. The drawdown limit now measures from your equity at the next start.")
         else:

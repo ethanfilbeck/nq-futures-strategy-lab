@@ -1,0 +1,389 @@
+//@version=6
+// Holdout ORB — TradingView port of nq_bot's opening-range-breakout strategy (MNQ / NQ, 1-minute chart).
+// Same rules and risk limits as config/settings.yaml in https://github.com/ethanfilbeck/nq-futures-strategy-lab
+//
+// RESEARCH / PAPER USE ONLY. This exact strategy FAILED testing on 2019–2025 MNQ data
+// (5-fold walk-forward profit factor 0.83, -$6,120 per contract). Nothing here is trading advice.
+//
+// Use: 1-minute chart of MNQ1! (or NQ1!). Strategy Tester shows the backtest; alerts fire on every
+// entry, partial, exit, flatten and halt (create the alert with "Any alert() function call").
+strategy("Holdout ORB (research / paper)", shorttitle = "Holdout ORB", overlay = true,
+     initial_capital = 10000, currency = currency.USD,
+     default_qty_type = strategy.fixed, default_qty_value = 1,
+     commission_type = strategy.commission.cash_per_contract, commission_value = 0.62,
+     slippage = 1, pyramiding = 0, process_orders_on_close = false, calc_on_every_tick = false,
+     margin_long = 0, margin_short = 0,
+     max_labels_count = 500, max_lines_count = 500)
+
+const string TZ = "America/New_York"
+
+// ───────────────────────── Inputs (defaults = settings.yaml) ─────────────────────────
+gS = "Session (US Eastern)"
+iRthStart  = input.string("09:30", "Regular session start", group = gS)
+iRthEnd    = input.string("16:00", "Regular session end", group = gS)
+iFlatten   = input.string("15:55", "Flatten all positions at", group = gS)
+
+gT = "Strategy"
+iOrMins    = input.int(15, "Opening range (minutes)", minval = 1, group = gT)
+iCutoff    = input.string("11:30", "No new entries after", group = gT)
+iMinOr     = input.float(15.0, "Min opening-range width (points)", group = gT)
+iMaxOr     = input.float(250.0, "Max opening-range width (points)", group = gT)
+iStopAtr   = input.float(1.5, "Max stop distance (× ATR)", group = gT)
+iMinStop   = input.float(8.0, "Min stop distance (points)", group = gT)
+iRR        = input.float(2.0, "Final target (R)", group = gT)
+iPartialR  = input.float(1.0, "Partial profit at (R)", group = gT)
+iPartialF  = input.float(0.5, "Partial fraction (needs ≥2 contracts)", minval = 0.0, maxval = 1.0, group = gT)
+iBE        = input.bool(true, "Move stop to breakeven after partial", group = gT)
+iLong      = input.bool(true, "Allow longs", group = gT)
+iShort     = input.bool(true, "Allow shorts", group = gT)
+
+gF = "Indicators & regime"
+iAtrLen    = input.int(14, "ATR length", group = gF)
+iEmaF      = input.int(20, "Fast EMA", group = gF)
+iEmaS      = input.int(50, "Slow EMA", group = gF)
+iSlopeLb   = input.int(10, "Slow-EMA slope lookback (bars)", group = gF)
+iBaseDays  = input.int(20, "Volatility baseline (sessions, same minute)", group = gF)
+iMinSlope  = input.float(2.0, "Min slow-EMA slope to count as trend (points)", group = gF)
+iHighVol   = input.float(1.8, "High-volatility ratio", group = gF)
+iExtVol    = input.float(3.0, "Extreme-volatility ratio (no trade)", group = gF)
+iLowVol    = input.float(0.5, "Low-volatility ratio (no trade)", group = gF)
+
+gR = "Risk (hard limits)"
+iRiskPct   = input.float(0.5, "Max risk per trade (% of equity)", group = gR)
+iRiskUsd   = input.float(100.0, "Max risk per trade ($)", group = gR)
+iDayLoss   = input.float(250.0, "Max daily loss ($, includes open trade)", group = gR)
+iMaxTrades = input.int(2, "Max trades per day", group = gR)
+iMaxCons   = input.int(2, "Stop for the day after N losses in a row", group = gR)
+iMaxQty    = input.int(2, "Max contracts", group = gR)
+iMaxDD     = input.float(10.0, "Kill switch: max drawdown from peak (%)", group = gR)
+iCooldown  = input.int(30, "Cooldown after a loss (minutes)", group = gR)
+iLockTrig  = input.float(200.0, "Profit protection starts at day P&L ($)", group = gR)
+iLockGive  = input.float(50.0, "…stop if this % of the day's peak is given back", group = gR)
+iMarginUse = input.float(0.5, "Max equity used as margin (fraction)", group = gR)
+iAbnMult   = input.float(6.0, "Abnormal bar: range > N × ATR halts the day", group = gR)
+
+gC = "Costs (keep in sync with Properties tab)"
+iMarginMNQ = input.float(4756.62, "Intraday margin per MNQ ($; NQ scales ×10)", group = gC)
+iComm      = input.float(0.62, "Commission per contract per side ($)", group = gC)
+iSlip      = input.int(1, "Slippage (ticks per side)", group = gC)
+
+gE = "Events (US Eastern, YYYY-MM-DD HH:MM, one per line)"
+iEvBefore  = input.int(15, "No entries from N minutes before…", group = gE)
+iEvAfter   = input.int(15, "…until N minutes after", group = gE)
+iEvFlat    = input.bool(true, "Flatten before each event", group = gE)
+iEvents    = input.text_area("2026-12-09 14:00\n2027-01-27 14:00\n2027-03-17 14:00\n2027-04-28 14:00\n2027-06-09 14:00\n2027-07-28 14:00\n2027-09-15 14:00\n2027-10-27 14:00\n2027-12-08 14:00", "FOMC decisions (CPI/PPI/jobs at 8:30 are before this strategy's window)", group = gE)
+
+gV = "Display"
+iShowPanel = input.bool(true, "Show stats panel", group = gV)
+iShadeReg  = input.bool(true, "Shade regime", group = gV)
+
+// ───────────────────────── Helpers ─────────────────────────
+hm(string s) =>
+    int(str.tonumber(str.substring(s, 0, 2))) * 60 + int(str.tonumber(str.substring(s, 3, 5)))
+
+tick(float x) =>
+    math.round(x / syminfo.mintick) * syminfo.mintick
+
+fmtUsd(float x) =>
+    (x < 0 ? "-$" : "+$") + str.tostring(math.abs(x), "#,##0")
+
+rthStart = hm(iRthStart)
+rthEnd   = hm(iRthEnd)
+flatMin  = hm(iFlatten)
+cutMin   = hm(iCutoff)
+orEnd    = rthStart + iOrMins
+pv       = syminfo.pointvalue
+marginPer = iMarginMNQ * pv / 2.0
+
+// ───────────────────────── Time & features (all causal) ─────────────────────────
+mins    = hour(time, TZ) * 60 + minute(time, TZ)             // bar OPEN time, minutes after midnight ET
+dayKey = year(time, TZ) * 10000 + month(time, TZ) * 100 + dayofmonth(time, TZ)
+wkKey  = year(time, TZ) * 100 + weekofyear(time, TZ)
+newDay = dayKey != dayKey[1]
+newWk  = wkKey != wkKey[1]
+rth    = mins >= rthStart and mins < rthEnd
+
+atr      = ta.sma(ta.tr(true), iAtrLen)
+emaF     = ta.ema(close, iEmaF)
+emaS     = ta.ema(close, iEmaS)
+emaSlope = emaS - emaS[iSlopeLb]
+anchor   = rth and (not rth[1] or newDay)
+vwapRaw  = ta.vwap(hlc3, anchor)
+vwapV    = rth ? vwapRaw : na
+
+// Opening range: known only once the window has fully closed
+var float orHi = na
+var float orLo = na
+var int orCount = 0
+if newDay
+    orHi := na
+    orLo := na
+    orCount := 0
+if rth and mins < orEnd
+    orHi := na(orHi) ? high : math.max(orHi, high)
+    orLo := na(orLo) ? low : math.min(orLo, low)
+    orCount += 1
+orReady = rth and mins >= orEnd and orCount >= math.max(1, int(iOrMins * 0.8))
+orHigh  = orReady ? orHi : na
+orLow   = orReady ? orLo : na
+orMid   = orReady ? (orHi + orLo) / 2.0 : na
+
+// Volatility baseline: median ATR at the same minute over the last N sessions
+type AtrHist
+    array<float> vals
+var map<int, AtrHist> atrHist = map.new<int, AtrHist>()
+float atrRatio = na
+if rth and not na(atr)
+    AtrHist h = atrHist.get(mins)
+    if na(h)
+        h := AtrHist.new(array.new<float>())
+        atrHist.put(mins, h)
+    h.vals.push(atr)
+    if h.vals.size() > iBaseDays
+        h.vals.shift()
+    if h.vals.size() >= math.max(5, math.floor(iBaseDays / 4))
+        atrRatio := atr / h.vals.median()
+
+// ───────────────────────── Regime (same rules as nq_bot/regime.py) ─────────────────────────
+string regime = "no_trade"
+if rth and not na(atr) and not na(atrRatio) and not na(emaSlope) and not na(vwapV)
+    if atrRatio >= iExtVol
+        regime := "no_trade"
+    else if atrRatio <= iLowVol
+        regime := "low_volatility"
+    else
+        up = emaF > emaS and emaSlope >= iMinSlope and close > vwapV
+        dn = emaF < emaS and emaSlope <= -iMinSlope and close < vwapV
+        string trend = up ? "bullish" : dn ? "bearish" : "sideways"
+        regime := atrRatio >= iHighVol and trend == "sideways" ? "high_volatility" : trend
+
+// ───────────────────────── Events ─────────────────────────
+var array<int> evTimes = array.new<int>()
+if barstate.isfirst
+    for ln in str.split(str.replace_all(iEvents, ",", "\n"), "\n")
+        if str.length(ln) >= 16
+            y  = str.tonumber(str.substring(ln, 0, 4))
+            mo = str.tonumber(str.substring(ln, 5, 7))
+            d  = str.tonumber(str.substring(ln, 8, 10))
+            hh = str.tonumber(str.substring(ln, 11, 13))
+            mm = str.tonumber(str.substring(ln, 14, 16))
+            if not na(y) and not na(mo) and not na(d) and not na(hh) and not na(mm)
+                evTimes.push(timestamp(TZ, int(y), int(mo), int(d), int(hh), int(mm), 0))
+
+inBlackout() =>
+    bool hit = false
+    for t in evTimes
+        if time >= t - iEvBefore * 60000 and time <= t + iEvAfter * 60000
+            hit := true
+    hit
+
+eventSoon() =>
+    bool hit = false
+    for t in evTimes
+        if time >= t - iEvBefore * 60000 and time < t
+            hit := true
+    hit
+
+// ───────────────────────── Risk state ─────────────────────────
+var float dRealized = 0.0
+var float dPeak = 0.0
+var int   dTrades = 0
+var int   dWins = 0
+var int   dConsLoss = 0
+var int   dCooldownUntil = 0
+var string dHalt = ""
+var bool  tradedLong = false
+var bool  tradedShort = false
+var string killed = ""
+var float peakEquity = strategy.initial_capital
+var int   lastClosed = 0
+var float wNet = 0.0
+var int   wTrades = 0
+var int   wWins = 0
+
+// trade being managed
+var float tStop = na
+var float tTarget = na
+var float tPartial = na
+var bool  tPartialDone = false
+
+equityClosed = strategy.initial_capital + strategy.netprofit
+
+// 1) Record a trade once the position is fully closed (partials + final exit = one trade, as in the bot)
+if strategy.position_size == 0 and strategy.closedtrades > lastClosed
+    float net = 0.0
+    for i = lastClosed to strategy.closedtrades - 1
+        net += strategy.closedtrades.profit(i)
+    lastClosed := strategy.closedtrades
+    dTrades += 1
+    wTrades += 1
+    dRealized += net
+    wNet += net
+    dPeak := math.max(dPeak, dRealized)
+    peakEquity := math.max(peakEquity, equityClosed)
+    if net > 0
+        dWins += 1
+        wWins += 1
+    if net < 0
+        dConsLoss += 1
+        dCooldownUntil := time + iCooldown * 60000
+    else
+        dConsLoss := 0
+    if dHalt == "" and dRealized <= -iDayLoss
+        dHalt := "daily loss limit"
+    if dHalt == "" and dConsLoss >= iMaxCons
+        dHalt := str.tostring(dConsLoss) + " losses in a row"
+    if dHalt == "" and dPeak >= iLockTrig and dRealized <= dPeak * (1 - iLockGive / 100.0)
+        dHalt := "profit protection"
+    ddPct = 100.0 * (peakEquity - equityClosed) / peakEquity
+    if killed == "" and ddPct >= iMaxDD
+        killed := "max drawdown " + str.tostring(ddPct, "#.0") + "%"
+    tStop := na
+    tTarget := na
+    tPartial := na
+    tPartialDone := false
+    alert('{"bot":"holdout","event":"closed","symbol":"' + syminfo.ticker + '","net":' + str.tostring(net, "#.##") + ',"day_pnl":' + str.tostring(dRealized, "#.##") + '}', alert.freq_once_per_bar_close)
+    if dHalt != "" or killed != ""
+        alert('{"bot":"holdout","event":"halted","reason":"' + (killed != "" ? killed : dHalt) + '"}', alert.freq_once_per_bar_close)
+
+// 2) New day / week resets
+if newDay
+    dRealized := 0.0
+    dPeak := 0.0
+    dTrades := 0
+    dWins := 0
+    dConsLoss := 0
+    dCooldownUntil := 0
+    dHalt := ""
+    tradedLong := false
+    tradedShort := false
+if newWk
+    wNet := 0.0
+    wTrades := 0
+    wWins := 0
+
+flatten(string why) =>
+    strategy.cancel_all()
+    strategy.close_all(comment = why)
+    alert('{"bot":"holdout","event":"flatten","reason":"' + why + '","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar_close)
+
+// 3) Abnormal bar → halt the day and flatten; 4) else manage an open position; 5) else look for an entry
+bool abnormal = not na(atr) and atr > 0 and (high - low) > iAbnMult * atr
+if abnormal
+    if dHalt == ""
+        dHalt := "abnormal bar"
+    if strategy.position_size != 0
+        flatten("abnormal market")
+
+else if strategy.position_size != 0
+    posQty = math.abs(strategy.position_size)
+    side   = strategy.position_size > 0 ? 1 : -1
+    avgPx  = strategy.position_avg_price
+    unreal = side * (close - avgPx) * posQty * pv
+    bool mustExit = false
+    if dRealized + unreal <= -iDayLoss
+        if dHalt == ""
+            dHalt := "daily loss limit (incl. open trade)"
+        mustExit := true
+    ddOpen = 100.0 * (peakEquity - (equityClosed + unreal)) / peakEquity
+    if ddOpen >= iMaxDD
+        if killed == ""
+            killed := "max drawdown " + str.tostring(ddOpen, "#.0") + "% (incl. open trade)"
+        mustExit := true
+    if mustExit
+        flatten(killed != "" ? killed : dHalt)
+    else if mins >= flatMin or not rth
+        flatten("end of session")
+    else if iEvFlat and eventSoon()
+        flatten("event ahead")
+    else if killed != ""
+        flatten(killed)
+    else if not tPartialDone and posQty >= 2 and not na(tPartial)
+        hit = side > 0 ? high >= tPartial : low <= tPartial
+        if hit
+            q = math.max(1, int(posQty * iPartialF))
+            strategy.close(side > 0 ? "L" : "S", qty = q, comment = "Partial " + str.tostring(iPartialR) + "R")
+            tPartialDone := true
+            if iBE and posQty - q > 0
+                tStop := tick(avgPx)
+                if side > 0
+                    strategy.exit("LX", from_entry = "L", stop = tStop, limit = tTarget, comment_loss = "BE stop", comment_profit = "Target")
+                else
+                    strategy.exit("SX", from_entry = "S", stop = tStop, limit = tTarget, comment_loss = "BE stop", comment_profit = "Target")
+            alert('{"bot":"holdout","event":"partial","qty":' + str.tostring(q) + ',"new_stop":' + str.tostring(tStop) + '}', alert.freq_once_per_bar_close)
+
+else if strategy.opentrades == 0
+    canSignal = rth and mins >= orEnd and mins < cutMin and not na(orHigh) and not na(atr) and not na(vwapV)
+    width = orHigh - orLow
+    if canSignal and width >= iMinOr and width <= iMaxOr and (regime == "bullish" or regime == "bearish")
+        int sideSig = 0
+        if iLong and regime == "bullish" and close > orHigh and close > vwapV and not tradedLong
+            sideSig := 1
+        else if iShort and regime == "bearish" and close < orLow and close < vwapV and not tradedShort
+            sideSig := -1
+        bool gatesOk = sideSig != 0
+        if gatesOk and inBlackout()
+            gatesOk := false
+        if gatesOk and (killed != "" or dHalt != "" or dTrades >= iMaxTrades or time < dCooldownUntil)
+            gatesOk := false
+        if gatesOk
+            atrStop = close - sideSig * iStopAtr * atr
+            float stop = sideSig > 0 ? math.max(orMid, atrStop) : math.min(orMid, atrStop)
+            if sideSig * (close - stop) < iMinStop
+                stop := close - sideSig * iMinStop
+            stop := tick(stop)
+            risk = math.abs(close - stop)
+            target  = tick(close + sideSig * iRR * risk)
+            partial = tick(close + sideSig * iPartialR * risk)
+            perC   = risk * pv + 2 * iComm + 2 * iSlip * syminfo.mintick * pv
+            budget = math.min(math.min(equityClosed * iRiskPct / 100.0, iRiskUsd), iDayLoss + math.min(dRealized, 0.0))
+            byRisk   = budget > 0 ? math.floor(budget / perC) : 0
+            byMargin = math.floor(equityClosed * iMarginUse / marginPer)
+            qty = math.max(0, math.min(byRisk, byMargin, iMaxQty))
+            if qty > 0
+                tStop := stop
+                tTarget := target
+                tPartial := partial
+                tPartialDone := false
+                if sideSig > 0
+                    tradedLong := true
+                    strategy.entry("L", strategy.long, qty = qty, comment = "ORB long")
+                    strategy.exit("LX", from_entry = "L", stop = stop, limit = target, comment_loss = "Stop", comment_profit = "Target")
+                else
+                    tradedShort := true
+                    strategy.entry("S", strategy.short, qty = qty, comment = "ORB short")
+                    strategy.exit("SX", from_entry = "S", stop = stop, limit = target, comment_loss = "Stop", comment_profit = "Target")
+                alert('{"bot":"holdout","event":"entry","symbol":"' + syminfo.ticker + '","side":"' + (sideSig > 0 ? "long" : "short") + '","qty":' + str.tostring(qty) + ',"ref":' + str.tostring(close) + ',"stop":' + str.tostring(stop) + ',"target":' + str.tostring(target) + '}', alert.freq_once_per_bar_close)
+
+// ───────────────────────── Visuals ─────────────────────────
+plot(vwapV, "VWAP", color = color.new(#f2b544, 0), linewidth = 2, style = plot.style_linebr)
+plot(emaF, "Fast EMA", color = color.new(#7aa2f7, 30))
+plot(emaS, "Slow EMA", color = color.new(#bb9af7, 30))
+plot(orHigh, "OR high", color = color.new(#4fc48a, 0), style = plot.style_linebr, linewidth = 2)
+plot(orLow, "OR low", color = color.new(#ef6a5b, 0), style = plot.style_linebr, linewidth = 2)
+plot(strategy.position_size != 0 ? tStop : na, "Stop", color = color.new(#ef6a5b, 0), style = plot.style_linebr)
+plot(strategy.position_size != 0 ? tTarget : na, "Target", color = color.new(#4fc48a, 0), style = plot.style_linebr)
+regColor = regime == "bullish" ? color.new(#4fc48a, 92) : regime == "bearish" ? color.new(#ef6a5b, 92) : regime == "high_volatility" ? color.new(#f2b544, 92) : na
+bgcolor(iShadeReg and rth ? regColor : na, title = "Regime")
+
+var table panel = table.new(position.top_right, 2, 7, bgcolor = color.new(#0b0f16, 8), border_color = color.new(#263247, 0), border_width = 1, frame_color = color.new(#263247, 0), frame_width = 1)
+if iShowPanel and barstate.islast
+    txt = color.new(#e9edf3, 0)
+    dim = color.new(#8f9bb0, 0)
+    dWr = dTrades > 0 ? str.tostring(100.0 * dWins / dTrades, "#") + "%" : "–"
+    wWr = wTrades > 0 ? str.tostring(100.0 * wWins / wTrades, "#") + "%" : "–"
+    status = killed != "" ? "KILLED: " + killed : dHalt != "" ? "Halted: " + dHalt : "Active"
+    table.cell(panel, 0, 0, "HOLDOUT ORB", text_color = color.new(#f2b544, 0), text_size = size.small)
+    table.cell(panel, 1, 0, "backtest / paper", text_color = dim, text_size = size.small)
+    table.cell(panel, 0, 1, "Today", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 1, str.tostring(dTrades) + " trades · " + dWr + " WR · " + fmtUsd(dRealized), text_color = txt, text_size = size.small)
+    table.cell(panel, 0, 2, "Week", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 2, str.tostring(wTrades) + " trades · " + wWr + " WR · " + fmtUsd(wNet), text_color = txt, text_size = size.small)
+    table.cell(panel, 0, 3, "All tested", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 3, str.tostring(strategy.closedtrades) + " fills · " + fmtUsd(strategy.netprofit), text_color = txt, text_size = size.small)
+    table.cell(panel, 0, 4, "Regime", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 4, regime, text_color = txt, text_size = size.small)
+    table.cell(panel, 0, 5, "Status", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 5, status, text_color = killed != "" or dHalt != "" ? color.new(#ef6a5b, 0) : color.new(#4fc48a, 0), text_size = size.small)
+    table.cell(panel, 0, 6, "Note", text_color = dim, text_size = size.small)
+    table.cell(panel, 1, 6, timeframe.period == "1" ? "Failed walk-forward (PF 0.83)" : "Use a 1-minute chart", text_color = timeframe.period == "1" ? dim : color.new(#ef6a5b, 0), text_size = size.small)

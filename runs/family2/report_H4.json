@@ -1,0 +1,66 @@
+{
+  "hypothesis": "H4 sweep",
+  "summary_1tick": {
+    "trades": 288,
+    "net_profit": 1203.88,
+    "win_rate_pct": 32.6,
+    "profit_factor": 1.2,
+    "avg_win": 76.14,
+    "avg_loss": -30.69,
+    "expectancy_per_trade": 4.18,
+    "avg_r": -0.108,
+    "max_drawdown_usd": -583.04,
+    "max_drawdown_pct": -0.58,
+    "sharpe_daily_ann": 0.67,
+    "sortino_daily_ann": 3.79,
+    "commissions": 357.12,
+    "ending_equity": 101203.88
+  },
+  "gross_before_commissions": 1561.0,
+  "t_stat_net": 0.71,
+  "net_before_2021": -152.58,
+  "net_since_2021": 1356.46,
+  "net_at_2_ticks": 962.38,
+  "positive_full_years": "2 of 6",
+  "exit_kinds": {
+    "stop": 194,
+    "target": 93,
+    "flatten": 1
+  },
+  "monte_carlo": {
+    "runs": 5000,
+    "p_losing": 25.7,
+    "net_p5": -1253.14,
+    "net_p50": 1006.38,
+    "net_p95": 4301.43,
+    "max_dd_pct_p50": -0.92,
+    "max_dd_pct_p95_worst": -1.81
+  },
+  "checks": {
+    "1_profit_factor_ge_1.20": true,
+    "2_t_stat_ge_3.0": false,
+    "3a_positive_years_ge_4_of_6": false,
+    "3b_net_positive_since_2021": true,
+    "4_positive_at_2_ticks": true,
+    "5_at_least_200_trades": true
+  },
+  "PASS": false,
+  "by_side": {
+    "trades": {
+      "-1": 138,
+      "1": 150
+    },
+    "net": {
+      "-1": 1931.38,
+      "1": -727.5
+    },
+    "avg": {
+      "-1": 14.0,
+      "1": -4.85
+    },
+    "win_rate_pct": {
+      "-1": 35.5,
+      "1": 30.0
+    }
+  }
+}

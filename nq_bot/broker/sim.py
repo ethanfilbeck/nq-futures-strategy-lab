@@ -55,6 +55,16 @@ class SimBroker(Broker):
         self.pending_market = [(-self.pos, "flatten", self.client_id or "flatten")] if self.pos else []
         self.stop = self.target = None
 
+    def flatten_now(self, price, ts) -> None:
+        """Emergency exit at the last known price (paper only): cancel everything, close at market now."""
+        self.pending_entry = None
+        self.pending_market = []
+        if self.pos != 0 and price is not None:
+            long = self.pos > 0
+            px = price - self.slip if long else price + self.slip
+            self._fill("flatten", -self.pos, px, ts)
+        self.stop = self.target = None
+
     def position(self) -> int:
         return self.pos
 

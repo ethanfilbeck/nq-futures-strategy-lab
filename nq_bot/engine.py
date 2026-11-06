@@ -27,6 +27,14 @@ class Engine:
         if cfg.strategy.name == "intraday_momentum":
             from .momentum import IntradayMomentum
             self.strategy = IntradayMomentum(cfg, spec)
+        elif cfg.strategy.name == "sweep":
+            from .family2 import LiquiditySweep
+            self.strategy = LiquiditySweep(cfg, spec)
+        elif cfg.strategy.name == "vwap_pullback":
+            from .family2 import VwapPullback
+            self.strategy = VwapPullback(cfg, spec)
+        elif cfg.strategy.name == "none":
+            self.strategy = None  # monitor only: data, risk and reporting run, no entries
         else:
             self.strategy = OpeningRangeBreakout(cfg, spec)
         self.flatten_minute = _hm(cfg.session.flatten_time)
@@ -35,6 +43,7 @@ class Engine:
         self.trades: list[dict] = []
         self.pending = None  # (client_id, signal) awaiting broker confirmation
         self.seq = 0
+        self.entries_from = None
 
     # ---------------------------------------------------------------- fills
     def sync_broker(self, now) -> None:
@@ -108,6 +117,8 @@ class Engine:
     def on_bar(self, ts, row) -> None:
         self.sync_broker(ts)
         self.risk.new_day(row["session_date"])
+        if self.strategy is not None and hasattr(self.strategy, "observe"):
+            self.strategy.observe(row)  # strategies that track state on every bar (e.g. sweeps)
 
         if not self.broker.is_connected():
             self.risk.halt_day("broker disconnected")
@@ -169,6 +180,10 @@ class Engine:
                 self.journal.write(ts, "partial", qty=q, level=t["partial"])
 
     def _maybe_enter(self, ts, row) -> None:
+        if self.strategy is None:
+            return
+        if self.entries_from is not None and ts < self.entries_from:
+            return  # warm-up period: indicators and risk run, no entries
         if self.pending or self.broker.has_working_entry():
             return  # duplicate-order guard
         regime = classify(row, self.cfg)
@@ -187,6 +202,14 @@ class Engine:
                                    self.cps, self.cfg.instrument.slippage_ticks)
         if qty <= 0:
             self.journal.write(ts, "skip", reason=note, signal=vars(sig))
+            return
+        if not (1 <= qty <= self.cfg.risk.max_contracts) or int(qty) != qty:
+            self.journal.write(ts, "skip", reason=f"order quantity {qty} outside limits", signal=vars(sig))
+            self.alerts.send("error", f"Refused order with invalid quantity {qty}")
+            return
+        if (sig.side > 0 and not sig.stop < sig.entry_ref < sig.target) or \
+           (sig.side < 0 and not sig.target < sig.entry_ref < sig.stop):
+            self.journal.write(ts, "skip", reason="stop/target on the wrong side of entry", signal=vars(sig))
             return
         self.seq += 1
         cid = f"{row['session_date']}-{self.seq}"

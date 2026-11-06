@@ -5,10 +5,11 @@
 
 A Python research-and-execution system for Micro E-mini Nasdaq-100 futures (MNQ): causal feature
 pipeline, conservative bar-by-bar simulator, walk-forward and Monte Carlo testing, pre-registered
-hypotheses, a hard-limit risk engine, and an Interactive Brokers **paper-only** execution adapter.
+hypotheses, a hard-limit risk engine, an **unattended paper-trading runner** (live data in, simulated orders out,
+daily reports), a TradingView port, and an Interactive Brokers **paper-only** execution adapter.
 
 The goal is **not** a bot that is forced to trade. It is a system that can say *no* — and so far it has,
-three times, on six years of real data.
+six times, on six years of real data.
 
 ## Results so far (2019-05 → 2025-06 MNQ, real costs; 2025-07 → 2026-10 held out, unseen)
 
@@ -17,12 +18,27 @@ three times, on six years of real data.
 | Opening-range breakout + VWAP/trend filter | full period + 5-fold walk-forward | 1,204 OOS | 0.83 | −$6,120 | **Fail** — [details](docs/RESULTS_ORB.md) |
 | Intraday momentum H1 (first half-hour, Gao et al. 2018) | pre-registered, no tuning | 1,277 | 0.84 | −$6,059 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
 | Intraday momentum H2 (rest-of-day, Baltussen et al. 2021) | pre-registered, no tuning | 1,277 | 0.93 | −$2,611 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
+| H3 Overnight drift (Boyarchenko et al. 2023) | pre-registered, no tuning | 1,576 | 0.98 | −$576 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
+| H4 Liquidity sweep of prior-day high/low | pre-registered, no tuning | 288 | 1.20 | +$1,204 | **Fail** (t = 0.71; one half-year made all of it) — [details](docs/RESULTS_FAMILY2.md) |
+| H5 VWAP pullback in a trend | pre-registered, no tuning | 1,399 | 0.94 | −$2,336 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
 
-Nothing has been traded with real money. All execution is locked to an IB paper account.
+H3 doubles as a methodology check: the pipeline reproduced the published finding that the 2–3 a.m. ET drift was
+positive before 2021 (+2.27 pts/day) and vanished after (+0.16), as the original authors reported in 2026.
 
-**Research status: closed.** After three disciplined tests, the strategy search is stopped on purpose. Trying
-idea after idea until one looks profitable on the same data is how overfitting happens. Any future hypothesis must
-be pre-registered, needs a reason that comes from outside this data, and counts toward the multiple-testing bar.
+Nothing has been traded with real money. All execution is simulated or locked to an IB paper account.
+
+**Research status: closed again after family 2.** Six disciplined tests, six rejections. Trying idea after idea
+on the same data until one looks profitable is how overfitting happens; the second family already used a stricter
+bar (t ≥ 3.0). Any future idea needs new data or an outside rationale, and is pre-registered first.
+
+## Automated paper trading (Sniper Den-style architecture, simulated orders only)
+
+Live 1-minute bars → the same engine as the backtests → simulated broker with bracket stops/targets → journal,
+restart-safe risk state and a daily report. Safeguards: stale or disconnected feed, bad/duplicate bars, missing
+stop, oversize position, invalid order quantity, kill file / Ctrl+C. A readiness script replays real sessions and
+proves the paper runner makes **exactly** the same trades as the backtester. Details, architecture and the
+comparison with TradingView-webhook-router setups: [`docs/AUTOMATION.md`](docs/AUTOMATION.md).
+What you still configure yourself: [`docs/MANUAL_SETUP.md`](docs/MANUAL_SETUP.md).
 
 ## Methodology (how leakage and self-deception are prevented)
 
@@ -65,6 +81,10 @@ nq_bot/features.py       causal indicators — no look-ahead (tested)
 nq_bot/regime.py         bullish / bearish / sideways / high-vol / low-vol / no-trade
 nq_bot/strategy.py       opening-range breakout with VWAP + trend filter
 nq_bot/momentum.py       pre-registered intraday momentum (H1/H2)
+nq_bot/family2.py        pre-registered family 2 (H3 overnight drift, H4 sweep, H5 VWAP pullback)
+nq_bot/paper.py          unattended paper runner, Databento live feed, replay
+nq_bot/report.py         daily performance report
+tradingview/holdout_orb.pine  TradingView (Pine v6) port of the ORB with the same risk limits
 nq_bot/risk.py           all risk limits and position sizing
 nq_bot/engine.py         the trading loop shared by backtest, replay and live
 nq_bot/broker/sim.py     conservative paper broker (next-bar fills, slippage, stop-first)
@@ -74,10 +94,12 @@ nq_bot/metrics.py        net, win rate, PF, drawdown, Sharpe, Sortino, expectanc
 nq_bot/live.py           real-time runner + watchdogs
 nq_bot/journal.py        JSON-lines decision log + webhook alerts
 cli.py                   commands
-tests/                   unit tests (26)
+tests/                   unit tests (36)
 research_edge.py         1-contract edge study for the ORB
 wf_edge.py               ORB walk-forward
 run_momentum_prereg.py   runs the pre-registered momentum test exactly as written
+run_family2_prereg.py    runs family 2 exactly as written
+scripts/readiness_check.py  pre-week checks on real replayed sessions
 docs/                    plan, pre-registration, results, paper drills, publishing checklist
 scripts/prepublish_check.py  blocks a push containing secrets or licensed data
 nq_bot/drill.py          IB paper drills
@@ -89,7 +111,7 @@ nq_bot/drill.py          IB paper drills
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys
-pytest -q                                               # should print 26 passed
+pytest -q                                               # should print 36 passed
 ```
 
 ## Commands
@@ -103,6 +125,9 @@ python cli.py walkforward --csv data/mnq_train.csv --folds 5
 python cli.py paper                        # IBKR paper account, needs TWS/Gateway running
 python cli.py reset-kill                   # clear the drawdown kill switch, deliberately
 python cli.py drill status                 # IB paper drills for the execution mechanics (docs/PAPER_DRILLS.md)
+python cli.py paper-replay --csv data/mnq_train.csv --days 5   # rehearse the paper runner on real past sessions
+python cli.py paper-live                   # live data, SIMULATED orders (needs Databento live)
+python cli.py kill                         # emergency stop for a running paper session
 ```
 
 Backtests write `logs/trades.csv` and a `logs/decisions_*.jsonl` file recording every order,
