@@ -73,6 +73,9 @@ def main():
     pr = sub.add_parser("paper-live", help="unattended PAPER trading on Databento live 1-minute bars (simulated orders)")
     pr.add_argument("--strategy", default=None, help="override strategy.name (orb_vwap, sweep, vwap_pullback, intraday_momentum, none)")
     pr.add_argument("--out", default="logs/paper")
+    pr.add_argument("--webhook", action="store_true", help="also accept TradingView webhook signals (strategy 'tradingview')")
+    pr.add_argument("--webhook-port", type=int, default=8787)
+    pr.add_argument("--allow-any-ip", action="store_true", help="skip the TradingView IP allowlist (local testing only)")
     rp = sub.add_parser("paper-replay", help="replay real historical sessions through the paper runner")
     rp.add_argument("--csv", required=True)
     rp.add_argument("--days", type=int, default=5)
@@ -157,6 +160,14 @@ def main():
             runner = PaperRunner(cfg, hist, args.out)
             if runner.engine.risk.killed_reason:
                 raise SystemExit(f"Kill switch is set ({runner.engine.risk.killed_reason}). Run reset-kill first.")
+            if args.webhook:
+                from nq_bot.webhook import TRADINGVIEW_IPS, WebhookGate, serve
+                if cfg.strategy.name != "tradingview":
+                    raise SystemExit("--webhook needs --strategy tradingview")
+                gate = WebhookGate(runner, os.environ.get("WEBHOOK_SECRET", ""),
+                                   None if args.allow_any_ip else TRADINGVIEW_IPS)
+                serve(gate, port=args.webhook_port)
+                print(f"Webhook receiver on http://127.0.0.1:{args.webhook_port}/tv (expose with a tunnel; see docs/AUTOMATION.md)")
             try:
                 run_databento_live(runner, key, fm.local_symbol, start=start)
             except KeyboardInterrupt:

@@ -35,7 +35,9 @@ bar (t ≥ 3.0). Any future idea needs new data or an outside rationale, and is 
 
 Live 1-minute bars → the same engine as the backtests → simulated broker with bracket stops/targets → journal,
 restart-safe risk state and a daily report. Safeguards: stale or disconnected feed, bad/duplicate bars, missing
-stop, oversize position, invalid order quantity, kill file / Ctrl+C. A readiness script replays real sessions and
+stop, oversize position, invalid order quantity, kill file / Ctrl+C. Signals come from the bot's own strategy **or**
+from TradingView alerts through an authenticated webhook receiver (shared secret, IP allowlist, replay and flood
+protection), the same pattern as commercial alert-to-broker services. A readiness script replays real sessions and
 proves the paper runner makes **exactly** the same trades as the backtester. Details, architecture and the
 comparison with TradingView-webhook-router setups: [`docs/AUTOMATION.md`](docs/AUTOMATION.md).
 What you still configure yourself: [`docs/MANUAL_SETUP.md`](docs/MANUAL_SETUP.md).
@@ -84,6 +86,8 @@ nq_bot/momentum.py       pre-registered intraday momentum (H1/H2)
 nq_bot/family2.py        pre-registered family 2 (H3 overnight drift, H4 sweep, H5 VWAP pullback)
 nq_bot/paper.py          unattended paper runner, Databento live feed, replay
 nq_bot/report.py         daily performance report
+nq_bot/webhook.py        TradingView webhook receiver (authenticated, rate-limited)
+nq_bot/external.py       turns webhook signals into risk-checked orders
 tradingview/holdout_orb.pine  TradingView (Pine v6) port of the ORB with the same risk limits
 nq_bot/risk.py           all risk limits and position sizing
 nq_bot/engine.py         the trading loop shared by backtest, replay and live
@@ -94,7 +98,7 @@ nq_bot/metrics.py        net, win rate, PF, drawdown, Sharpe, Sortino, expectanc
 nq_bot/live.py           real-time runner + watchdogs
 nq_bot/journal.py        JSON-lines decision log + webhook alerts
 cli.py                   commands
-tests/                   unit tests (36)
+tests/                   unit tests (56)
 research_edge.py         1-contract edge study for the ORB
 wf_edge.py               ORB walk-forward
 run_momentum_prereg.py   runs the pre-registered momentum test exactly as written
@@ -111,7 +115,7 @@ nq_bot/drill.py          IB paper drills
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys
-pytest -q                                               # should print 36 passed
+pytest -q                                               # should print 56 passed
 ```
 
 ## Commands
@@ -127,6 +131,7 @@ python cli.py reset-kill                   # clear the drawdown kill switch, del
 python cli.py drill status                 # IB paper drills for the execution mechanics (docs/PAPER_DRILLS.md)
 python cli.py paper-replay --csv data/mnq_train.csv --days 5   # rehearse the paper runner on real past sessions
 python cli.py paper-live                   # live data, SIMULATED orders (needs Databento live)
+python cli.py paper-live --strategy tradingview --webhook   # TradingView alerts in, simulated orders out
 python cli.py kill                         # emergency stop for a running paper session
 ```
 

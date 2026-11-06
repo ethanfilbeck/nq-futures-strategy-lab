@@ -33,6 +33,9 @@ class Engine:
         elif cfg.strategy.name == "vwap_pullback":
             from .family2 import VwapPullback
             self.strategy = VwapPullback(cfg, spec)
+        elif cfg.strategy.name == "tradingview":
+            from .external import ExternalSignals
+            self.strategy = ExternalSignals(cfg, spec)  # signals from TradingView webhooks, same risk engine
         elif cfg.strategy.name == "none":
             self.strategy = None  # monitor only: data, risk and reporting run, no entries
         else:

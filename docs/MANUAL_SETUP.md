@@ -10,7 +10,8 @@ Nothing here can be done from Claude's side: each needs your account, your money
 | 4 | **Start it each morning (or leave running)** | Unattended run. | One PowerShell window in `Documents\nq_bot`: `py cli.py paper-live`. Start before 9:15 ET (8:15 CT). | — |
 | 5 | **Optional phone alerts** | Entries, exits, halts, errors. | Create a Discord webhook URL and put `ALERT_WEBHOOK_URL=…` in `.env`. Never share it. | Free |
 | 6 | **IB paper (later)** | Real broker plumbing, still simulated money. | After IB approves the account: follow `PAPER_DRILLS.md`. | Market data via IB |
-| 7 | **Refresh `config/events.csv`** | Event blackouts. | Already filled through Dec 2027 from BLS/Fed; check before 2028. | — |
+| 7 | **Optional: TradingView webhook mode** | The Sniper Den-style path (TradingView signals → paper runner). | Follow "Sniper Den-style mode" in `AUTOMATION.md`: Essential plan + 2FA, `WEBHOOK_SECRET`, re-paste the Pine script, `cloudflared` tunnel, alert URL. | $14.95/month (TradingView) |
+| 8 | **Refresh `config/events.csv`** | Event blackouts. | Already filled through Dec 2027 from BLS/Fed; check before 2028. | — |
 
 ## What was verified without you
 
@@ -22,9 +23,16 @@ Nothing here can be done from Claude's side: each needs your account, your money
 - Stale feed (>120 s silent in market hours), duplicate / out-of-order / malformed bars, missing stop and oversize
   positions all trigger the right response (unit tests).
 - A daily report is written for every session.
+- Webhook receiver: wrong passphrase, oversized body, bad JSON, wrong symbol, stops on the wrong side, replayed
+  old alerts, non-TradingView IPs, duplicates and floods are all rejected (unit tests). A webhook signal sent over
+  real HTTP during a replayed real session became a bracketed simulated trade filled at the next bar's open; a
+  signal whose stop was too wide for the $10k account was refused by the risk engine.
 
 ## What is NOT verified
 
 - The Databento live connection itself (item 2).
+- TradingView actually delivering webhooks to your tunnel (needs your paid plan; check the alert log's
+  "Webhook status" column and the journal's `webhook` lines on the first day).
+- The updated Pine script recompiling in TradingView (the change is small: one setting and two alert fields).
 - Interactive Brokers paper execution (account not yet approved).
 - Any strategy's profitability: none has an edge on the evidence so far.

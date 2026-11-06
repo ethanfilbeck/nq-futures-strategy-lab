@@ -73,6 +73,9 @@ iEvAfter   = input.int(15, "…until N minutes after", group = gE)
 iEvFlat    = input.bool(true, "Flatten before each event", group = gE)
 iEvents    = input.text_area("2026-12-09 14:00\n2027-01-27 14:00\n2027-03-17 14:00\n2027-04-28 14:00\n2027-06-09 14:00\n2027-07-28 14:00\n2027-09-15 14:00\n2027-10-27 14:00\n2027-12-08 14:00", "FOMC decisions (CPI/PPI/jobs at 8:30 are before this strategy's window)", group = gE)
 
+gW = "Webhook (paper runner)"
+iPass      = input.string("", "Webhook passphrase (same as WEBHOOK_SECRET in .env)", group = gW, tooltip = "Sent inside the alert JSON so the paper runner can authenticate it. Leave empty if you don't use webhooks.")
+
 gV = "Display"
 iShowPanel = input.bool(true, "Show stats panel", group = gV)
 iShadeReg  = input.bool(true, "Shade regime", group = gV)
@@ -265,7 +268,7 @@ if newWk
 flatten(string why) =>
     strategy.cancel_all()
     strategy.close_all(comment = why)
-    alert('{"bot":"holdout","event":"flatten","reason":"' + why + '","symbol":"' + syminfo.ticker + '"}', alert.freq_once_per_bar_close)
+    alert('{"bot":"holdout","passphrase":"' + iPass + '","event":"flatten","reason":"' + why + '","symbol":"' + syminfo.ticker + '","time":' + str.tostring(time) + '}', alert.freq_once_per_bar_close)
 
 // 3) Abnormal bar → halt the day and flatten; 4) else manage an open position; 5) else look for an entry
 bool abnormal = not na(atr) and atr > 0 and (high - low) > iAbnMult * atr
@@ -353,7 +356,7 @@ else if strategy.opentrades == 0
                     tradedShort := true
                     strategy.entry("S", strategy.short, qty = qty, comment = "ORB short")
                     strategy.exit("SX", from_entry = "S", stop = stop, limit = target, comment_loss = "Stop", comment_profit = "Target")
-                alert('{"bot":"holdout","event":"entry","symbol":"' + syminfo.ticker + '","side":"' + (sideSig > 0 ? "long" : "short") + '","qty":' + str.tostring(qty) + ',"ref":' + str.tostring(close) + ',"stop":' + str.tostring(stop) + ',"target":' + str.tostring(target) + '}', alert.freq_once_per_bar_close)
+                alert('{"bot":"holdout","passphrase":"' + iPass + '","event":"entry","symbol":"' + syminfo.ticker + '","side":"' + (sideSig > 0 ? "long" : "short") + '","qty":' + str.tostring(qty) + ',"ref":' + str.tostring(close) + ',"stop":' + str.tostring(stop) + ',"target":' + str.tostring(target) + ',"time":' + str.tostring(time) + '}', alert.freq_once_per_bar_close)
 
 // ───────────────────────── Visuals ─────────────────────────
 plot(vwapV, "VWAP", color = color.new(#f2b544, 0), linewidth = 2, style = plot.style_linebr)

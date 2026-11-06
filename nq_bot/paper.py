@@ -107,6 +107,7 @@ class PaperRunner:
                 feats = fn(feats, self.cfg)
                 cols += extra_cols
             row = feats[cols].iloc[-1].to_dict()
+            row["_ts"] = ts
             self.engine.on_bar(ts, row)
             self._check_invariants(ts, row)
             if self.persist:
@@ -139,6 +140,19 @@ class PaperRunner:
             self.engine.sync_broker(ts)
         self.journal.write(ts, "emergency", reason=reason)
         self.alerts.send("error", f"EMERGENCY: {reason} - flattened (simulated) and halted for the day")
+
+    @property
+    def external(self):
+        """The TradingView signal queue (strategy 'tradingview' only)."""
+        from .external import ExternalSignals
+        if not isinstance(self.engine.strategy, ExternalSignals):
+            raise RuntimeError("webhook signals need strategy 'tradingview'")
+        return self.engine.strategy
+
+    def external_flatten(self, reason: str) -> None:
+        with self.lock:
+            if self.last_ts is not None:
+                self.engine._flatten(self.last_ts, reason)  # fills on the next bar, like every market order
 
     def heartbeat(self) -> None:
         """Call every few seconds from a timer: detects a stalled feed and the KILL file."""
