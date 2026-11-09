@@ -27,12 +27,14 @@ Nothing here can be done from Claude's side: each needs your account, your money
   old alerts, non-TradingView IPs, duplicates and floods are all rejected (unit tests). A webhook signal sent over
   real HTTP during a replayed real session became a bracketed simulated trade filled at the next bar's open; a
   signal whose stop was too wide for the $10k account was refused by the risk engine.
+- The updated Pine script (with the webhook passphrase setting) compiles and is saved in TradingView as version 2
+  of "Holdout ORB (research / paper)" (Nov 9, 2026). Only message: a harmless warning that the stats panel
+  refreshes once per closed bar.
 
 ## What is NOT verified
 
 - The Databento live connection itself (item 2).
 - TradingView actually delivering webhooks to your tunnel (needs your paid plan; check the alert log's
   "Webhook status" column and the journal's `webhook` lines on the first day).
-- The updated Pine script recompiling in TradingView (the change is small: one setting and two alert fields).
 - Interactive Brokers paper execution (account not yet approved).
 - Any strategy's profitability: none has an edge on the evidence so far.
