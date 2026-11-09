@@ -62,9 +62,11 @@ written to the journal.
 4. In a second window, open a tunnel: `winget install -e --id Cloudflare.cloudflared` once, then
    `cloudflared tunnel --url http://127.0.0.1:8787`. Copy the `https://….trycloudflare.com` address it prints.
 5. TradingView → Alert → Condition: *Holdout ORB* → *Any alert() function call* → Notifications → Webhook URL:
-   `https://….trycloudflare.com/tv`. Note: alerts on Essential expire after 2 months; quick-tunnel URLs change
-   every time `cloudflared` restarts, so update the alert's URL when that happens.
-6. Check `logs/paper/decisions_*.jsonl` for `"event": "webhook"` lines (accepted / rejected with a reason).
+   `https://….trycloudflare.com/tv`. Note: quick-tunnel URLs change every time `cloudflared` restarts, so update
+   the alert's URL when that happens. (TradingView's Nov 2026 plan page lists "Alerts that don't expire" on Essential.)
+7. Make sure the chart's MNQ data is **real-time**, not delayed (no "D" badge next to the symbol). Delayed CME data
+   is ~10 minutes old, and the receiver rejects alerts more than 2 minutes behind the live bars.
+8. Check `logs/paper/decisions_*.jsonl` for `"event": "webhook"` lines (accepted / rejected with a reason).
 
 The TradingView alert log shows the alert text, including the passphrase. Don't share screenshots of it, and
 change the secret if you do.
