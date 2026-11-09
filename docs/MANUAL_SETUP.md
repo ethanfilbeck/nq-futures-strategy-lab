@@ -4,7 +4,7 @@ Nothing here can be done from Claude's side: each needs your account, your money
 
 | # | Item | Why | How | Cost |
 |---|---|---|---|---|
-| 1 | **Databento live CME subscription** | The live feed for `paper-live`. Without it, use the TradingView chart (free) or `paper-replay`. | Databento portal → Live data → CME Globex (non-professional). | ~$33–37/month (check the portal) |
+| 1 | **Databento live CME subscription** | The live feed for `paper-live`. Without it, use the TradingView chart (free) or `paper-replay`. | Databento portal → Plans → Standard (CME). Usage-based (pay-per-GB) accounts get historical data only. Signup credits can pay toward the first month. | $199/month Standard plan (Databento pricing page, Nov 2026) |
 | 2 | **Live-connection smoke test** | Databento's live servers can't be reached from Claude's workspace, so the live code path is unverified until you run it. | Sunday after 6 PM ET or any weekday: `py cli.py paper-live --strategy none`. Expect "History: … bars" then a new bar each minute in `logs/paper/decisions_*.jsonl`. Ctrl+C to stop. | — |
 | 3 | **Keep the PC awake during market hours** | The runner stops if Windows sleeps. | Settings → System → Power → Sleep: Never (while plugged in) for that week. | — |
 | 4 | **Start it each morning (or leave running)** | Unattended run. | One PowerShell window in `Documents\nq_bot`: `py cli.py paper-live`. Start before 9:15 ET (8:15 CT). | — |
