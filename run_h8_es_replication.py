@@ -55,6 +55,9 @@ def main(csv):
            "trades": [{"entry": str(t.entry_ts), "exit": str(t.exit_ts), "entry_px": t.entry, "exit_px": t.exit,
                        "kind": t.kind, "net": round(net(t), 2)} for t in trades]}
     Path("runs").mkdir(exist_ok=True)
+    trades = out.pop("trades")
+    name = "h8_es_replication"
+    Path(f"runs/{name}_trades.jsonl").write_text("".join(json.dumps(t) + "\n" for t in trades))  # git-ignored
     Path("runs/h8_es_replication.json").write_text(json.dumps(out, indent=2, default=lambda o: bool(o) if isinstance(o, np.bool_) else str(o)))
     print(f"n={out['n']} skipped={skipped} net=${out['net']:,.2f} mean=${out['mean']:.2f} PF={pf:.2f} t={out['t']:.2f}")
     print(f"random 24h longs: mean ${out['random_mean']:.2f}, 95th pct ${p95:.2f}")

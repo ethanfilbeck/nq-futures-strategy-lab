@@ -31,3 +31,4 @@ venv/
 _to_delete/
 .vscode/
 .idea/
+runs/*_trades.jsonl

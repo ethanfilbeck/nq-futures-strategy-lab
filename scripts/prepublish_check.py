@@ -29,6 +29,7 @@ CONTENT_PATTERNS = [
     (re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "email address"),
     (re.compile(r"[A-Za-z]:\\Users\\[^\\\s]+", re.I), "local Windows user path"),
     (re.compile(r"https://discord(app)?\.com/api/webhooks/\S+"), "alert webhook URL"),
+    (re.compile(r'"(?:entry_px|exit_px|entry_price|exit_price)"\s*:'), "per-trade prices (derived from licensed data)"),
 ]
 ALLOWED_EMAILS = {"noreply@anthropic.com"}
 TEXT_EXT = {".py", ".md", ".txt", ".yaml", ".yml", ".csv", ".json", ".ini", ".cfg", ".toml", ".example", ""}
@@ -57,6 +58,8 @@ def scan(paths: list[str]) -> list[str]:
                 hit = m.group(0)
                 if why == "email address" and hit in ALLOWED_EMAILS:
                     continue
+                if why.startswith("per-trade prices") and not p.startswith("runs/"):
+                    continue  # code and tests may name these fields; only result files are checked
                 if why == "Databento API key" and set(hit[3:]) <= {"x"}:
                     continue  # the placeholder in .env.example
                 problems.append(f"{p}: {why} -> {hit[:6]}…")

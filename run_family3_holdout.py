@@ -18,7 +18,10 @@ out = {"data": [str(bars.index[0]), str(bars.index[-1])], "skipped": skipped, "s
                    "kind": t.kind, "net": round(t.net(), 2)} for t in trades],
        "verdict": "HOLDOUT FAIL" if fail else "HOLDOUT CONSISTENT (not proof)"}
 Path("runs").mkdir(exist_ok=True)
+trades = out.pop("trades")
+name = "family3_holdout"
+Path(f"runs/{name}_trades.jsonl").write_text("".join(json.dumps(t) + "\n" for t in trades))  # git-ignored
 Path("runs/family3_holdout.json").write_text(json.dumps(out, indent=2))
-for t in out["trades"]:
+for t in trades:
     print(f"{t['entry'][:16]} -> {t['exit'][:16]}  {t['entry_px']:>9.2f} -> {t['exit_px']:>9.2f}  {t['kind']:5s} ${t['net']:>8.2f}")
 print(f"n={st['n']} net=${st.get('net', 0):,.2f} mean=${st.get('mean', 0):.2f} skipped={skipped} -> {out['verdict']}")
