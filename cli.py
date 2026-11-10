@@ -92,6 +92,8 @@ def main():
     dp.add_argument("--ref", type=float, help="with --delayed: reference price you read off a chart, if IB sends none")
     fp = sub.add_parser("fomc-paper", help="forward PAPER tracking of H8 (pre-FOMC drift) on the IB paper account")
     fp.add_argument("--test-now", action="store_true", help="plumbing check: buy 1, place GTC stop, sell ~20 s later")
+    fp.add_argument("--if-due", action="store_true",
+                    help="for the scheduled task: run only if a trade is open or today is an entry day, else exit")
     lp = sub.add_parser("paper")
     lp.add_argument("--live", action="store_true", help="ALSO needs mode: live, env flag and typed confirmation")
 
@@ -206,8 +208,15 @@ def main():
         from nq_bot.drill import run as drill
         drill(cfg, args.action, side=args.side, stop=args.stop, delayed=args.delayed, ref=args.ref)
     elif args.cmd == "fomc-paper":
-        from nq_bot.fomc_paper import run as fomc_run
-        fomc_run(cfg, test_now=args.test_now)
+        from nq_bot import fomc_paper as fp_mod
+        if args.if_due:
+            import pandas as pd
+            st = fp_mod.load_state(fp_mod.OUT / "state.json")
+            now = pd.Timestamp.now(tz=fp_mod.TZ)
+            if not fp_mod.due_today(now, fp_mod.fomc_events(), bool(st.get("in_trade"))):
+                print(f"{now:%Y-%m-%d %H:%M} ET: no FOMC paper trade due today.")
+                return
+        fp_mod.run(cfg, test_now=args.test_now)
     elif args.cmd == "paper":
         from nq_bot.live import run
         run(cfg, live_flag=args.live)

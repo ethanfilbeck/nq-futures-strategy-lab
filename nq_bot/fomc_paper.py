@@ -211,7 +211,27 @@ class Runner:
         self._record(st, px if px is not None else st["stop"], "stop" + ("" if px is not None else " (fill price not seen; stop level used)"))
 
 
+def keep_awake(on: bool = True) -> None:
+    """On Windows, stop the PC from sleeping while a trade is being tracked (no effect elsewhere)."""
+    try:
+        import ctypes
+        ES_CONTINUOUS, ES_SYSTEM_REQUIRED = 0x80000000, 0x00000001
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | (ES_SYSTEM_REQUIRED if on else 0))
+    except (AttributeError, OSError):
+        pass
+
+
+def due_today(now: pd.Timestamp, events: list[date], in_trade: bool) -> bool:
+    """Should the daily scheduled task start the tracker now? Yes if a trade is open (resume it) or if
+    today is an entry day and the 14:00 ET entry hasn't passed yet. Pure function, unit-tested."""
+    if in_trade:
+        return True
+    w = next_window(now, events)
+    return w is not None and w.entry.date() == now.date() and now < w.entry + pd.Timedelta(minutes=ENTRY_GRACE_MIN)
+
+
 def run(cfg, test_now: bool = False, events_path: str = "config/events.csv") -> None:
+    keep_awake(True)
     r = Runner(cfg)
     r.connect()
     try:
@@ -272,5 +292,6 @@ def run(cfg, test_now: bool = False, events_path: str = "config/events.csv") -> 
                 r.broker.ib.disconnect()
                 r.connect()
     finally:
+        keep_awake(False)
         if r.broker.ib.isConnected():
             r.broker.ib.disconnect()

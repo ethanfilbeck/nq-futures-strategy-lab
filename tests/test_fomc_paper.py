@@ -3,7 +3,7 @@ from datetime import date
 
 import pandas as pd
 
-from nq_bot.fomc_paper import decide, fomc_events, next_window, prev_weekday, window_for
+from nq_bot.fomc_paper import decide, due_today, fomc_events, next_window, prev_weekday, window_for
 
 TZ = "America/New_York"
 
@@ -40,3 +40,12 @@ def test_next_window_moves_on_after_exit():
     ev = [date(2026, 12, 9), date(2027, 1, 27)]
     assert next_window(ts("2026-12-09 13:54"), ev).event == date(2026, 12, 9)
     assert next_window(ts("2026-12-09 13:55"), ev).event == date(2027, 1, 27)
+
+
+def test_daily_task_only_starts_on_entry_day_or_open_trade():
+    ev = [date(2026, 12, 9)]
+    assert due_today(ts("2026-12-08 13:40"), ev, False)            # entry day, before 14:00 ET
+    assert not due_today(ts("2026-12-08 14:10"), ev, False)        # too late to enter
+    assert not due_today(ts("2026-12-07 13:40"), ev, False)        # day before entry day
+    assert not due_today(ts("2026-11-20 13:40"), ev, False)        # ordinary day
+    assert due_today(ts("2026-12-09 09:00"), ev, True)             # trade open (e.g. after a reboot): resume

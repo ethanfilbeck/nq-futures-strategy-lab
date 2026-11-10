@@ -14,6 +14,21 @@ statement on the **IB paper account** with the frozen rules, and report those tr
 3. One-time plumbing check (any time the market is open): `py cli.py fomc-paper --test-now`
    (buy 1, place the GTC stop, sell ~20 s later; logged to `test_trades.jsonl`, never counted as a result).
 
+## Hands-free mode (Windows Task Scheduler)
+Install once, from the repo folder: `.\scripts\install_fomc_task.ps1`. The task runs
+`py cli.py fomc-paper --if-due` every weekday at 12:40 PM Central and at logon. It exits at once unless today is a
+Fed entry day or a paper trade is already open (then it resumes it), wakes the PC if needed, and the tracker keeps
+the PC awake while a trade is open. Output: `logs\fomc_paper\task.log`.
+
+What stays manual, on purpose:
+- **Being logged into Windows** (the task doesn't store your Windows password).
+- **TWS logged into Paper.** Turn on TWS's own auto-restart (*File → Global Configuration → Lock and Exit →
+  Auto restart*) so it reconnects daily on its own; IBKR still requires a fresh login about once a week.
+  Fully unattended logins need a third-party tool (IBC) that stores your IB password in a file. That is your call,
+  and not set up here.
+- Windows **wake timers** must be allowed (Power Options → Change advanced power settings → Sleep →
+  Allow wake timers → Enable) for the task to wake a sleeping PC.
+
 ## Safety
 - Paper only: the IB adapter refuses live ports and non-`DU` accounts; this command has no live option.
 - The stop is **GTC and held at IB**, so it survives the overnight break, TWS's nightly restart, a crash or a
