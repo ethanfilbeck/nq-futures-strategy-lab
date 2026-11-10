@@ -1,0 +1,6 @@
+# Normalize line endings in the repo so a Windows checkout and a Linux CI run see identical files.
+# Without this, a checkout with core.autocrlf unset makes every file look modified.
+* text=auto
+*.ps1 text eol=crlf
+*.png binary
+*.csv text
