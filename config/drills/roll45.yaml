@@ -1,0 +1,84 @@
+# NQ bot settings. Paper mode is the default and the only mode enabled out of the box.
+# Values marked PLACEHOLDER must be checked against your broker before relying on them.
+
+mode: paper                 # paper | live  (live also needs env flag + --live + typed confirmation)
+
+instrument:
+  root: MNQ                 # MNQ ($2/pt) strongly recommended for small accounts; NQ is $20/pt
+  exchange: CME
+  roll_days_before_expiry: 45
+  margin_per_contract: 4756.62    # IBKR MNQ intraday initial margin (overnight initial is 6795.17), read 2026-11-04 - recheck periodically
+  commission_per_side: 0.62       # IBKR MNQ: 0.25 commission + 0.353 CME exchange fee + 0.011 NFA fee = 0.614, read 2026-11-04
+  slippage_ticks: 1               # assumed on market/stop fills, each side
+
+session:
+  timezone: America/New_York
+  rth_start: "09:30"
+  rth_end: "16:00"
+  flatten_time: "15:55"           # no overnight positions
+  stale_data_seconds: 120         # live only: no new bar for this long -> halt + flatten
+
+strategy:
+  name: orb_vwap
+  opening_range_minutes: 15
+  entry_cutoff: "11:30"           # no new entries after this time
+  min_or_points: 15.0             # skip days with a tiny opening range
+  max_or_points: 250.0            # skip days with a huge opening range
+  max_stop_atr: 1.5               # stop is the tighter of OR midpoint or entry -/+ this * ATR
+  min_stop_points: 8.0
+  reward_risk: 2.0                # final target in R
+  partial_r: 1.0                  # take partial at 1R
+  partial_fraction: 0.5           # fraction closed at partial (needs >=2 contracts to matter)
+  move_stop_to_breakeven: true
+  allow_long: true
+  allow_short: true
+  allowed_regimes: [bullish, bearish]
+
+momentum:                         # pre-registered: docs/PREREG_INTRADAY_MOMENTUM.md (used when strategy.name = intraday_momentum)
+  variant: first_half_hour        # first_half_hour (H1, Gao et al. 2018) | rest_of_day (H2, Baltussen et al. 2021)
+  stop_mult: 1.5
+  stop_lookback_days: 20
+  min_history_days: 10
+  min_stop_points: 10.0
+
+features:
+  atr_period: 14
+  ema_fast: 20
+  ema_slow: 50
+  slope_lookback: 10
+  vol_baseline_days: 20           # ATR is compared with its median at the same time of day over this many sessions
+
+regime:
+  min_slope_points: 2.0           # ema_slow change over slope_lookback bars to count as trending
+  high_vol_ratio: 1.8             # ATR / baseline ATR above this = high volatility
+  extreme_vol_ratio: 3.0          # above this = no-trade
+  low_vol_ratio: 0.5              # below this = low volatility (no trade by default)
+
+risk:
+  starting_equity: 10000.0        # used in backtests / sim; live reads equity from broker
+  max_risk_per_trade_pct: 0.5     # % of equity risked per trade
+  max_risk_per_trade_usd: 100.0   # hard cap in dollars (the smaller of the two wins)
+  max_daily_loss_usd: 250.0
+  max_trades_per_day: 2
+  max_consecutive_losses: 2       # per day; halts new entries for the rest of the day
+  max_contracts: 2
+  max_drawdown_pct: 10.0          # from equity peak; kills the bot until a human resets it
+  cooldown_minutes_after_loss: 30
+  profit_lock_trigger_usd: 200.0  # once day P&L reaches this...
+  profit_lock_giveback_pct: 50.0  # ...stop trading if it gives back this % of the day's peak
+  max_margin_utilization: 0.5     # never use more than this fraction of equity as margin
+  abnormal_range_atr_mult: 6.0    # one bar's range > this * ATR = abnormal -> halt + flatten
+
+events:
+  file: config/events.csv         # you fill this in: CPI, PPI, NFP, FOMC times (ET)
+  blackout_before_minutes: 15
+  blackout_after_minutes: 15
+  flatten_before_high_impact: true
+
+ibkr:
+  host: 127.0.0.1
+  port: 7497                      # 7497 = TWS paper, 4002 = Gateway paper. Live ports are refused in paper mode.
+  client_id: 17
+
+journal:
+  dir: logs

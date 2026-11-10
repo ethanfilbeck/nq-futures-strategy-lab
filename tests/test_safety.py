@@ -215,3 +215,27 @@ def test_restart_adopts_existing_stop_instead_of_stacking_a_second(cfg):
     assert b.sl is stop and b.stop_px == 20980.0
     # with the stop adopted, reconciliation has nothing to replace
     assert protection_fix(1, False, True, 1, False) == "none"
+
+
+def test_new_session_never_cancels_a_working_stop_it_did_not_place(cfg):
+    """Regression (IB paper drill 4, 2026-11-09): a fresh connection saw position +1, didn't know about
+    the stop already working at IB, cancelled it and flattened. Reconciliation must adopt it instead."""
+    pytest.importorskip("ib_async")
+    from nq_bot.broker.ibkr import IBKRBroker
+    b = IBKRBroker(cfg, SPECS["MNQ"])
+    b.contract = SimpleNamespace(conId=1, localSymbol="MNQZ6")
+    pos = SimpleNamespace(contract=b.contract, position=1)
+    stop = SimpleNamespace(contract=b.contract, isDone=lambda: False,
+                           order=SimpleNamespace(orderId=8, action="SELL", orderType="STP", auxPrice=27796.25,
+                                                 totalQuantity=1, orderRef="drill"))
+    target = SimpleNamespace(contract=b.contract, isDone=lambda: False,
+                             order=SimpleNamespace(orderId=7, action="SELL", orderType="LMT", lmtPrice=28246.25,
+                                                   totalQuantity=1, orderRef="drill"))
+    cancelled, placed = [], []
+    b.ib = _fake_ib(positions=[pos], open_trades=[target, stop])
+    b.ib.cancelOrder = cancelled.append
+    b.ib.placeOrder = lambda c, o: placed.append(o)
+    b.flatten = lambda reason: pytest.fail(f"flattened a protected position: {reason}")
+    b._reconcile_protection()
+    assert b.sl is stop and b.tp is target and b.stop_px == 27796.25
+    assert not cancelled and not placed

@@ -87,6 +87,9 @@ def main():
     dp.add_argument("action", choices=["status", "bracket", "duplicate", "reconcile", "flatten"])
     dp.add_argument("--side", choices=["buy", "sell"], default="buy")
     dp.add_argument("--stop", type=float, help="stop level to use when replacing a missing stop")
+    dp.add_argument("--delayed", action="store_true",
+                    help="use IB's free delayed quotes (no CME real-time subscription); wide buffers, paper only")
+    dp.add_argument("--ref", type=float, help="with --delayed: reference price you read off a chart, if IB sends none")
     lp = sub.add_parser("paper")
     lp.add_argument("--live", action="store_true", help="ALSO needs mode: live, env flag and typed confirmation")
 
@@ -178,7 +181,20 @@ def main():
         print("KILL file written. The running paper session will flatten and stop within ~5 seconds.")
     elif args.cmd == "reset-kill":
         from nq_bot.live import reset_kill
-        path = Path(input("Which state file? [logs/paper/risk_state.json] ").strip() or "logs/paper/risk_state.json")
+        import json as _json
+        files = {"logs/risk_state.json": "IB runner (py cli.py paper)",
+                 "logs/paper/risk_state.json": "Databento runner (py cli.py paper-live)"}
+        killed = []
+        for f, what in files.items():
+            try:
+                reason = _json.loads(Path(f).read_text()).get("killed_reason")
+            except (OSError, ValueError):
+                reason = None
+            print(f"  {f:28s} {what}: " + (f"KILLED ({reason})" if reason else "not killed"))
+            if reason:
+                killed.append(f)
+        default = killed[0] if len(killed) == 1 else "logs/paper/risk_state.json"
+        path = Path(input(f"Which state file? [{default}] ").strip() or default)
         Path("logs/paper/KILL").unlink(missing_ok=True)
         if input("Type RESET to clear the kill switch: ").strip() == "RESET" and reset_kill(path):
             print("Kill switch cleared. The drawdown limit now measures from your equity at the next start.")
@@ -186,7 +202,7 @@ def main():
             print("Nothing cleared.")
     elif args.cmd == "drill":
         from nq_bot.drill import run as drill
-        drill(cfg, args.action, side=args.side, stop=args.stop)
+        drill(cfg, args.action, side=args.side, stop=args.stop, delayed=args.delayed, ref=args.ref)
     elif args.cmd == "paper":
         from nq_bot.live import run
         run(cfg, live_flag=args.live)

@@ -101,9 +101,9 @@ class IBKRBroker(Broker):
             if (pos > 0 and o.action != "SELL") or (pos < 0 and o.action != "BUY"):
                 continue
             ref = o.orderRef or "adopted"
-            if o.orderType == "STP" and self.sl is None:
+            if o.orderType == "STP" and (self.sl is None or self.sl.isDone()):
                 self.sl, self.stop_px = self._track(t, "stop", ref), float(o.auxPrice)
-            elif o.orderType == "LMT" and self.tp is None:
+            elif o.orderType == "LMT" and (self.tp is None or self.tp.isDone()):
                 self.tp = self._track(t, "target", ref)
 
     def roll_due(self, today) -> bool:
@@ -153,7 +153,7 @@ class IBKRBroker(Broker):
         if qty <= 0:
             return
         o = MarketOrder("SELL" if pos > 0 else "BUY", qty)
-        o.orderRef = client_id
+        o.orderRef, o.tif = client_id, "DAY"   # explicit TIF avoids IB warning 10349 (false "Cancelled")
         self.reducing.append(self._track(self.ib.placeOrder(self.contract, o), "reduce", client_id))
 
     def modify_protection(self, stop: float, qty: int) -> None:
@@ -176,7 +176,7 @@ class IBKRBroker(Broker):
         pos = self.position()
         if pos != 0:
             o = MarketOrder("SELL" if pos > 0 else "BUY", abs(pos))
-            o.orderRef = f"flatten:{reason[:20]}"
+            o.orderRef, o.tif = f"flatten:{reason[:20]}", "DAY"  # avoid 10349 false "Cancelled" status
             self.reducing.append(self._track(self.ib.placeOrder(self.contract, o), "flatten",
                                              self.entry.order.orderRef if self.entry else "flatten"))
         self.entry = self.tp = self.sl = None
@@ -234,6 +234,10 @@ class IBKRBroker(Broker):
 
     def _reconcile_protection(self):
         pos = self.position()
+        if pos != 0 and (self.sl is None or self.sl.isDone()):
+            # Never treat a position as unprotected just because THIS session didn't place the stop
+            # (e.g. after a restart): adopt a working stop/target at IB before deciding anything.
+            self.adopt_existing_orders()
         entry_working = self.entry is not None and not self.entry.isDone()
         sl_live = self.sl is not None and not self.sl.isDone()
         action = protection_fix(pos, entry_working, sl_live, int(self.sl.order.totalQuantity) if sl_live else 0,

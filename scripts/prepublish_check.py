@@ -25,7 +25,7 @@ CONTENT_PATTERNS = [
     (re.compile(r"\bdb-[A-Za-z0-9]{20,}\b"), "Databento API key"),
     (re.compile(r"\b(?:ghp|gho|github_pat)_[A-Za-z0-9_]{20,}\b"), "GitHub token"),
     (re.compile(r"\bsk-[A-Za-z0-9-]{20,}\b"), "API secret key"),
-    (re.compile(r"\b[DU]U\d{6,}\b|\bU\d{7,}\b"), "Interactive Brokers account ID"),
+    (re.compile(r"\bDU[A-Z]?\d{5,}\b|\bU\d{7,}\b"), "Interactive Brokers account ID"),
     (re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "email address"),
     (re.compile(r"[A-Za-z]:\\Users\\[^\\\s]+", re.I), "local Windows user path"),
     (re.compile(r"https://discord(app)?\.com/api/webhooks/\S+"), "alert webhook URL"),

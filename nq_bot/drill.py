@@ -18,6 +18,10 @@ from .broker.ibkr import IBKRBroker
 from .contracts import SPECS
 
 STOP_PTS, TARGET_PTS = 20.0, 40.0
+# With --delayed (no CME real-time subscription) the reference price can be ~10 minutes old, so the
+# entry limit, stop and target are placed far enough away that a stale price can't put them on the
+# wrong side of the market. Paper drills only - the live runner never uses delayed data.
+DELAYED_BUFFER_PTS, DELAYED_STOP_PTS, DELAYED_TARGET_PTS = 150.0, 150.0, 300.0
 
 
 def _connect(cfg) -> IBKRBroker:
@@ -42,16 +46,48 @@ def _show(b: IBKRBroker) -> None:
               f"[{t.orderStatus.status}] ref={o.orderRef}")
 
 
-def _last_price(b: IBKRBroker) -> float:
-    [tk] = b.ib.reqTickers(b.contract)
-    for px in (tk.last, tk.close, tk.marketPrice()):
-        if px and px == px and px > 0:
-            return float(px)
-    raise SystemExit("No market price available - check your CME market-data subscription.")
+def _good(px) -> bool:
+    return bool(px) and px == px and px > 0
 
 
-def run(cfg, action: str, side: str = "buy", stop: float | None = None) -> None:
+def _last_price(b: IBKRBroker, delayed: bool = False, timeout: float = 15.0) -> float:
+    if not delayed:
+        [tk] = b.ib.reqTickers(b.contract)
+        for px in (tk.last, tk.close, tk.marketPrice()):
+            if _good(px):
+                return float(px)
+        raise SystemExit("No market price available - check your CME market-data subscription.")
+    # Delayed quotes: a snapshot request can hang, so stream for up to `timeout` seconds instead.
+    tk = b.ib.reqMktData(b.contract, "", False, False)
+    try:
+        waited = 0.0
+        while waited < timeout:
+            b.ib.sleep(0.5)
+            waited += 0.5
+            for px in (tk.last, tk.marketPrice(), tk.close):
+                if _good(px):
+                    print(f"Delayed reference price: {float(px)}")
+                    return float(px)
+    finally:
+        b.ib.cancelMktData(b.contract)
+    # Fallback: the latest 1-minute bar from IB's historical-data service.
+    try:
+        bars = b.ib.reqHistoricalData(b.contract, "", "1800 S", "1 min", "TRADES", False, timeout=15)
+        if bars and _good(bars[-1].close):
+            print(f"Reference price from IB's last 1-min bar ({bars[-1].date}): {bars[-1].close}")
+            return float(bars[-1].close)
+    except Exception as e:  # noqa: BLE001 - any failure here just means "no price"
+        print(f"Historical-bar fallback failed: {e}")
+    raise SystemExit("No delayed price arrived - nothing was ordered. Re-run with --ref <price> using the "
+                     "MNQ price from your TradingView chart.")
+
+
+def run(cfg, action: str, side: str = "buy", stop: float | None = None, delayed: bool = False,
+        ref: float | None = None) -> None:
     b = _connect(cfg)
+    if delayed:
+        b.ib.reqMarketDataType(3)   # IB's free 10-15 min delayed quotes
+        print("Using DELAYED market data (paper drill only): wide stop/target buffers.")
     try:
         if action == "status":
             _show(b)
@@ -59,12 +95,21 @@ def run(cfg, action: str, side: str = "buy", stop: float | None = None) -> None:
             if action == "bracket" and (b.position() != 0 or b.has_working_entry()):
                 raise SystemExit("Already in a position - run `drill flatten` first.")
             sgn = 1 if side == "buy" else -1
-            ref = _last_price(b)
+            if ref is not None:
+                if not delayed:
+                    raise SystemExit("--ref needs --delayed (it uses the wide buffers).")
+                print(f"Using the reference price you typed: {ref}")
+            else:
+                ref = _last_price(b, delayed)
             spec = b.spec
+            sp, tp = (DELAYED_STOP_PTS, DELAYED_TARGET_PTS) if delayed else (STOP_PTS, TARGET_PTS)
+            offset = int(DELAYED_BUFFER_PTS / spec.tick_size) if delayed else 4
             req = BracketRequest(f"drill-{int(time.time())}", sgn, 1,
-                                 stop=spec.round_to_tick(ref - sgn * STOP_PTS),
-                                 target=spec.round_to_tick(ref + sgn * TARGET_PTS))
+                                 stop=spec.round_to_tick(ref - sgn * sp),
+                                 target=spec.round_to_tick(ref + sgn * tp),
+                                 limit_offset_ticks=offset)
             # for "duplicate" a position already exists, so the adapter must reject this
+            b.adopt_existing_orders()   # know about the working stop/target before polling
             b.submit_bracket(req, ref)
             for _ in range(30):
                 b.ib.sleep(1)
@@ -80,10 +125,10 @@ def run(cfg, action: str, side: str = "buy", stop: float | None = None) -> None:
             b.adopt_existing_orders()
             if stop is not None:
                 b.stop_px = stop
-            b.poll()  # runs _reconcile_protection(): resize / replace / cancel orphans
+            _, events = b.poll()  # runs _reconcile_protection(): resize / replace / cancel orphans
             b.ib.sleep(2)
-            _, events = b.poll()
-            for e in events:
+            _, more = b.poll()
+            for e in events + more:
                 print(f"EVENT {e.status}: {e.message}")
             _show(b)
         elif action == "flatten":

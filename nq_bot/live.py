@@ -97,13 +97,23 @@ def run(cfg, live_flag: bool = False) -> None:
                 broker.flatten(eng.risk.killed_reason)
                 alerts.send("error", f"Kill switch: {eng.risk.killed_reason}. Exiting.")
                 break
+    except (ConnectionError, OSError) as e:
+        # TWS/Gateway closed or the socket dropped: ib_async raises instead of returning, so handle it
+        # here. Nothing can be sent to IB now; the bracket orders already at IB stay working.
+        alerts.send("error", f"Disconnected from IB ({type(e).__name__}). Server-side bracket orders remain. Exiting.")
     except KeyboardInterrupt:
-        alerts.send("warning", "Stopped by user - flattening")
-        broker.flatten("user stop")
-        broker.ib.sleep(2)
+        alerts.send("warning", "Stopped by user - flattening (wait for it to finish; don't press Ctrl+C again)")
+        for attempt in range(2):
+            try:
+                broker.flatten("user stop")
+                broker.ib.sleep(2)
+                break
+            except KeyboardInterrupt:
+                log.warning("Second Ctrl+C ignored - finishing the flatten first")
     finally:
         save_risk_state(eng.risk, state_file)
-        broker.ib.disconnect()
+        if broker.is_connected():
+            broker.ib.disconnect()
 
 
 def save_risk_state(risk, path: Path) -> None:
