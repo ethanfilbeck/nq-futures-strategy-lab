@@ -29,6 +29,17 @@ What stays manual, on purpose:
 - Windows **wake timers** must be allowed (Power Options → Change advanced power settings → Sleep →
   Allow wake timers → Enable) for the task to wake a sleeping PC.
 
+## Phone alerts (Discord)
+With `ALERT_WEBHOOK_URL` set in `.env`, the tracker posts to a Discord channel when it: announces a Fed trade
+that day, enters, exits, gets stopped out, re-places a missing stop, can't reach TWS, loses or regains the IB
+connection (expect a pair around TWS's nightly restart during the overnight hold), skips a late entry, refuses
+to trade, or crashes. Times are shown in Central time. Every message says PAPER.
+
+Setup: in Discord, create a server (or use your own), then channel *Edit Channel → Integrations → Webhooks →
+New Webhook → Copy Webhook URL*. Put `ALERT_WEBHOOK_URL=<that URL>` in `.env` (git-ignored; the prepublish check
+also blocks Discord webhook URLs). Check it with `py cli.py alert-test`. Treat the URL like a password: anyone
+with it can post to that channel. If it leaks, delete the webhook in Discord and make a new one.
+
 ## Safety
 - Paper only: the IB adapter refuses live ports and non-`DU` accounts; this command has no live option.
 - The stop is **GTC and held at IB**, so it survives the overnight break, TWS's nightly restart, a crash or a

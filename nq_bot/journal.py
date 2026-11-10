@@ -34,15 +34,20 @@ class Alerts:
         self.enabled = enabled
         self.url = os.environ.get("ALERT_WEBHOOK_URL")
 
-    def send(self, level: str, text: str) -> None:
+    def send(self, level: str, text: str) -> bool:
+        """Log the alert and, if a webhook URL is set, post it. Returns True only if the post succeeded."""
         if not self.enabled:
-            return
+            return False
         getattr(log, level if level in ("info", "warning", "error") else "info")(text)
         if not self.url:
-            return
+            return False
         try:
             body = json.dumps({"content": f"[NQ bot {level.upper()}] {text}"}).encode()
-            req = urllib.request.Request(self.url, data=body, headers={"Content-Type": "application/json"})
+            # Discord rejects Python's default user agent, so name ours.
+            req = urllib.request.Request(self.url, data=body, method="POST",
+                                         headers={"Content-Type": "application/json", "User-Agent": "nq-bot-alerts/1.0"})
             urllib.request.urlopen(req, timeout=5).read()
-        except Exception as e:  # alerts must never crash the bot
+            return True
+        except Exception as e:  # alerts must never crash the bot; never log the URL (it is a secret)
             log.warning("alert webhook failed: %s", type(e).__name__)
+            return False

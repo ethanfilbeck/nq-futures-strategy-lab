@@ -49,3 +49,42 @@ def test_daily_task_only_starts_on_entry_day_or_open_trade():
     assert not due_today(ts("2026-12-07 13:40"), ev, False)        # day before entry day
     assert not due_today(ts("2026-11-20 13:40"), ev, False)        # ordinary day
     assert due_today(ts("2026-12-09 09:00"), ev, True)             # trade open (e.g. after a reboot): resume
+
+
+def test_alert_times_are_shown_in_central():
+    from nq_bot.fomc_paper import ct
+    assert ct(pd.Timestamp("2026-12-08 14:00", tz="America/New_York")) == "Tue 1:00 PM CT"
+    assert ct(pd.Timestamp("2026-12-09 13:55", tz="America/New_York")) == "Wed 12:55 PM CT"
+
+
+def test_alerts_post_to_discord_with_a_named_user_agent(monkeypatch):
+    import json as _json
+    from nq_bot import journal
+    sent = {}
+
+    class Resp:
+        def read(self):
+            return b""
+
+    def fake_urlopen(req, timeout):
+        sent["ua"] = req.get_header("User-agent")
+        sent["body"] = _json.loads(req.data)
+        return Resp()
+
+    monkeypatch.setenv("ALERT_WEBHOOK_URL", "https://example.invalid/hook")
+    monkeypatch.setattr(journal.urllib.request, "urlopen", fake_urlopen)
+    assert journal.Alerts().send("info", "hello") is True
+    assert sent["ua"] == "nq-bot-alerts/1.0" and sent["body"]["content"] == "[NQ bot INFO] hello"
+
+
+def test_alerts_never_raise_and_report_failure(monkeypatch):
+    from nq_bot import journal
+
+    def boom(req, timeout):
+        raise OSError("down")
+
+    monkeypatch.setenv("ALERT_WEBHOOK_URL", "https://example.invalid/hook")
+    monkeypatch.setattr(journal.urllib.request, "urlopen", boom)
+    assert journal.Alerts().send("error", "x") is False
+    monkeypatch.delenv("ALERT_WEBHOOK_URL")
+    assert journal.Alerts().send("error", "x") is False

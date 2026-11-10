@@ -94,6 +94,7 @@ def main():
     fp.add_argument("--test-now", action="store_true", help="plumbing check: buy 1, place GTC stop, sell ~20 s later")
     fp.add_argument("--if-due", action="store_true",
                     help="for the scheduled task: run only if a trade is open or today is an entry day, else exit")
+    sub.add_parser("alert-test", help="send one test message to ALERT_WEBHOOK_URL (Discord) from .env")
     lp = sub.add_parser("paper")
     lp.add_argument("--live", action="store_true", help="ALSO needs mode: live, env flag and typed confirmation")
 
@@ -217,6 +218,15 @@ def main():
                 print(f"{now:%Y-%m-%d %H:%M} ET: no FOMC paper trade due today.")
                 return
         fp_mod.run(cfg, test_now=args.test_now)
+    elif args.cmd == "alert-test":
+        from nq_bot.journal import Alerts
+        al = Alerts()
+        if not al.url:
+            print("ALERT_WEBHOOK_URL is not set. Add it to the .env file in this folder (see docs/FOMC_PAPER.md).")
+        elif al.send("info", "Test alert - phone alerts are working. (PAPER bot, no real money.)"):
+            print("Sent. Check Discord on your phone.")
+        else:
+            print("The webhook post failed - check the URL in .env (copy it again from Discord).")
     elif args.cmd == "paper":
         from nq_bot.live import run
         run(cfg, live_flag=args.live)

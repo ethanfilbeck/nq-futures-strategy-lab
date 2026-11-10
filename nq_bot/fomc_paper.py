@@ -8,6 +8,9 @@ Results go to logs/fomc_paper/forward_trades.jsonl - forward paper results, kept
 
     py cli.py fomc-paper              # waits for the next event, trades it, exits
     py cli.py fomc-paper --test-now   # plumbing check: buy, place the GTC stop, sell ~20 s later (logged separately)
+
+Phone alerts: if ALERT_WEBHOOK_URL (a Discord webhook) is set in .env, it posts on entry, exit, stop-out, a
+re-placed stop, lost/restored connection, a refused or skipped trade, and any crash. `py cli.py alert-test` checks it.
 """
 from __future__ import annotations
 
@@ -110,10 +113,12 @@ def append_trade(path: Path, rec: dict) -> None:
 
 # ---------------------------------------------------------------- IB side
 class Runner:
-    def __init__(self, cfg, outdir: Path = OUT):
+    def __init__(self, cfg, outdir: Path = OUT, alerts=None):
         from .broker.ibkr import IBKRBroker
         from .contracts import SPECS
+        from .journal import Alerts
         self.cfg, self.out = cfg, outdir
+        self.alerts = alerts or Alerts()
         self.spec = SPECS[cfg.instrument.root]
         self.broker = IBKRBroker(cfg, self.spec, live_authorized=False)   # paper lock lives in here
         self.state_path = outdir / "state.json"
@@ -126,8 +131,14 @@ class Runner:
                 return
             except (ConnectionError, OSError, TimeoutError) as e:
                 log.warning("IB connect failed (%s), retry %d/%d in %ds", type(e).__name__, i + 1, tries, wait_s)
+                if i == 0:
+                    self.alerts.send("warning", "PAPER: can't reach TWS. Is it running and logged into Paper? "
+                                                f"Retrying every {wait_s}s for {tries * wait_s // 60} min.")
                 time.sleep(wait_s)
-        raise RuntimeError("Could not reach TWS/IB Gateway. The protective stop (GTC) is still working at IB.")
+        msg = "Could not reach TWS/IB Gateway. The protective stop (GTC) is still working at IB."
+        self.alerts.send("error", f"PAPER fomc-paper gave up reconnecting after {tries} tries. {msg} "
+                                  "Log TWS into Paper and rerun `py cli.py fomc-paper`.")
+        raise RuntimeError(msg)
 
     def contract(self, st):
         from ib_async import Contract
@@ -166,6 +177,7 @@ class Runner:
         if not self._our_stops(con):
             log.warning("No working protective stop found - re-placing at %s", st["stop"])
             self._place_stop(con, st["stop"])
+            self.alerts.send("warning", f"PAPER: protective stop was missing - re-placed at {st['stop']:.2f}.")
             self.broker.ib.sleep(2)
 
     def enter(self, w: Window, test: bool = False) -> dict:
@@ -179,6 +191,8 @@ class Runner:
               "entry": fill, "stop": stop}
         save_state(self.state_path, st)
         log.warning("ENTERED long 1 %s @ %.2f, GTC stop %.2f (paper)", con.localSymbol, fill, stop)
+        self.alerts.send("info", f"{'TEST ' if test else ''}PAPER ENTRY: bought 1 {con.localSymbol} @ {fill:.2f}. "
+                                 f"Stop {stop:.2f} (3%) held at IB. Planned exit {ct(w.exit)}.")
         return st
 
     def exit(self, st, reason: str) -> None:
@@ -201,6 +215,10 @@ class Runner:
         append_trade(self.out / ("test_trades.jsonl" if st.get("test") else "forward_trades.jsonl"), rec)
         save_state(self.state_path, {"in_trade": False, "last": rec})
         log.warning("CLOSED %s @ %.2f (%s), est. net $%.2f", st["local_symbol"], exit_px, reason, net)
+        verb = "STOPPED OUT" if reason.startswith("stop") else "EXIT"
+        self.alerts.send("warning" if verb == "STOPPED OUT" else "info",
+                         f"{'TEST ' if st.get('test') else ''}PAPER {verb}: sold 1 {st['local_symbol']} @ {exit_px:.2f} "
+                         f"(entry {st['entry']:.2f}, {reason}). Est. net ${net:+,.2f}. Simulated, not real money.")
 
     def stopped_out(self, st) -> None:
         con = self.contract(st)
@@ -209,6 +227,12 @@ class Runner:
             if f.contract.conId == con.conId and f.execution.side == "SLD" and (f.execution.orderRef or "").startswith(REF):
                 px = float(f.execution.price)
         self._record(st, px if px is not None else st["stop"], "stop" + ("" if px is not None else " (fill price not seen; stop level used)"))
+
+
+def ct(ts) -> str:
+    """Timestamp as phone-friendly Central time, e.g. 'Tue 1:00 PM CT' (the user is in Kentucky)."""
+    t = pd.Timestamp(ts).tz_convert("America/Chicago")
+    return f"{t:%a} {t.hour % 12 or 12}:{t:%M} {'AM' if t.hour < 12 else 'PM'} CT"
 
 
 def keep_awake(on: bool = True) -> None:
@@ -235,63 +259,85 @@ def run(cfg, test_now: bool = False, events_path: str = "config/events.csv") -> 
     r = Runner(cfg)
     r.connect()
     try:
-        st = load_state(r.state_path)
-        if test_now:
-            if st.get("in_trade") or r.position(r.broker.contract) != 0:
-                raise SystemExit("Not flat (or a tracked trade is open) - test refused.")
-            now = pd.Timestamp.now(tz=TZ)
-            st = r.enter(Window(now.date(), now, now), test=True)
-            r.ensure_stop(r.contract(st), st)
-            print(f"Test: long 1 {st['local_symbol']} @ {st['entry']}, GTC stop {st['stop']} working. Selling in 20 s...")
-            r.broker.ib.sleep(20)
-            r.exit(st, "test")
-            print("Test round trip done - see logs/fomc_paper/test_trades.jsonl")
-            return
-        events = fomc_events(events_path)
-        announced = False
-        while True:
-            if not r.broker.ib.isConnected():
-                log.warning("Not connected to IB (TWS restart?). The GTC stop stays at IB. Reconnecting...")
-                r.connect()
-            now = pd.Timestamp.now(tz=TZ)
-            st = load_state(r.state_path)
-            in_trade = bool(st.get("in_trade"))
-            con = r.contract(st) if in_trade else r.broker.contract
-            pos = r.position(con)
-            w = window_for(pd.Timestamp(st["event"]).date()) if in_trade else next_window(now, events)
-            action = decide(now, w, in_trade, pos)
-            if action == "refuse":
-                raise SystemExit(f"An MNQ position ({pos:+d}) exists that this tracker didn't open. Close it manually first.")
-            if action == "done":
-                print("No upcoming FOMC events in config/events.csv. Refresh the calendar.")
-                return
-            if action == "skip":
-                print(f"Missed the {w.entry:%Y-%m-%d %H:%M} ET entry for the {w.event} statement - not entering late. "
-                      "Start earlier next time.")
-                return
-            if action == "wait" and not announced:
-                print(f"Next: FOMC statement {w.event}. Entry {w.entry:%a %Y-%m-%d %H:%M} ET, exit {w.exit:%a %H:%M} ET. "
-                      "Leave this window open and TWS (paper) logged in.")
-                announced = True
-            if action == "enter":
-                r.enter(w)
-            elif action == "hold":
-                r.ensure_stop(con, st)
-            elif action == "exit":
-                r.exit(st, "time" if now < w.exit + pd.Timedelta(minutes=10) else "late (tracker was not running at 13:55)")
-                print("Trade recorded in logs/fomc_paper/forward_trades.jsonl. Done until the next event.")
-                return
-            elif action == "stopped":
-                r.stopped_out(st)
-                print("Protective stop was hit. Recorded. Done until the next event.")
-                return
-            try:
-                r.broker.ib.sleep(15)
-            except (ConnectionError, OSError):
-                log.warning("Lost the IB connection (TWS restart?). The GTC stop stays at IB. Reconnecting...")
-                r.broker.ib.disconnect()
-                r.connect()
+        _loop(r, test_now, events_path)
+    except SystemExit as e:
+        if e.code not in (None, 0):
+            r.alerts.send("error", f"PAPER fomc-paper stopped: {e.code}")
+        raise
+    except Exception as e:
+        r.alerts.send("error", f"PAPER fomc-paper crashed ({type(e).__name__}: {e}). Any GTC stop stays at IB. "
+                               "Check logs\\fomc_paper\\task.log.")
+        raise
     finally:
         keep_awake(False)
         if r.broker.ib.isConnected():
             r.broker.ib.disconnect()
+
+
+def _reconnect(r: Runner, why: str) -> None:
+    r.alerts.send("warning", f"PAPER: lost the IB connection ({why}). Any GTC stop stays at IB. Reconnecting...")
+    r.connect()
+    r.alerts.send("info", "PAPER: reconnected to IB.")
+
+
+def _loop(r: Runner, test_now: bool, events_path: str) -> None:
+    st = load_state(r.state_path)
+    if test_now:
+        if st.get("in_trade") or r.position(r.broker.contract) != 0:
+            raise SystemExit("Not flat (or a tracked trade is open) - test refused.")
+        now = pd.Timestamp.now(tz=TZ)
+        st = r.enter(Window(now.date(), now, now), test=True)
+        r.ensure_stop(r.contract(st), st)
+        print(f"Test: long 1 {st['local_symbol']} @ {st['entry']}, GTC stop {st['stop']} working. Selling in 20 s...")
+        r.broker.ib.sleep(20)
+        r.exit(st, "test")
+        print("Test round trip done - see logs/fomc_paper/test_trades.jsonl")
+        return
+    events = fomc_events(events_path)
+    announced = False
+    while True:
+        if not r.broker.ib.isConnected():
+            log.warning("Not connected to IB (TWS restart?). The GTC stop stays at IB. Reconnecting...")
+            _reconnect(r, "TWS restart?")
+        now = pd.Timestamp.now(tz=TZ)
+        st = load_state(r.state_path)
+        in_trade = bool(st.get("in_trade"))
+        con = r.contract(st) if in_trade else r.broker.contract
+        pos = r.position(con)
+        w = window_for(pd.Timestamp(st["event"]).date()) if in_trade else next_window(now, events)
+        action = decide(now, w, in_trade, pos)
+        if action == "refuse":
+            raise SystemExit(f"An MNQ position ({pos:+d}) exists that this tracker didn't open. Close it manually first.")
+        if action == "done":
+            print("No upcoming FOMC events in config/events.csv. Refresh the calendar.")
+            return
+        if action == "skip":
+            r.alerts.send("warning", f"PAPER: missed the {ct(w.entry)} entry for the {w.event} Fed statement - "
+                                     "not entering late (rules say 14:00 ET).")
+            print(f"Missed the {w.entry:%Y-%m-%d %H:%M} ET entry for the {w.event} statement - not entering late. "
+                  "Start earlier next time.")
+            return
+        if action == "wait" and not announced:
+            if w.entry.date() == now.date():
+                r.alerts.send("info", f"PAPER: Fed trade today. Buying 1 MNQ at {ct(w.entry)}, selling {ct(w.exit)}.")
+            print(f"Next: FOMC statement {w.event}. Entry {w.entry:%a %Y-%m-%d %H:%M} ET, exit {w.exit:%a %H:%M} ET. "
+                  "Leave this window open and TWS (paper) logged in.")
+            announced = True
+        if action == "enter":
+            r.enter(w)
+        elif action == "hold":
+            r.ensure_stop(con, st)
+        elif action == "exit":
+            r.exit(st, "time" if now < w.exit + pd.Timedelta(minutes=10) else "late (tracker was not running at 13:55)")
+            print("Trade recorded in logs/fomc_paper/forward_trades.jsonl. Done until the next event.")
+            return
+        elif action == "stopped":
+            r.stopped_out(st)
+            print("Protective stop was hit. Recorded. Done until the next event.")
+            return
+        try:
+            r.broker.ib.sleep(15)
+        except (ConnectionError, OSError):
+            log.warning("Lost the IB connection (TWS restart?). The GTC stop stays at IB. Reconnecting...")
+            r.broker.ib.disconnect()
+            _reconnect(r, "TWS restart?")
