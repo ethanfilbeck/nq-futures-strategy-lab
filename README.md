@@ -1,7 +1,7 @@
 # NQ / MNQ Futures Strategy Lab — a system that decides whether a strategy has an edge
 
 > **⚠️ Not a money-making bot.** 11 of 12 tested strategies failed. One (the pre-FOMC drift) passed and replicated
-> on a second market, and is now being tested forward **on paper only**. This is a research and software-engineering
+> on two more markets (S&P 500 and Russell 2000), and is now being tested forward **on paper only**. This is a research and software-engineering
 > project, not trading advice. Nothing has been traded with real money.
 
 A Python research-and-execution system for Micro E-mini Nasdaq-100 futures (MNQ): causal feature pipeline,
@@ -18,8 +18,8 @@ that makes the one *yes* earn it.
 |---|---|
 | Ideas tested (2019-05 → 2025-06 MNQ, real costs) | **12**, all but the first pre-registered and hashed before running |
 | Rejected | **11** |
-| Survivor | **H8 pre-FOMC drift**: passed on MNQ (t 3.02), weak but positive on 16 months of held-out MNQ data (t 0.34), **replicated on S&P 500 micro futures** (59 events, t 3.56, beat random long holds) |
-| Status of H8 | Replicated candidate, **forward paper trading** on an IB paper account (`fomc-paper`), ~8 events a year. Not real money. |
+| Survivor | **H8 pre-FOMC drift**: passed on MNQ (t 3.02), weak but positive on 16 months of held-out MNQ data (t 0.34), **replicated on S&P 500 micro futures** (59 events, t 3.56) **and Russell 2000 micro futures** (59 events, t 2.45), beating random long holds in both |
+| Status of H8 | Replicated in two markets, **forward paper trading** on an IB paper account (`fomc-paper`), ~8 events a year. Not real money. |
 | Broker drills | 13 of 13 pass on an IB paper account; 3 bugs found and fixed |
 | Security review | Webhook receiver threat-modeled; 2 denial-of-service weaknesses found and fixed ([report](docs/SECURITY_WEBHOOK.md)) |
 
@@ -38,12 +38,15 @@ that makes the one *yes* earn it.
 | **H8 pre-FOMC drift** (Lucca & Moench 2015) | pre-registered, t ≥ 3 + beat random longs | 48 | 3.34 | +$7,115 | **Pass** (t 3.02) — [details](docs/RESULTS_FAMILY3.md) |
 | ↳ H8 on held-out MNQ (2025-07 → 2026-10) | run once, rule frozen | 11 | — | +$368 | Consistent, weak (t 0.34) |
 | ↳ H8 on S&P 500 micro (MES), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 3.55 | +$5,141 (MES) | **Replicates** (t 3.56) — [details](docs/RESULTS_H8_ES_REPLICATION.md) |
+| ↳ H8 on Russell 2000 micro (M2K), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 2.29 | +$2,325 (M2K) | **Replicates** (t 2.45) — [details](docs/RESULTS_H8_M2K_REPLICATION.md) |
 | H9 CPI / jobs-report days | pre-registered, t ≥ 3.5 + beat random longs | 141 | 1.05 | +$1,247 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 | H10 pre-holiday | pre-registered, t ≥ 3.5 + beat random longs | 59 | 1.84 | +$3,876 | **Fail** (t 1.70) — [details](docs/RESULTS_FAMILY4.md) |
 | H11 opening-hour trend after a high-range day | pre-registered, t ≥ 3.5 | 253 | 1.08 | +$1,983 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 
-**Why H8 is still not "proven":** 48 of its 59 S&P events are the same dates as the MNQ test, and the S&P and Nasdaq
-move together (~0.9 correlation), so the replication is supporting rather than independent evidence. Published
+**Why H8 is still not "proven":** all three markets were tested on the same Fed meetings (48 of the 59 are the MNQ
+training dates), so luck specific to those particular meetings would show up in all three. The Russell 2000 test is the
+more informative replication (it moves less with the Nasdaq, and random long holds there lost money), but it is
+weaker (t 2.45) and rests on a few good meetings. Published
 research found the drift had faded in 2016–2019; it reappeared in 2020–2026, a period of unusual rate
 uncertainty. The deciding evidence is forward: FOMC meetings no test has seen.
 
