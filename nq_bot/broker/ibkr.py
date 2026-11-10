@@ -13,11 +13,19 @@ from __future__ import annotations
 
 import logging
 import time
+from datetime import date as date_type
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
 from ..contracts import front_month
 from .base import BracketRequest, Broker, Fill, OrderEvent
+
+if TYPE_CHECKING:          # type checking only; ib_async is imported lazily at runtime
+    from ib_async import IB, Contract, Trade
+
+    from ..config import Cfg
+    from ..contracts import ContractSpec, FrontMonth
 
 log = logging.getLogger("nq_bot.ibkr")
 PAPER_PORTS = {7497, 4002}
@@ -25,24 +33,37 @@ ENTRY_TIMEOUT_SEC = 90
 
 
 class IBKRBroker(Broker):
-    def __init__(self, cfg, spec, live_authorized: bool = False):
+    def __init__(self, cfg: Cfg, spec: ContractSpec, live_authorized: bool = False):
         from ib_async import IB  # pip install ib_async
 
         self.cfg, self.spec, self.live = cfg, spec, live_authorized
         if not live_authorized and cfg.ibkr.port not in PAPER_PORTS:
             raise RuntimeError(f"Port {cfg.ibkr.port} is not a paper port {sorted(PAPER_PORTS)}; refusing.")
-        self.ib = IB()
-        self.contract = None
-        self.entry = self.tp = self.sl = None
+        self.ib: IB = IB()
+        self._contract: Contract | None = None          # set by connect(); use the `contract` property
+        self.entry: Trade | None = None
+        self.tp: Trade | None = None
+        self.sl: Trade | None = None
         self.entry_sent_at = 0.0
         self.kind_by_order: dict[int, str] = {}
         self.cid_by_order: dict[int, str] = {}
         self.seen_execs: set[str] = set()
         self._events: list[OrderEvent] = []
         self._reported_dead: set[int] = set()
-        self.reducing: list = []        # working reduce/flatten market orders
+        self.reducing: list[Trade] = []        # working reduce/flatten market orders
         self.stop_px: float | None = None
-        self.front = None
+        self.front: FrontMonth | None = None
+
+    @property
+    def contract(self) -> Contract:
+        """The qualified front-month contract. Raises rather than sending an order to nothing."""
+        if self._contract is None:
+            raise RuntimeError("Not connected to IB: call connect() before trading.")
+        return self._contract
+
+    @contract.setter
+    def contract(self, c: Contract) -> None:
+        self._contract = c
 
     # ---------------------------------------------------------------- setup
     def connect(self, startup_checks: bool = True):
@@ -61,7 +82,7 @@ class IBKRBroker(Broker):
         q = self.ib.qualifyContracts(fut)
         if not q:
             raise RuntimeError(f"Could not qualify {fm.local_symbol}")
-        self.contract = q[0]
+        self._contract = q[0]
         if self.contract.localSymbol != fm.local_symbol:
             raise RuntimeError(f"Expected {fm.local_symbol}, broker returned {self.contract.localSymbol}")
         mult = float(self.contract.multiplier or 0)
@@ -102,12 +123,17 @@ class IBKRBroker(Broker):
                 continue
             ref = o.orderRef or "adopted"
             if o.orderType == "STP" and (self.sl is None or self.sl.isDone()):
+                if o.auxPrice is None:          # a stop with no price protects nothing - leave it alone
+                    log.warning("Ignoring a working STP order with no stop price (orderRef %s)", ref)
+                    continue
                 self.sl, self.stop_px = self._track(t, "stop", ref), float(o.auxPrice)
             elif o.orderType == "LMT" and (self.tp is None or self.tp.isDone()):
                 self.tp = self._track(t, "target", ref)
 
-    def roll_due(self, today) -> bool:
+    def roll_due(self, today: date_type) -> bool:
         """True once `today` maps to a different quarterly contract than the one we connected to."""
+        if self.front is None:
+            raise RuntimeError("Not connected to IB: call connect() before checking the roll date.")
         fm = front_month(self.cfg.instrument.root, today, self.cfg.instrument.roll_days_before_expiry)
         return fm.local_symbol != self.front.local_symbol
 
@@ -239,8 +265,8 @@ class IBKRBroker(Broker):
             # (e.g. after a restart): adopt a working stop/target at IB before deciding anything.
             self.adopt_existing_orders()
         entry_working = self.entry is not None and not self.entry.isDone()
-        sl_live = self.sl is not None and not self.sl.isDone()
-        action = protection_fix(pos, entry_working, sl_live, int(self.sl.order.totalQuantity) if sl_live else 0,
+        sl = self.sl if (self.sl is not None and not self.sl.isDone()) else None
+        action = protection_fix(pos, entry_working, sl is not None, int(sl.order.totalQuantity) if sl else 0,
                                 any(not t.isDone() for t in self.reducing))
         if action == "none":
             return
@@ -252,7 +278,15 @@ class IBKRBroker(Broker):
                     self.ib.cancelOrder(t.order)
             self.sl = self.tp = None
         elif action == "resize":
-            self.modify_protection(self.stop_px, abs(pos))
+            # the working stop's own price is the fallback, so a resize can never send a stop with no level
+            level = self.stop_px
+        if level is None and sl is not None and sl.order.auxPrice is not None:
+            level = float(sl.order.auxPrice)
+            if level is None:
+                self._events.append(OrderEvent(ref, "rejected", "cannot resize a stop with no known level - flattening"))
+                self.flatten("unprotected position")
+                return
+            self.modify_protection(level, abs(pos))
         elif action == "replace_stop":
             if self.stop_px is None:  # no known stop level -> can't protect -> get out
                 self._events.append(OrderEvent(ref, "rejected", "unprotected position with no stop level - flattening"))

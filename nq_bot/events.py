@@ -21,7 +21,8 @@ class EventCalendar:
             df = pd.read_csv(p, comment="#")
             if len(df):
                 df["datetime_et"] = pd.to_datetime(df["datetime_et"]).dt.tz_localize(tz)
-                df["impact"] = df.get("impact", "high").fillna("high").str.lower()
+                impact = df["impact"] if "impact" in df.columns else pd.Series("high", index=df.index)
+                df["impact"] = impact.fillna("high").str.lower()
                 self.events = df.sort_values("datetime_et").reset_index(drop=True)
 
     def blackout(self, ts) -> str | None:

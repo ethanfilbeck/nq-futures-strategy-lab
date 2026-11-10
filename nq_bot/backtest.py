@@ -10,6 +10,7 @@ import pandas as pd
 from .broker.sim import SimBroker
 from .config import override
 from .contracts import SPECS
+from .data import times
 from .engine import Engine
 from .events import EventCalendar
 from .features import add_features
@@ -78,21 +79,22 @@ def walk_forward(bars: pd.DataFrame, cfg, grid: dict, n_folds: int = 4) -> dict:
     """Anchored walk-forward. Days are cut into n_folds+1 equal chunks; fold k picks params on
     chunks 0..k and trades them, unchanged, on chunk k+1. Test windows never overlap, and
     only the concatenated out-of-sample trades are reported."""
-    days = sorted(set(bars.index.date))
+    days = sorted(set(times(bars).date))
     chunk = len(days) // (n_folds + 1)
     if chunk < 20:
         raise ValueError("need at least ~20 trading days per chunk (more data or fewer folds)")
     keys = list(grid)
     combos = [dict(zip(keys, v)) for v in itertools.product(*grid.values())]
-    oos, folds = [], []
+    oos: list[pd.DataFrame] = []
+    folds: list[dict[str, object]] = []
     for k in range(n_folds):
         split = days[(k + 1) * chunk - 1]
         end = days[-1] if k == n_folds - 1 else days[(k + 2) * chunk - 1]
         # test run starts 25 days early so indicators are warm; only trades entered after
         # `split` are counted (risk state from warm-up days is a small, conservative bias).
-        train = bars[bars.index.date <= split]
+        train = bars[times(bars).date <= split]
         warm = days[max(0, (k + 1) * chunk - 25)]
-        test_full = bars[(bars.index.date >= warm) & (bars.index.date <= end)]
+        test_full = bars[(times(bars).date >= warm) & (times(bars).date <= end)]
         best, best_s = None, -np.inf
         for c in combos:
             s = _score(run_backtest(train, override(cfg, c))["summary"])
@@ -105,8 +107,9 @@ def walk_forward(bars: pd.DataFrame, cfg, grid: dict, n_folds: int = 4) -> dict:
         t = res["trades"]
         if not t.empty:
             t = t[pd.to_datetime(t["entry_ts"]).map(lambda x: x.date()) > split].reset_index(drop=True)
-        folds.append({"fold": k, "train_end": str(split), "test_end": str(end), "params": best,
-                      "oos": summarize(t, cfg.risk.starting_equity)})
+        fold_rec: dict[str, object] = {"fold": k, "train_end": str(split), "test_end": str(end),
+                                       "params": best, "oos": summarize(t, cfg.risk.starting_equity)}
+        folds.append(fold_rec)
         if not t.empty:
             oos.append(t)
     oos_trades = pd.concat(oos, ignore_index=True) if oos else pd.DataFrame()

@@ -7,28 +7,38 @@ scale size up after losses.
 """
 from __future__ import annotations
 
+import json
 import logging
 import math
 from dataclasses import dataclass, field
+from datetime import date as date_type
 from datetime import timedelta
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:          # only for type checking: no import cost at runtime
+    import pandas as pd
+
+    from .config import Cfg
+    from .contracts import ContractSpec
 
 log = logging.getLogger("nq_bot.risk")
 
 
 @dataclass
 class DayState:
-    date: object = None
+    date: date_type | None = None
     realized: float = 0.0
     peak: float = 0.0
     trades: int = 0
     consecutive_losses: int = 0
-    cooldown_until: object = None
+    cooldown_until: pd.Timestamp | None = None
     halted_reason: str | None = None
 
 
 @dataclass
 class RiskManager:
-    cfg: object
+    cfg: Cfg
     equity: float
     peak_equity: float = field(init=False)
     killed_reason: str | None = field(default=None, init=False)
@@ -38,7 +48,7 @@ class RiskManager:
         self.peak_equity = self.equity
 
     # ---- state -------------------------------------------------------------
-    def new_day(self, session_date) -> None:
+    def new_day(self, session_date: date_type) -> None:
         if self.day.date != session_date:
             self.day = DayState(date=session_date)
 
@@ -57,7 +67,7 @@ class RiskManager:
         return 0.0 if self.peak_equity <= 0 else 100.0 * (self.peak_equity - self.equity) / self.peak_equity
 
     # ---- gates -------------------------------------------------------------
-    def can_enter(self, now) -> tuple[bool, str]:
+    def can_enter(self, now: pd.Timestamp) -> tuple[bool, str]:
         r = self.cfg.risk
         d = self.day
         if self.killed_reason:
@@ -70,7 +80,7 @@ class RiskManager:
             return False, f"cooldown until {d.cooldown_until:%H:%M}"
         return True, "ok"
 
-    def size(self, entry: float, stop: float, spec, margin_per_contract: float,
+    def size(self, entry: float, stop: float, spec: ContractSpec, margin_per_contract: float,
              commission_per_side: float, slippage_ticks: int) -> tuple[int, str]:
         """Contracts to trade. 0 means 'do not trade' (never rounded up)."""
         r = self.cfg.risk
@@ -108,7 +118,7 @@ class RiskManager:
         return hit
 
     # ---- persistence (so a restart can't reset today's limits or the kill switch) ----
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         d = self.day
         return {"equity": self.equity, "peak_equity": self.peak_equity, "killed_reason": self.killed_reason,
                 "day": {"date": str(d.date) if d.date else None, "realized": d.realized, "peak": d.peak,
@@ -116,7 +126,7 @@ class RiskManager:
                         "cooldown_until": d.cooldown_until.isoformat() if d.cooldown_until is not None else None,
                         "halted_reason": d.halted_reason}}
 
-    def load_dict(self, s: dict, today) -> None:
+    def load_dict(self, s: dict[str, Any], today: date_type) -> None:
         """Restore saved state. Peak equity and the kill switch always carry over; the day's
         counters carry over only if the saved day is `today`."""
         import pandas as pd
@@ -135,7 +145,7 @@ class RiskManager:
             return True
         return False
 
-    def record_trade(self, net_pnl: float, now) -> None:
+    def record_trade(self, net_pnl: float, now: pd.Timestamp) -> None:
         r = self.cfg.risk
         d = self.day
         d.trades += 1
@@ -158,3 +168,20 @@ class RiskManager:
             self.halt_day("profit protection: gave back too much of today's gain")
         if self.drawdown_pct >= r.max_drawdown_pct:
             self.kill(f"max drawdown {self.drawdown_pct:.1f}% reached")
+
+
+# ---- persistence helpers (used by both the IB runner and the simulated paper runner) ----
+def save_risk_state(risk: RiskManager, path: Path) -> None:
+    """Write the risk state atomically, so a crash mid-write cannot leave a half file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(risk.to_dict(), indent=2))
+    tmp.replace(path)
+
+
+def restore_risk_state(risk: RiskManager, path: Path, today: date_type) -> None:
+    """Load a saved state so a restart cannot reset today's limits or clear the kill switch."""
+    if path.exists():
+        risk.load_dict(json.loads(path.read_text()), today)
+        log.info("Restored risk state: day trades %s, realized %.2f, killed=%s",
+                 risk.day.trades, risk.day.realized, risk.killed_reason)

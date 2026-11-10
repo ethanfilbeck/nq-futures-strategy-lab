@@ -76,7 +76,7 @@ def write_daily_report(outdir, day, trades, journal_path, *, bars, gaps, halted,
               f"- Halted today: {halted or 'no'}",
               f"- Kill switch: {killed or 'off'}",
               f"- Problems logged (bad data, emergencies, rejected/cancelled orders): {len(issues)}",
-              f"- Positions closed by rule: {', '.join(flattens) if flattens else 'none'}"]
+              f"- Positions closed by rule: {', '.join(str(x) for x in flattens) if flattens else 'none'}"]
     if skips:
         lines += ["", "## Signals skipped by risk rules"] + [f"- {k}: {v}" for k, v in skips.most_common()]
     path = out / f"report_{day}.md"

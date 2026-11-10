@@ -15,8 +15,8 @@ def summarize(trades: pd.DataFrame, starting_equity: float) -> dict:
     equity = starting_equity + pnl.cumsum()
     peak = np.maximum.accumulate(np.concatenate([[starting_equity], equity.values]))[1:]
     dd = (equity.values - peak)
-    max_dd = float(dd.min())
-    max_dd_pct = float((dd / peak).min() * 100)
+    max_dd = float(np.min(dd))
+    max_dd_pct = float(np.min(dd / peak) * 100)
 
     daily = trades.assign(d=pd.to_datetime(trades["exit_ts"]).map(lambda x: x.date())).groupby("d")["net"].sum()
     # daily returns on equity; zero-trade days are excluded (understates vol slightly - noted in docs)

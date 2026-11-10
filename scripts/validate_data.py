@@ -21,7 +21,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 def validate(bars: pd.DataFrame, tick: float = 0.25, max_move_pct: float = 3.0) -> tuple[list[str], list[str]]:
     """Return (errors, warnings) for a DataFrame indexed by bar-open time with open/high/low/close/volume."""
-    errors, warnings = [], []
+    errors: list[str] = []
+    warnings: list[str] = []
     need = ["open", "high", "low", "close", "volume"]
     missing = [c for c in need if c not in bars.columns]
     if missing:
@@ -58,7 +59,7 @@ def validate(bars: pd.DataFrame, tick: float = 0.25, max_move_pct: float = 3.0) 
     if len(big):
         warnings.append(f"{len(big)} one-bar moves over {max_move_pct}% (first: {big.index[0]}, {big.iloc[0]:.1f}%) "
                         "- check for roll jumps or bad prints")
-    if getattr(idx, "tz", None) is not None and idx.is_monotonic_increasing:
+    if isinstance(idx, pd.DatetimeIndex) and idx.tz is not None and idx.is_monotonic_increasing:
         et = idx.tz_convert("America/New_York")
         rth = (et.hour * 60 + et.minute >= 570) & (et.hour * 60 + et.minute < 960) & (et.dayofweek < 5)
         t = et[rth]

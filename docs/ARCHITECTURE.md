@@ -17,7 +17,7 @@ bar -> features -> regime -> strategy -> event blackout -> risk gates + sizing -
 | Features and regime | `features.py`, `regime.py`, `events.py`, `contracts.py` | No |
 | Strategies | `strategy.py` (ORB), `momentum.py`, `family2.py`, `family3.py`, `family4.py` | No |
 | Backtesting | `engine.py`, `backtest.py` (walk-forward), `broker/sim.py`, `broker/base.py` | No |
-| Risk | `risk.py` | No |
+| Risk | `risk.py` (limits, sizing, and saving/restoring risk state) | No |
 | Statistics | `metrics.py` (PF, drawdown, Sharpe, Monte Carlo), bootstrap benchmarks in the family modules | No |
 | Research runs | `run_*_prereg.py`, `run_*_replication.py`, `research_edge.py`, `wf_edge.py`, `docs/PREREG_*`, `docs/RESULTS_*` | No |
 | Simulated paper trading | `paper.py`, `report.py`, `webhook.py`, `external.py` | No (simulated fills) |
@@ -40,8 +40,7 @@ A `research/`, `execution/`, `data/` package split would look tidier. It was not
 Revisit when a second instrument or strategy family needs its own engine.
 
 ## Known rough edges
-- `paper.py` (simulated) imports two risk-state helpers from `live.py`. They touch no broker, but they belong in
-  `risk.py`.
-- Type hints are partial; mypy is advisory (see `TOOLING.md`).
+- Type hints are partial: mypy passes, but most functions are still unannotated, so it checks less than it could.
+  `disallow_untyped_defs` stays off until that changes.
 - `date.today()` (the PC's local date) decides roll and startup dates. Correct for a PC in a US time zone; would
   need an explicit exchange time zone on a server elsewhere.

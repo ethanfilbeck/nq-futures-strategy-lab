@@ -19,17 +19,26 @@ A failure in any required gate exits non-zero and prints the tool's full output.
 | **scripts/verify_prereg.py** | Fails if any pre-registration differs from its frozen SHA-256, or has no hash | none | 7 of 7 match |
 | **scripts/prepublish_check.py** | Blocks API keys, broker account IDs, emails, local paths, licensed data, trade prices in tracked files | in the script | Clean |
 | **scripts/validate_data.py** | Sanity-checks a bar file before any backtest uses it (ordering, duplicates, OHLC consistency, tick grid, gaps, jumps) | flags | Run by hand on each new download (data is licensed, so CI cannot hold it) |
-| **mypy** | Type checking | `pyproject.toml` | **Advisory.** 117 findings; the code base was written without type hints. Reported on every run, does not fail it |
+| **mypy** | Type checking | `pyproject.toml` | **Clean** (0 findings, 35 files). Was 117 on 2026-11-10; fixed the same day and promoted to a required gate |
 | **GitHub Actions** | Runs `scripts/check.py` on Ubuntu (Python 3.10, 3.12) and Windows (3.12) on every push, pull request and weekly | `.github/workflows/ci.yml` | Added; first run happens on push |
 | **Gitleaks (CI only)** | Scans the full git history for secrets on every push | `.gitleaks.toml` | Added. A manual pattern scan of the full history found only the `.env.example` placeholder |
 | **Dependabot** | Weekly pull requests for outdated or vulnerable dependencies and Actions | `.github/dependabot.yml` | Added |
 | **uv (lock file only)** | Generates `requirements.lock`, an exact cross-platform pin of every dependency, for reproducing results | none | `requirements.lock` added |
 
-### Two real fixes that the security rules found
+### Four real fixes these tools found
+Two from the security rules:
 1. `nq_bot/webhook.py` validated "the JSON body is an object" with `assert`, which Python removes under `-O`.
    A JSON list would then have reached code that expects a dict. Now an explicit check; test added.
 2. `nq_bot/journal.py` passed `ALERT_WEBHOOK_URL` straight to `urllib`, which also opens `file://` and plain
    `http://`. Alerts now go only to `https://` URLs; anything else is ignored with a warning. Test added.
+
+Two from type checking, both in the IB adapter's protection path:
+
+3. A working stop order whose `auxPrice` was unset could be adopted, recording a stop level of `0.0` and leaving
+   the position effectively unprotected. Such an order is now ignored and logged. Test added.
+4. Resizing a stop used `self.stop_px`, which can be unset after a restart; the resize would have sent a stop
+   order with no price. It now falls back to the working order's own price, and flattens if neither is known.
+   Test added.
 
 ## Evaluated and not adopted
 | Tool | Why not |

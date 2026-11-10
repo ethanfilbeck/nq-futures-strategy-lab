@@ -19,6 +19,9 @@ from .events import EventCalendar
 from .features import _hm, add_features
 from .journal import Alerts, Journal
 
+# These live in risk.py (they are risk state, not execution); re-exported so existing imports keep working.
+from .risk import restore_risk_state, save_risk_state
+
 log = logging.getLogger("nq_bot.live")
 LIVE_ENV_TOKEN = "I_UNDERSTAND_THE_RISK"  # noqa: S105 (a confirmation phrase, not a credential)
 
@@ -114,20 +117,6 @@ def run(cfg, live_flag: bool = False) -> None:
         save_risk_state(eng.risk, state_file)
         if broker.is_connected():
             broker.ib.disconnect()
-
-
-def save_risk_state(risk, path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(risk.to_dict(), indent=2))
-    tmp.replace(path)  # atomic: a crash mid-write can't leave a half file
-
-
-def restore_risk_state(risk, path: Path, today) -> None:
-    if path.exists():
-        risk.load_dict(json.loads(path.read_text()), today)
-        log.info("Restored risk state: day trades %s, realized %.2f, killed=%s",
-                 risk.day.trades, risk.day.realized, risk.killed_reason)
 
 
 def reset_kill(path: Path) -> bool:

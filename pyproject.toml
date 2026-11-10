@@ -26,5 +26,9 @@ python_version = "3.10"
 ignore_missing_imports = true      # ib_async / databento ship partial or no stubs
 check_untyped_defs = true
 warn_unused_ignores = true
+# Turned on once the code base type-checked cleanly; keeps new code from drifting back.
+disallow_untyped_defs = false        # most functions are still unannotated; annotate as modules are touched
+warn_redundant_casts = true
+no_implicit_optional = true
 exclude = ["^data/", "^logs/", "^runs/", "^tests/"]
 

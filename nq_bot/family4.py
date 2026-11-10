@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from . import family3 as f3
+from .data import times
 from .family3 import TICK, Trade
 
 # BLS release days (08:30 ET), from bls.gov/bls/news-release/cpi.htm and empsit.htm, read 2026-11-09.
@@ -34,17 +35,18 @@ STOP_FRAC = 0.03
 class Session4(f3.Session):
     def __init__(self, bars: pd.DataFrame):
         super().__init__(bars)
-        t = bars.index
+        t = times(bars)
         for hm in ("10:29", "10:30"):
             h, m = map(int, hm.split(":"))
             sel = bars[(t.hour == h) & (t.minute == m)]
             self._minute[hm] = {ts.date(): (ts, row) for ts, row in zip(sel.index, sel.itertuples(index=False))}
         mins = t.hour * 60 + t.minute
         rth = bars[(mins >= 570) & (mins < 960)]
-        g = rth.groupby(rth.index.date)
+        g = rth.groupby(times(rth).date)
         self.rth_range = (g["high"].max() - g["low"].min()).to_dict()
-        open_hr = rth[(rth.index.hour * 60 + rth.index.minute) < 630]
-        go = open_hr.groupby(open_hr.index.date)
+        rth_t = times(rth)
+        open_hr = rth[(rth_t.hour * 60 + rth_t.minute) < 630]
+        go = open_hr.groupby(times(open_hr).date)
         self.oh_high, self.oh_low = go["high"].max().to_dict(), go["low"].min().to_dict()
 
 

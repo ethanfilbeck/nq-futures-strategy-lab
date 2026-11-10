@@ -46,7 +46,8 @@ def main():
     end_ts = pd.Timestamp(f"{replay_days[-1]} 23:59", tz="America/New_York")
     hist = bars[(bars.index < start_ts) & (bars.index >= start_ts - pd.Timedelta(days=35))]
     live = bars[(bars.index >= start_ts) & (bars.index <= end_ts)]
-    results, ok = {}, True
+    results: dict[str, object] = {}
+    ok = True
 
     tmp = Path(tempfile.mkdtemp(prefix="nqbot_ready_"))
     try:
@@ -62,13 +63,14 @@ def main():
         results["paper_trades"] = len(paper)
         results["backtest_trades"] = len(bt)
         results["paper_matches_backtest"] = bool(same)
-        ok &= same
+        ok = ok and bool(same)
         # 3: protection and session rules
         if len(paper):
             exits_ok = paper["exit_kind"].isin(["stop", "target", "flatten"]).all()
             same_day = (pd.to_datetime(paper["entry_ts"]).map(lambda x: x.date())
                         == pd.to_datetime(paper["exit_ts"]).map(lambda x: x.date())).all()
-            stops = [json.loads(l) for l in r.journal.path.read_text().splitlines() if '"event": "order"' in l]
+            journal_lines = r.journal.path.read_text().splitlines() if r.journal.path else []
+            stops = [json.loads(line) for line in journal_lines if '"event": "order"' in line]
             all_had_stops = all(o["signal"]["stop"] is not None for o in stops)
         else:
             exits_ok = same_day = all_had_stops = True
@@ -93,10 +95,12 @@ def main():
         rest = live[live.index > half.index[-1]]
         for ts, b in rest.iterrows():
             k2.on_bar(ts, b["open"], b["high"], b["low"], b["close"], b["volume"])
-        results["kill_flattens"] = bool(flat_after_kill)
-        results["kill_survives_restart"] = k2.engine.risk.killed_reason == "readiness drill"
-        results["no_entries_after_kill"] = len(k2.engine.trades) == 0
-        ok &= results["kill_flattens"] and results["kill_survives_restart"] and results["no_entries_after_kill"]
+        kill_flattens = bool(flat_after_kill)
+        kill_survives = k2.engine.risk.killed_reason == "readiness drill"
+        no_entries = len(k2.engine.trades) == 0
+        results["kill_flattens"], results["kill_survives_restart"] = kill_flattens, kill_survives
+        results["no_entries_after_kill"] = no_entries
+        ok = ok and kill_flattens and kill_survives and no_entries
         sample = (tmp / "paper" / reps[-1]).read_text() if reps else ""
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

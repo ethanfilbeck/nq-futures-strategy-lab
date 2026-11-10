@@ -9,7 +9,7 @@ Gates (a failure in any required gate makes this exit 1 - nothing is silently ig
   3. prereg        pre-registrations still match their frozen hashes
   4. prepublish    no secrets, account IDs, licensed data or trade prices in tracked files
   5. pip-audit     known vulnerabilities in dependencies
-  6. mypy          type check - ADVISORY: reported, does not fail the run (the code base is mostly untyped)
+  6. mypy          type check (clean since 2026-11-10; a new type error fails the run)
 """
 import subprocess
 import sys
@@ -24,7 +24,7 @@ GATES = [
     ("prereg", [PY, "scripts/verify_prereg.py"], True, False),
     ("prepublish", [PY, "scripts/prepublish_check.py"], True, False),
     ("pip-audit", [PY, "-m", "pip_audit", "-r", "requirements.txt", "--progress-spinner", "off"], True, True),
-    ("mypy (advisory)", [PY, "-m", "mypy", "nq_bot", "cli.py", "scripts"], False, False),
+    ("mypy", [PY, "-m", "mypy", "nq_bot", "cli.py", "scripts"], True, False),
 ]
 
 

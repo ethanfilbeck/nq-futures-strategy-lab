@@ -21,7 +21,7 @@ class Signal:
     entry_ref: float     # close of the signal bar (actual fill comes from the broker)
     stop: float
     target: float
-    partial_target: float
+    partial_target: float | None   # None = no partial exit (the whole position runs to stop or target)
     regime: str
     reason: str
 

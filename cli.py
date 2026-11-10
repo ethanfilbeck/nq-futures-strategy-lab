@@ -194,14 +194,14 @@ def main():
         files = {"logs/risk_state.json": "IB runner (py cli.py paper)",
                  "logs/paper/risk_state.json": "Databento runner (py cli.py paper-live)"}
         killed = []
-        for f, what in files.items():
+        for state_file, what in files.items():
             try:
-                reason = _json.loads(Path(f).read_text()).get("killed_reason")
+                reason = _json.loads(Path(state_file).read_text()).get("killed_reason")
             except (OSError, ValueError):
                 reason = None
-            print(f"  {f:28s} {what}: " + (f"KILLED ({reason})" if reason else "not killed"))
+            print(f"  {state_file:28s} {what}: " + (f"KILLED ({reason})" if reason else "not killed"))
             if reason:
-                killed.append(f)
+                killed.append(state_file)
         default = killed[0] if len(killed) == 1 else "logs/paper/risk_state.json"
         path = Path(input(f"Which state file? [{default}] ").strip() or default)
         Path("logs/paper/KILL").unlink(missing_ok=True)

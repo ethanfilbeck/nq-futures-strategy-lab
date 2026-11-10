@@ -31,6 +31,14 @@ def _normalize(df: pd.DataFrame, tz: str = TZ) -> pd.DataFrame:
     return df
 
 
+def times(bars: pd.DataFrame) -> pd.DatetimeIndex:
+    """The frame's index as the DatetimeIndex it always is (bar-open times), for .hour/.date/.weekday."""
+    idx = bars.index
+    if not isinstance(idx, pd.DatetimeIndex):
+        raise TypeError(f"expected a DatetimeIndex of bar times, got {type(idx).__name__}")
+    return idx
+
+
 def load_csv(path: str, tz_of_file: str = "UTC") -> pd.DataFrame:
     """CSV with a timestamp column of bar OPEN times. Naive timestamps are read as `tz_of_file`."""
     raw = pd.read_csv(path)

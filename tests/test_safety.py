@@ -239,3 +239,39 @@ def test_new_session_never_cancels_a_working_stop_it_did_not_place(cfg):
     b._reconcile_protection()
     assert b.sl is stop and b.tp is target and b.stop_px == 27796.25
     assert not cancelled and not placed
+
+
+def test_a_stop_order_with_no_price_is_never_adopted(cfg):
+    """IB can report a STP order whose auxPrice is unset. Adopting it would record stop_px = 0 and leave
+    the position effectively unprotected, so it is ignored and left alone."""
+    pytest.importorskip("ib_async")
+    from nq_bot.broker.ibkr import IBKRBroker
+    b = IBKRBroker(cfg, SPECS["MNQ"])
+    b.contract = SimpleNamespace(conId=1, localSymbol="MNQZ6")
+    pos = SimpleNamespace(contract=b.contract, position=1)
+    broken = SimpleNamespace(contract=b.contract, isDone=lambda: False,
+                             order=SimpleNamespace(orderId=9, action="SELL", orderType="STP", auxPrice=None,
+                                                   totalQuantity=1, orderRef="broken"))
+    b.ib = _fake_ib(positions=[pos], open_trades=[broken])
+    b.adopt_existing_orders()
+    assert b.sl is None and b.stop_px is None
+
+
+def test_resize_uses_the_working_stops_own_price_when_the_level_is_unknown(cfg):
+    """After a restart the tracker may know a stop exists but not at what level. A resize must still send a
+    real price (taken from the order itself), never None."""
+    pytest.importorskip("ib_async")
+    from nq_bot.broker.ibkr import IBKRBroker
+    b = IBKRBroker(cfg, SPECS["MNQ"])
+    b.contract = SimpleNamespace(conId=1, localSymbol="MNQZ6")
+    pos = SimpleNamespace(contract=b.contract, position=2)          # 2 contracts...
+    stop = SimpleNamespace(contract=b.contract, isDone=lambda: False,
+                           order=SimpleNamespace(orderId=10, action="SELL", orderType="STP", auxPrice=20980.0,
+                                                 totalQuantity=1, orderRef="old"))   # ...but a stop for 1
+    placed = []
+    b.ib = _fake_ib(positions=[pos], open_trades=[stop])
+    b.ib.placeOrder = lambda c, o: placed.append(o)
+    b.sl, b.stop_px = stop, None          # stop known, level not
+    b.flatten = lambda reason: pytest.fail(f"flattened instead of resizing: {reason}")
+    b._reconcile_protection()
+    assert b.stop_px == 20980.0 and stop.order.totalQuantity == 2

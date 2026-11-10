@@ -33,8 +33,9 @@ def _connect(cfg) -> IBKRBroker:
 
 
 def _show(b: IBKRBroker) -> None:
-    print(f"Contract: {b.contract.localSymbol}  (front month by our calendar: {b.front.local_symbol}, "
-          f"roll on/after {b.front.roll_date})")
+    fm = b.front
+    print(f"Contract: {b.contract.localSymbol}" + (f"  (front month by our calendar: {fm.local_symbol}, "
+                                                   f"roll on/after {fm.roll_date})" if fm else ""))
     print(f"Position: {b.position():+d}")
     trades = [t for t in b.ib.openTrades() if t.contract.symbol in ("NQ", "MNQ")]
     if not trades:

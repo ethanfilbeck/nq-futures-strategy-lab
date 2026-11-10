@@ -7,10 +7,12 @@ H3 (overnight drift) is a fixed-time trade outside RTH and lives in run_family2_
 from __future__ import annotations
 
 import math
+from typing import Any
 
 import numpy as np
 import pandas as pd
 
+from .data import times
 from .strategy import Signal
 
 F2_COLS = ["pdh", "pdl"]
@@ -51,9 +53,12 @@ class LiquiditySweep:
         self.day = None
         self._ready: Signal | None = None
 
-    def _reset(self, d):
+    def _reset(self, d) -> None:
         self.day = d
-        self.state = {s: {"active": False, "done": False, "n": 0, "ext": None} for s in (1, -1)}
+        # per side: whether a sweep is being tracked, whether this side is finished for the day,
+        # how many bars since the sweep, and the extreme price reached (None until a sweep starts)
+        self.state: dict[int, dict[str, Any]] = {
+            s: {"active": False, "done": False, "n": 0, "ext": None} for s in (1, -1)}
 
     def mark_traded(self, session_date, side):
         pass  # one sweep per side per day is enforced by 'done'
@@ -139,12 +144,12 @@ def overnight_drift_trades(bars: pd.DataFrame, slippage_ticks: int = 1, commissi
                            point_value: float = 2.0, tick: float = 0.25) -> pd.DataFrame:
     """H3: long at the 02:00 ET bar open, out at the 03:00 ET bar open, with a protective stop.
     `bars` index = bar OPEN times in America/New_York."""
-    idx = bars.index
+    idx = times(bars)
     mins = idx.hour * 60 + idx.minute
     dates = pd.Index(idx.date)
     slip = slippage_ticks * tick
     o, l = bars["open"].to_numpy(), bars["low"].to_numpy()
-    pos = {}
+    pos: dict = {}
     for i, (d, m) in enumerate(zip(dates, mins)):
         if m in (120, 180):
             pos.setdefault(d, {})[m] = i

@@ -8,6 +8,8 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
+from .data import times
+
 TICK = 0.25
 PT_VALUE = 2.0          # MNQ $/point
 COMMISSION_RT = 1.24    # $0.62 per side
@@ -48,13 +50,13 @@ class Session:
 
     def __init__(self, bars: pd.DataFrame):
         self.bars = bars
-        t = bars.index
+        t = times(bars)
         mins = t.hour * 60 + t.minute
         rth = (mins >= 570) & (mins < 960) & (t.weekday < 5)
         counts = pd.Series(1, index=t[rth]).groupby(t[rth].date).sum()
         self.days = [d for d, n in counts.items() if n >= 300]
         self.day_index = {d: i for i, d in enumerate(self.days)}
-        self._minute = {}
+        self._minute: dict[str, dict] = {}
         for hm in ("09:30", "09:31", "13:55", "14:00", "15:55", "15:59"):
             h, m = map(int, hm.split(":"))
             sel = bars[(t.hour == h) & (t.minute == m)]
@@ -133,7 +135,9 @@ def h6_benchmark_pool(s: Session):
 
 # ---------------------------------------------------------------- H7 overnight-gap reversal
 def run_h7(s: Session):
-    trades, gaps, skipped_filled = [], [], 0
+    trades: list = []
+    gaps: list = []
+    skipped_filled = 0
     for i in range(1, len(s.days)):
         d, p = s.days[i], s.days[i - 1]
         o, c = s.bar(d, "09:30"), s.bar(p, "15:59")
@@ -225,7 +229,7 @@ def stats(trades, extra_ticks=0):
 
 
 def by_year(trades):
-    out = {}
+    out: dict = {}
     for t in trades:
         out[t.entry_ts.year] = out.get(t.entry_ts.year, 0.0) + t.net()
     return dict(sorted(out.items()))

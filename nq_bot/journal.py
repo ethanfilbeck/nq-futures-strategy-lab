@@ -14,13 +14,13 @@ log = logging.getLogger("nq_bot")
 class Journal:
     def __init__(self, directory: str | Path | None, enabled: bool = True):
         self.enabled = enabled and directory is not None
-        self.path = None
-        if self.enabled:
+        self.path: Path | None = None
+        if self.enabled and directory is not None:
             Path(directory).mkdir(parents=True, exist_ok=True)
             self.path = Path(directory) / f"decisions_{datetime.now():%Y%m%d_%H%M%S}.jsonl"  # noqa: DTZ005 (local file name)
 
-    def write(self, _ts, _event: str, /, **data) -> None:
-        if not self.enabled:
+    def write(self, _ts: object, _event: str, /, **data: object) -> None:
+        if not self.enabled or self.path is None:
             return
         rec = {"at": str(_ts), "event": _event, **data}
         with open(self.path, "a", encoding="utf-8") as f:

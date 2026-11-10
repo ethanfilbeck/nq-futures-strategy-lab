@@ -240,7 +240,8 @@ def keep_awake(on: bool = True) -> None:
     try:
         import ctypes
         ES_CONTINUOUS, ES_SYSTEM_REQUIRED = 0x80000000, 0x00000001
-        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | (ES_SYSTEM_REQUIRED if on else 0))
+        kernel32 = ctypes.windll.kernel32           # type: ignore[attr-defined]  # Windows only
+        kernel32.SetThreadExecutionState(ES_CONTINUOUS | (ES_SYSTEM_REQUIRED if on else 0))
     except (AttributeError, OSError):
         pass
 
@@ -311,6 +312,8 @@ def _loop(r: Runner, test_now: bool, events_path: str) -> None:
         if action == "done":
             print("No upcoming FOMC events in config/events.csv. Refresh the calendar.")
             return
+        if w is None:          # decide() returns "done" when there is no window; be explicit about it
+            raise RuntimeError(f"internal: action {action!r} with no trading window")
         if action == "skip":
             r.alerts.send("warning", f"PAPER: missed the {ct(w.entry)} entry for the {w.event} Fed statement - "
                                      "not entering late (rules say 14:00 ET).")

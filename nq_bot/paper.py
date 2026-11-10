@@ -13,6 +13,7 @@ from __future__ import annotations
 import logging
 import threading
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 import pandas as pd
@@ -24,8 +25,8 @@ from .engine import Engine
 from .events import EventCalendar
 from .features import _hm, add_features
 from .journal import Alerts, Journal
-from .live import restore_risk_state, save_risk_state
 from .report import write_daily_report
+from .risk import restore_risk_state, save_risk_state
 
 log = logging.getLogger("nq_bot.paper")
 KEEP_DAYS = 35
@@ -57,7 +58,8 @@ class PaperRunner:
         self.gaps_today = 0
         self.rth_bars_today = 0
         self.day = None
-        self.extra = []
+        # extra feature builders for the chosen strategy: (function, column names it adds)
+        self.extra: list[tuple[Callable[..., pd.DataFrame], list[str]]] = []
         self._setup_strategy_features()
         self.journal.write(pd.Timestamp.now(tz="UTC"), "paper_start", strategy=cfg.strategy.name,
                            history_bars=len(self.hist))
@@ -189,7 +191,7 @@ class PaperRunner:
 def replay(runner: PaperRunner, bars: pd.DataFrame) -> None:
     """Feed historical bars one at a time through the runner, exactly as live bars would arrive."""
     for ts, r in bars.iterrows():
-        runner.on_bar(ts, r["open"], r["high"], r["low"], r["close"], r["volume"])
+        runner.on_bar(pd.Timestamp(str(ts)), r["open"], r["high"], r["low"], r["close"], r["volume"])
     if runner.day is not None:
         runner.end_of_day(runner.day)
 
@@ -201,7 +203,7 @@ def databento_history(key: str, symbol: str, days: int = KEEP_DAYS) -> pd.DataFr
     from .data import _normalize
     client = db.Historical(key)
     rng = client.metadata.get_dataset_range(dataset="GLBX.MDP3")
-    end = pd.Timestamp(rng["end"] if isinstance(rng, dict) else rng.end)
+    end = pd.Timestamp(str(rng["end"]) if isinstance(rng, dict) else rng.end)
     start = end - pd.Timedelta(days=days)
     data = client.timeseries.get_range(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[symbol],
                                        stype_in="raw_symbol", start=start, end=end)

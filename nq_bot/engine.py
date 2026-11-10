@@ -7,12 +7,25 @@ chance to report fills for that bar.
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, Protocol
 
 from .broker.base import BracketRequest
 from .features import _hm
 from .regime import classify
 from .risk import RiskManager
-from .strategy import OpeningRangeBreakout
+from .strategy import OpeningRangeBreakout, Signal
+
+if TYPE_CHECKING:
+    pass
+
+
+class StrategyLike(Protocol):
+    """What the engine needs from a strategy. Each strategy module implements this without inheriting it."""
+
+    def evaluate(self, row: Mapping[str, Any], regime: str) -> Signal | None: ...
+
+    def mark_traded(self, session_date: object, side: int) -> None: ...
 
 
 class Engine:
@@ -24,6 +37,7 @@ class Engine:
         self.alerts = alerts
         self.events = events
         self.risk = RiskManager(cfg, starting_equity or cfg.risk.starting_equity)
+        self.strategy: StrategyLike | None
         if cfg.strategy.name == "intraday_momentum":
             from .momentum import IntradayMomentum
             self.strategy = IntradayMomentum(cfg, spec)
@@ -42,7 +56,7 @@ class Engine:
             self.strategy = OpeningRangeBreakout(cfg, spec)
         self.flatten_minute = _hm(cfg.session.flatten_time)
         self.cps = cfg.instrument.commission_per_side
-        self.trade = None
+        self.trade: dict[str, Any] | None = None
         self.trades: list[dict] = []
         self.pending = None  # (client_id, signal) awaiting broker confirmation
         self.seq = 0
@@ -73,11 +87,12 @@ class Engine:
                     "commission": f.qty * self.cps,
                 }
             else:  # additional partial fill of the entry
-                t = self.trade
-                t["entry_price"] = (t["entry_price"] * t["qty"] + f.price * f.qty) / (t["qty"] + f.qty)
-                t["qty"] += f.qty
-                t["open_qty"] += f.qty
-                t["commission"] += f.qty * self.cps
+                open_trade = self.trade
+                open_trade["entry_price"] = ((open_trade["entry_price"] * open_trade["qty"] + f.price * f.qty)
+                                             / (open_trade["qty"] + f.qty))
+                open_trade["qty"] += f.qty
+                open_trade["open_qty"] += f.qty
+                open_trade["commission"] += f.qty * self.cps
             self.journal.write(f.ts, "fill", **vars(f))
             self.alerts.send("info", f"ENTRY {'LONG' if f.side > 0 else 'SHORT'} {f.qty} @ {f.price}")
             return
@@ -97,6 +112,8 @@ class Engine:
 
     def _close_trade(self, ts) -> None:
         t = self.trade
+        if t is None:
+            return
         pv = self.spec.point_value
         gross = sum(t["side"] * (px - t["entry_price"]) * q * pv for q, px, _, _ in t["exits"])
         net = gross - t["commission"]
