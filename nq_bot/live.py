@@ -20,7 +20,7 @@ from .features import _hm, add_features
 from .journal import Alerts, Journal
 
 log = logging.getLogger("nq_bot.live")
-LIVE_ENV_TOKEN = "I_UNDERSTAND_THE_RISK"
+LIVE_ENV_TOKEN = "I_UNDERSTAND_THE_RISK"  # noqa: S105 (a confirmation phrase, not a credential)
 
 
 def authorise_live(cfg, cli_flag: bool) -> bool:

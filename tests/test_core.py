@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from nq_bot.backtest import COLS, run_backtest
+from nq_bot.backtest import run_backtest
 from nq_bot.broker.base import BracketRequest
 from nq_bot.broker.sim import SimBroker
 from nq_bot.config import load_settings, override

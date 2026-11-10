@@ -3,8 +3,8 @@ import json
 import sys
 from pathlib import Path
 
-from nq_bot.data import load_csv
 from nq_bot import family3 as f3
+from nq_bot.data import load_csv
 
 TRAIN_END = "2025-06-30 23:59"
 

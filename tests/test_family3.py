@@ -1,5 +1,4 @@
 """Mechanics of the Family 3 simulators on small synthetic sessions (no market data needed)."""
-import numpy as np
 import pandas as pd
 
 from nq_bot import family3 as f3

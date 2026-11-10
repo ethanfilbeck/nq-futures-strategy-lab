@@ -64,7 +64,8 @@ class WebhookGate:
             return 413, "body too large"
         try:
             msg = json.loads(body.decode("utf-8"))
-            assert isinstance(msg, dict)
+            if not isinstance(msg, dict):   # not an assert: asserts vanish under `python -O`
+                raise ValueError("not a JSON object")
         except Exception:
             return 400, "invalid JSON"
         given = str(msg.pop("passphrase", "")).encode()

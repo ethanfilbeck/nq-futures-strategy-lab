@@ -1,0 +1,8 @@
+# Gitleaks config for CI. Uses the default rules; the only allowance is the placeholder in .env.example.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented placeholders, not real credentials"
+regexes = ['''db-x{20,}''']
+paths = ['''requirements\.lock''']

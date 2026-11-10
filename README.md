@@ -127,7 +127,7 @@ nq_bot/metrics.py        net, win rate, PF, drawdown, Sharpe, Sortino, expectanc
 nq_bot/live.py           real-time runner + watchdogs
 nq_bot/journal.py        JSON-lines decision log + webhook alerts
 cli.py                   commands
-tests/                   unit tests (69)
+tests/                   unit, regression and mocked-integration tests (81)
 research_edge.py         1-contract edge study for the ORB
 wf_edge.py               ORB walk-forward
 run_momentum_prereg.py   runs the pre-registered momentum test exactly as written
@@ -139,7 +139,10 @@ nq_bot/drill.py          IB paper drills (13 drills, results in docs/PAPER_DRILL
 nq_bot/family3.py        pre-registered family 3 (H6 turn of month, H7 gap reversal, H8 pre-FOMC drift)
 nq_bot/family4.py        pre-registered family 4 (H9 macro days, H10 pre-holiday, H11 high-range trend)
 nq_bot/fomc_paper.py     forward PAPER tracking of H8 on the IB paper account
-run_family3_prereg.py / run_family3_holdout.py / run_family4_prereg.py / run_h8_es_replication.py
+run_family3_prereg.py / run_family3_holdout.py / run_family4_prereg.py / run_h8_es_replication.py / run_h8_m2k_replication.py
+scripts/check.py         every quality gate in one command (what CI runs)
+scripts/verify_prereg.py    fails if a pre-registration was edited after it was frozen
+scripts/validate_data.py    sanity-checks a bar file before a backtest uses it
 ```
 
 ## Install
@@ -148,8 +151,23 @@ run_family3_prereg.py / run_family3_holdout.py / run_family4_prereg.py / run_h8_
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys
-pytest -q                                               # should print 69 passed
+pytest -q                                               # 79 passed, 2 skipped (those need licensed data)
 ```
+
+## Quality gates
+
+[![CI](https://github.com/ethanfilbeck/nq-futures-strategy-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/ethanfilbeck/nq-futures-strategy-lab/actions/workflows/ci.yml)
+
+```bash
+pip install -r requirements-dev.txt
+python scripts/check.py        # lint + security rules, tests, pre-registration hashes, publish check, dependency audit, types
+```
+
+GitHub Actions runs the same command on Ubuntu and Windows for every push, plus a full-history secret scan
+(Gitleaks) and weekly dependency updates (Dependabot). `requirements.lock` pins exact versions for reproducing
+results. What each tool does, and which tools were rejected and why: [`docs/TOOLING.md`](docs/TOOLING.md).
+How the code is layered and how research is kept apart from execution: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The rules every new idea follows: [`docs/RESEARCH_PROTOCOL.md`](docs/RESEARCH_PROTOCOL.md).
 
 ## Commands
 

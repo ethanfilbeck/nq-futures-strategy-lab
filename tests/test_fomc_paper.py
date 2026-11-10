@@ -59,6 +59,7 @@ def test_alert_times_are_shown_in_central():
 
 def test_alerts_post_to_discord_with_a_named_user_agent(monkeypatch):
     import json as _json
+
     from nq_bot import journal
     sent = {}
 

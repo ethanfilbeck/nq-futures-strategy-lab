@@ -17,7 +17,7 @@ class Journal:
         self.path = None
         if self.enabled:
             Path(directory).mkdir(parents=True, exist_ok=True)
-            self.path = Path(directory) / f"decisions_{datetime.now():%Y%m%d_%H%M%S}.jsonl"
+            self.path = Path(directory) / f"decisions_{datetime.now():%Y%m%d_%H%M%S}.jsonl"  # noqa: DTZ005 (local file name)
 
     def write(self, _ts, _event: str, /, **data) -> None:
         if not self.enabled:
@@ -32,7 +32,12 @@ class Alerts:
 
     def __init__(self, enabled: bool = True):
         self.enabled = enabled
-        self.url = os.environ.get("ALERT_WEBHOOK_URL")
+        url = os.environ.get("ALERT_WEBHOOK_URL") or None
+        if url and not url.lower().startswith("https://"):
+            # urllib would also open file:// or plain http:// - never send alerts anywhere but an HTTPS webhook
+            log.warning("ALERT_WEBHOOK_URL ignored: it must start with https://")
+            url = None
+        self.url = url
 
     def send(self, level: str, text: str) -> bool:
         """Log the alert and, if a webhook URL is set, post it. Returns True only if the post succeeded."""
@@ -44,9 +49,9 @@ class Alerts:
         try:
             body = json.dumps({"content": f"[NQ bot {level.upper()}] {text}"}).encode()
             # Discord rejects Python's default user agent, so name ours.
-            req = urllib.request.Request(self.url, data=body, method="POST",
+            req = urllib.request.Request(self.url, data=body, method="POST",  # noqa: S310 (https enforced in __init__)
                                          headers={"Content-Type": "application/json", "User-Agent": "nq-bot-alerts/1.0"})
-            urllib.request.urlopen(req, timeout=5).read()
+            urllib.request.urlopen(req, timeout=5).read()  # noqa: S310
             return True
         except Exception as e:  # alerts must never crash the bot; never log the URL (it is a secret)
             log.warning("alert webhook failed: %s", type(e).__name__)

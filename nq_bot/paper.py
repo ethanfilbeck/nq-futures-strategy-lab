@@ -10,7 +10,6 @@ drawdown limits (via the risk engine), flat by 15:55 ET.
 """
 from __future__ import annotations
 
-import json
 import logging
 import threading
 import time
@@ -198,6 +197,7 @@ def replay(runner: PaperRunner, bars: pd.DataFrame) -> None:
 def databento_history(key: str, symbol: str, days: int = KEEP_DAYS) -> pd.DataFrame:
     """Recent 1-minute bars for warm-up (indicators need ~20 sessions). Small, cheap request."""
     import databento as db
+
     from .data import _normalize
     client = db.Historical(key)
     rng = client.metadata.get_dataset_range(dataset="GLBX.MDP3")

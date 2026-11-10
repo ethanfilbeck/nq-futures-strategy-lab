@@ -19,7 +19,7 @@ class SimBroker(Broker):
         self.spec = spec
         self.slip = slippage_ticks * spec.tick_size
         self.reject_prob = reject_prob
-        self.rng = random.Random(seed)
+        self.rng = random.Random(seed)  # noqa: S311 (simulated order rejections, not security)
         self.pos = 0
         self.pending_entry: BracketRequest | None = None
         self.pending_market: list[tuple[int, str, str]] = []  # (signed qty, kind, client_id)

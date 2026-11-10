@@ -28,7 +28,7 @@ def _wrap(d):
 
 
 def load_settings(path: str | Path = "config/settings.yaml") -> Cfg:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         raw = yaml.safe_load(f)
     cfg = _wrap(raw)
     validate(cfg)

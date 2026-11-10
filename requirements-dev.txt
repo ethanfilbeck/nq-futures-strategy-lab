@@ -1,0 +1,6 @@
+# Development and CI tools (not needed to run the bot).   py -m pip install -r requirements-dev.txt
+ruff>=0.6          # lint, import order, security rules (Bandit rule set), naive-datetime checks
+mypy>=1.11         # type checking (advisory for now)
+pip-audit>=2.7     # known-vulnerability scan of dependencies
+types-PyYAML
+pandas-stubs

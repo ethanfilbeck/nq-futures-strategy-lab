@@ -36,7 +36,7 @@ TEXT_EXT = {".py", ".md", ".txt", ".yaml", ".yml", ".csv", ".json", ".ini", ".cf
 
 
 def files_to_publish() -> list[str]:
-    out = subprocess.run(["git", "ls-files", "--cached"], capture_output=True, text=True, check=True).stdout
+    out = subprocess.run(["git", "ls-files", "--cached"], capture_output=True, text=True, check=True).stdout  # noqa: S607
     return [f for f in out.splitlines() if f]
 
 

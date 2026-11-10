@@ -57,6 +57,7 @@ def test_valid_entry_queued_without_leaking_secret():
 @pytest.mark.parametrize("payload,code", [
     (body(passphrase="x" * 32), 401),
     (b"not json", 400),
+    (b"[1, 2]", 400),                                            # valid JSON but not an object
     (b"x" * 5000, 413),
     (body(event="buy_everything"), 400),
     (body(symbol="ES1!"), 400),
@@ -211,3 +212,12 @@ def test_negative_or_bad_content_length_rejected():
     finally:
         httpd.shutdown()
     assert not r.signals
+
+
+def test_alert_webhook_must_be_https(monkeypatch):
+    from nq_bot import journal
+    for bad in ("http://example.invalid/hook", "file:///etc/passwd", "ftp://example.invalid/x"):
+        monkeypatch.setenv("ALERT_WEBHOOK_URL", bad)
+        assert journal.Alerts().url is None
+    monkeypatch.setenv("ALERT_WEBHOOK_URL", "https://example.invalid/hook")
+    assert journal.Alerts().url == "https://example.invalid/hook"

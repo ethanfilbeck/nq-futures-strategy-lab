@@ -143,8 +143,9 @@ def main():
             raise SystemExit("paper commands only run with mode: paper")
         print(f"SIMULATED ORDERS ONLY. Strategy: {cfg.strategy.name}. Output: {args.out}")
         if args.cmd == "paper-replay":
-            from nq_bot.data import load_csv
             import pandas as pd
+
+            from nq_bot.data import load_csv
             bars = load_csv(args.csv)
             sessions = sorted({d for d in bars.between_time("09:30", "15:59").index.date})[-args.days:]
             start = pd.Timestamp(f"{sessions[0]} 00:00", tz=cfg.session.timezone)
@@ -153,7 +154,9 @@ def main():
             replay(runner, bars[bars.index >= start])
         else:
             import os
+
             import pandas as pd
+
             from nq_bot.contracts import front_month
             from nq_bot.paper import databento_history, run_databento_live
             key = os.environ.get("DATABENTO_API_KEY")
@@ -185,8 +188,9 @@ def main():
         Path("logs/paper/KILL").write_text("emergency stop requested\n")
         print("KILL file written. The running paper session will flatten and stop within ~5 seconds.")
     elif args.cmd == "reset-kill":
-        from nq_bot.live import reset_kill
         import json as _json
+
+        from nq_bot.live import reset_kill
         files = {"logs/risk_state.json": "IB runner (py cli.py paper)",
                  "logs/paper/risk_state.json": "Databento runner (py cli.py paper-live)"}
         killed = []
