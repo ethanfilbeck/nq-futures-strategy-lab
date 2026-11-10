@@ -184,3 +184,30 @@ def test_pine_alert_json_is_accepted():
     g, r = gate()
     assert g.handle(sample, "127.0.0.1", None) == (200, "signal queued")
     assert r.signals[0]["side"] == -1
+
+
+def test_outside_ips_cannot_exhaust_rate_limit():
+    """Found in security review: rate limit used to run before the IP allowlist, so anyone could lock out alerts."""
+    g, r = gate(allow=TRADINGVIEW_IPS)
+    for _ in range(50):
+        assert g.handle(body(), "127.0.0.1", "203.0.113.9")[0] == 403
+    assert g.handle(body(), "127.0.0.1", "52.89.214.238")[0] == 200
+
+
+def test_negative_or_bad_content_length_rejected():
+    """Found in security review: Content-Length -1 made the server read until EOF with no size cap."""
+    import http.client
+    g, r = gate()
+    httpd = serve(g, port=0)
+    port = httpd.server_address[1]
+    try:
+        for bad in ("-1", "abc"):
+            c = http.client.HTTPConnection("127.0.0.1", port, timeout=3)
+            c.putrequest("POST", "/tv")
+            c.putheader("Content-Length", bad)
+            c.endheaders()
+            assert c.getresponse().status == 400
+            c.close()
+    finally:
+        httpd.shutdown()
+    assert not r.signals

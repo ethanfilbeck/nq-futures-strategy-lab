@@ -48,6 +48,12 @@ class WebhookGate:
 
     def handle(self, body: bytes, peer_ip: str, fwd_ip: str | None) -> tuple[int, str]:
         now = self.clock()
+        # IP allowlist first, so traffic from outside it can't use up the rate limit and lock out real alerts
+        if self.allow_ips is not None:
+            src = fwd_ip if (peer_ip == "127.0.0.1" and fwd_ip) else peer_ip
+            if src not in self.allow_ips:
+                self._audit("rejected", f"source ip {src} not allowed")
+                return 403, "forbidden"
         with self.lock:
             while self.recent and now - self.recent[0] > 60:
                 self.recent.popleft()
@@ -56,11 +62,6 @@ class WebhookGate:
             self.recent.append(now)
         if len(body) > MAX_BODY:
             return 413, "body too large"
-        if self.allow_ips is not None:
-            src = fwd_ip if (peer_ip == "127.0.0.1" and fwd_ip) else peer_ip
-            if src not in self.allow_ips:
-                self._audit("rejected", f"source ip {src} not allowed")
-                return 403, "forbidden"
         try:
             msg = json.loads(body.decode("utf-8"))
             assert isinstance(msg, dict)
@@ -136,9 +137,12 @@ def serve(gate: WebhookGate, host: str = "127.0.0.1", port: int = 8787, path: st
         def do_POST(self):
             if self.path != path:
                 return self._reply(404, "not found")
-            n = int(self.headers.get("Content-Length") or 0)
-            if n > MAX_BODY:
-                return self._reply(413, "body too large")
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+            except ValueError:
+                return self._reply(400, "bad Content-Length")
+            if n < 0 or n > MAX_BODY:   # a negative length would make read() wait for EOF with no size limit
+                return self._reply(413 if n > 0 else 400, "bad Content-Length")
             body = self.rfile.read(n)
             fwd = self.headers.get("CF-Connecting-IP") or (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip() or None
             code, msg = gate.handle(body, self.client_address[0], fwd)
