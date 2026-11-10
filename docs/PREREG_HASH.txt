@@ -3,3 +3,4 @@ PREREG_FAMILY2.md sha256=0c2e45cb1db1c7074a75fde0f00343afd887c1e3a24bebda1f8c557
 PREREG_FAMILY3.md sha256=3ba0208e574c9572377aa4f92b92bd8c3e42ebf7488b97aa1abcb4502835e573 frozen_at=2026-11-09 21:30 CST (before any family-3 backtest)
 PREREG_FAMILY3_HOLDOUT.md sha256=3b9eb0c532e0de4a862f2a201af7b06fddcda0f2f57fd16ea904c37252257961 frozen_at=2026-11-09 21:34 CST (before holdout data downloaded)
 PREREG_FAMILY4.md sha256=9922304e9da74fd762a3800504c658e8c1db023d592bcd305c69b47285ecfd8f frozen_at=2026-11-09 21:59 CST (before any family-4 backtest)
+PREREG_H8_ES_REPLICATION.md sha256=a1f9c0652970a8fbcd725f2d9fea64550e4567521dff7306657da96d377c2a63 frozen_at=2026-11-09 22:18 CST (before any ES/MES data downloaded)
