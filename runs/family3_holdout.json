@@ -1,0 +1,17 @@
+{
+  "data": [
+    "2025-06-30 20:00:00-04:00",
+    "2026-10-30 16:59:00-04:00"
+  ],
+  "skipped": 0,
+  "stats": {
+    "n": 11,
+    "net": 367.8599999999999,
+    "mean": 33.44181818181817,
+    "pf": 1.2770113557637277,
+    "t": 0.3410164918710278,
+    "win_rate": 0.6363636363636364
+  },
+  "verdict": "HOLDOUT CONSISTENT (not proof)",
+  "trades_file": "runs/family3_holdout_trades.jsonl (git-ignored: prices derived from licensed data)"
+}

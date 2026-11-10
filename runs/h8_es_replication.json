@@ -1,0 +1,25 @@
+{
+  "data": [
+    "2019-05-05 20:00:00-04:00",
+    "2026-10-30 16:59:00-04:00"
+  ],
+  "n": 59,
+  "skipped": 0,
+  "net": 5140.59,
+  "mean": 87.12864406779661,
+  "pf": 3.554609696463713,
+  "t": 3.5643834276596684,
+  "win_rate": 0.6271186440677966,
+  "random_mean": 5.867578571428553,
+  "random_p95": 55.26998940677968,
+  "net_2019_2022": 1784.03,
+  "net_2023_2026": 3356.56,
+  "checks": {
+    "net>0 and PF>=1.20": true,
+    "t>=2.0": true,
+    "beats random 24h longs (>95th pct)": true,
+    "both halves positive": true
+  },
+  "verdict": "REPLICATION PASSES (supporting, not independent)",
+  "trades_file": "runs/h8_es_replication_trades.jsonl (git-ignored: prices derived from licensed data)"
+}
