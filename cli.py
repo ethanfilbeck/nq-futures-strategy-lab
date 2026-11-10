@@ -90,11 +90,13 @@ def main():
     dp.add_argument("--delayed", action="store_true",
                     help="use IB's free delayed quotes (no CME real-time subscription); wide buffers, paper only")
     dp.add_argument("--ref", type=float, help="with --delayed: reference price you read off a chart, if IB sends none")
+    fp = sub.add_parser("fomc-paper", help="forward PAPER tracking of H8 (pre-FOMC drift) on the IB paper account")
+    fp.add_argument("--test-now", action="store_true", help="plumbing check: buy 1, place GTC stop, sell ~20 s later")
     lp = sub.add_parser("paper")
     lp.add_argument("--live", action="store_true", help="ALSO needs mode: live, env flag and typed confirmation")
 
     args = p.parse_args()
-    logging.basicConfig(level=logging.INFO if args.verbose or args.cmd in ("paper", "drill") else logging.WARNING,
+    logging.basicConfig(level=logging.INFO if args.verbose or args.cmd in ("paper", "drill", "fomc-paper") else logging.WARNING,
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     _env()
     cfg = load_settings(args.config)
@@ -203,6 +205,9 @@ def main():
     elif args.cmd == "drill":
         from nq_bot.drill import run as drill
         drill(cfg, args.action, side=args.side, stop=args.stop, delayed=args.delayed, ref=args.ref)
+    elif args.cmd == "fomc-paper":
+        from nq_bot.fomc_paper import run as fomc_run
+        fomc_run(cfg, test_now=args.test_now)
     elif args.cmd == "paper":
         from nq_bot.live import run
         run(cfg, live_flag=args.live)
