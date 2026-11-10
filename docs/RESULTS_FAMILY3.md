@@ -47,3 +47,20 @@ t 3.022). No disaster stop was hit.
 ## Next step (pre-registered): one holdout run
 Per `PREREG_FAMILY3.md`, a passing hypothesis is run **once** on the untouched holdout (2025-07-01 → 2026-10-31),
 then paper only. The holdout protocol is fixed in `docs/PREREG_FAMILY3_HOLDOUT.md` before downloading the data.
+
+## Holdout result (run once, 2026-11-09, per `PREREG_FAMILY3_HOLDOUT.md`)
+Data 2025-07-01 → 2026-11-01 (Databento flagged 2025-09-17, 2025-09-24 and 2025-11-28 as degraded-quality days;
+2025-09-17 is an FOMC exit day). 11 events, none skipped, no disaster stop hit.
+
+| | Holdout | Training |
+|---|---|---|
+| Trades | 11 | 48 |
+| Net | +$367.86 | +$7,114.98 |
+| Mean / trade | +$33.44 | +$148.23 |
+| Wins | 7 of 11 | 32 of 48 |
+| t | 0.34 | 3.02 |
+
+**Verdict: HOLDOUT CONSISTENT** under the frozen rule (net > 0 and mean > the $9.51 random-long benchmark).
+This is weak support only: the mean per trade fell ~78% from training, and 11 trades with t = 0.34 cannot
+distinguish an edge from luck. Status: **unproven candidate**. Next, per the protocol: paper-track future FOMC
+events only (about 8 per year), reported separately from backtests. No real money.
