@@ -1,35 +1,58 @@
 # NQ / MNQ Futures Strategy Lab — a system that decides whether a strategy has an edge
 
-> **⚠️ Not a profitable bot. Every strategy tested here failed (see Results). This is a research and
-> software-engineering project, not trading advice. Nothing has been traded with real money.**
+> **⚠️ Not a money-making bot.** 11 of 12 tested strategies failed. One (the pre-FOMC drift) passed and replicated
+> on a second market, and is now being tested forward **on paper only**. This is a research and software-engineering
+> project, not trading advice. Nothing has been traded with real money.
 
-A Python research-and-execution system for Micro E-mini Nasdaq-100 futures (MNQ): causal feature
-pipeline, conservative bar-by-bar simulator, walk-forward and Monte Carlo testing, pre-registered
-hypotheses, a hard-limit risk engine, an **unattended paper-trading runner** (live data in, simulated orders out,
-daily reports), a TradingView port, and an Interactive Brokers **paper-only** execution adapter.
+A Python research-and-execution system for Micro E-mini Nasdaq-100 futures (MNQ): causal feature pipeline,
+conservative bar-by-bar simulator, walk-forward and Monte Carlo testing, pre-registered hypotheses, a hard-limit
+risk engine, an **unattended paper-trading runner**, a TradingView port with an authenticated webhook receiver, and
+an Interactive Brokers **paper-only** execution adapter verified with 13 failure drills.
 
-The goal is **not** a bot that is forced to trade. It is a system that can say *no* — and so far it has,
-six times, on six years of real data.
+The goal is **not** a bot that is forced to trade. It is a system that can say *no* — it said no 11 times — and
+that makes the one *yes* earn it.
 
-## Results so far (2019-05 → 2025-06 MNQ, real costs; 2025-07 → 2026-10 held out, unseen)
+## Headline
 
-| Strategy | How it was tested | Trades | Profit factor | Net per contract | Verdict |
+| | |
+|---|---|
+| Ideas tested (2019-05 → 2025-06 MNQ, real costs) | **12**, all but the first pre-registered and hashed before running |
+| Rejected | **11** |
+| Survivor | **H8 pre-FOMC drift**: passed on MNQ (t 3.02), weak but positive on 16 months of held-out MNQ data (t 0.34), **replicated on S&P 500 micro futures** (59 events, t 3.56, beat random long holds) |
+| Status of H8 | Replicated candidate, **forward paper trading** on an IB paper account (`fomc-paper`), ~8 events a year. Not real money. |
+| Broker drills | 13 of 13 pass on an IB paper account; 3 bugs found and fixed |
+| Security review | Webhook receiver threat-modeled; 2 denial-of-service weaknesses found and fixed ([report](docs/SECURITY_WEBHOOK.md)) |
+
+## Results (2019-05 → 2025-06 MNQ unless noted; $0.62/side + 1 tick slippage, 1 contract)
+
+| Strategy | How it was tested | Trades | PF | Net per contract | Verdict |
 |---|---|---|---|---|---|
 | Opening-range breakout + VWAP/trend filter | full period + 5-fold walk-forward | 1,204 OOS | 0.83 | −$6,120 | **Fail** — [details](docs/RESULTS_ORB.md) |
-| Intraday momentum H1 (first half-hour, Gao et al. 2018) | pre-registered, no tuning | 1,277 | 0.84 | −$6,059 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
-| Intraday momentum H2 (rest-of-day, Baltussen et al. 2021) | pre-registered, no tuning | 1,277 | 0.93 | −$2,611 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
-| H3 Overnight drift (Boyarchenko et al. 2023) | pre-registered, no tuning | 1,576 | 0.98 | −$576 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
-| H4 Liquidity sweep of prior-day high/low | pre-registered, no tuning | 288 | 1.20 | +$1,204 | **Fail** (t = 0.71; one half-year made all of it) — [details](docs/RESULTS_FAMILY2.md) |
-| H5 VWAP pullback in a trend | pre-registered, no tuning | 1,399 | 0.94 | −$2,336 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
+| H1 first half-hour momentum (Gao et al. 2018) | pre-registered | 1,277 | 0.84 | −$6,059 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
+| H2 rest-of-day momentum (Baltussen et al. 2021) | pre-registered | 1,277 | 0.93 | −$2,611 | **Fail** — [details](docs/RESULTS_INTRADAY_MOMENTUM.md) |
+| H3 overnight drift (Boyarchenko et al. 2023) | pre-registered, t ≥ 3 | 1,576 | 0.98 | −$576 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
+| H4 liquidity sweep of prior-day high/low | pre-registered, t ≥ 3 | 288 | 1.20 | +$1,204 | **Fail** (t 0.71) — [details](docs/RESULTS_FAMILY2.md) |
+| H5 VWAP pullback in a trend | pre-registered, t ≥ 3 | 1,399 | 0.94 | −$2,336 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
+| H6 turn of the month | pre-registered, t ≥ 3 + beat random longs | 73 | 1.14 | +$2,892 | **Fail** (worse than random long holds) — [details](docs/RESULTS_FAMILY3.md) |
+| H7 overnight-gap reversal | pre-registered, t ≥ 3 | 439 | 0.92 | −$3,742 | **Fail** — [details](docs/RESULTS_FAMILY3.md) |
+| **H8 pre-FOMC drift** (Lucca & Moench 2015) | pre-registered, t ≥ 3 + beat random longs | 48 | 3.34 | +$7,115 | **Pass** (t 3.02) — [details](docs/RESULTS_FAMILY3.md) |
+| ↳ H8 on held-out MNQ (2025-07 → 2026-10) | run once, rule frozen | 11 | — | +$368 | Consistent, weak (t 0.34) |
+| ↳ H8 on S&P 500 micro (MES), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 3.55 | +$5,141 (MES) | **Replicates** (t 3.56) — [details](docs/RESULTS_H8_ES_REPLICATION.md) |
+| H9 CPI / jobs-report days | pre-registered, t ≥ 3.5 + beat random longs | 141 | 1.05 | +$1,247 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
+| H10 pre-holiday | pre-registered, t ≥ 3.5 + beat random longs | 59 | 1.84 | +$3,876 | **Fail** (t 1.70) — [details](docs/RESULTS_FAMILY4.md) |
+| H11 opening-hour trend after a high-range day | pre-registered, t ≥ 3.5 | 253 | 1.08 | +$1,983 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 
-H3 doubles as a methodology check: the pipeline reproduced the published finding that the 2–3 a.m. ET drift was
-positive before 2021 (+2.27 pts/day) and vanished after (+0.16), as the original authors reported in 2026.
+**Why H8 is still not "proven":** 48 of its 59 S&P events are the same dates as the MNQ test, and the S&P and Nasdaq
+move together (~0.9 correlation), so the replication is supporting rather than independent evidence. Published
+research found the drift had faded in 2016–2019; it reappeared in 2020–2026, a period of unusual rate
+uncertainty. The deciding evidence is forward: FOMC meetings no test has seen.
 
-Nothing has been traded with real money. All execution is simulated or locked to an IB paper account.
+**Methodology checks:** H3 reproduced a published finding (the 2–3 a.m. ET drift was +2.27 pts/day before 2021 and
++0.16 after). Long-only calendar ideas (H6, H9, H10) are benchmarked against random long holds of the same length,
+because in a rising market any long-only rule looks profitable.
 
-**Research status: closed again after family 2.** Six disciplined tests, six rejections. Trying idea after idea
-on the same data until one looks profitable is how overfitting happens; the second family already used a stricter
-bar (t ≥ 3.0). Any future idea needs new data or an outside rationale, and is pre-registered first.
+**Strategy search on this data is closed.** Each extra idea tested on the same data raises the odds of a lucky pass;
+the bar rose from t ≥ 3.0 to t ≥ 3.5 as the count grew. New ideas need new data.
 
 ## Automated paper trading (Sniper Den-style architecture, simulated orders only)
 
@@ -49,10 +72,13 @@ What you still configure yourself: [`docs/MANUAL_SETUP.md`](docs/MANUAL_SETUP.md
 - **Real costs.** IBKR MNQ commission + CME + NFA fees ($0.614/side), 1-tick slippage, 2-tick stress test.
 - **Walk-forward.** Parameters are chosen on past data and judged only on the next unseen window.
 - **Pre-registration.** New hypotheses are written down with pass/fail criteria and hashed (`docs/PREREG_HASH.txt`) *before* the first test. Failures are published, not tuned away.
-- **Untouched holdout.** The last 16 months are not downloaded until a strategy passes everything else.
+- **Untouched holdout.** The last 16 months were downloaded only after H8 passed, and used once, for H8 only.
+- **Replication on a second market.** A passing rule is re-tested, unchanged, on a related market (H8 → S&P 500 micro).
 - **Monte Carlo** reshuffles trade order to show the spread of outcomes the same trades could produce.
 
 ## Security and fault-tolerance controls
+
+- Webhook receiver security review (threat model, controls, 2 fixed findings, residual risks): [`docs/SECURITY_WEBHOOK.md`](docs/SECURITY_WEBHOOK.md).
 
 - `scripts/prepublish_check.py` blocks a push if any committed file contains API keys, broker account IDs, emails, local paths, `.env`, market data or trade logs.
 
@@ -98,7 +124,7 @@ nq_bot/metrics.py        net, win rate, PF, drawdown, Sharpe, Sortino, expectanc
 nq_bot/live.py           real-time runner + watchdogs
 nq_bot/journal.py        JSON-lines decision log + webhook alerts
 cli.py                   commands
-tests/                   unit tests (56)
+tests/                   unit tests (69)
 research_edge.py         1-contract edge study for the ORB
 wf_edge.py               ORB walk-forward
 run_momentum_prereg.py   runs the pre-registered momentum test exactly as written
@@ -106,7 +132,11 @@ run_family2_prereg.py    runs family 2 exactly as written
 scripts/readiness_check.py  pre-week checks on real replayed sessions
 docs/                    plan, pre-registration, results, paper drills, publishing checklist
 scripts/prepublish_check.py  blocks a push containing secrets or licensed data
-nq_bot/drill.py          IB paper drills
+nq_bot/drill.py          IB paper drills (13 drills, results in docs/PAPER_DRILLS.md)
+nq_bot/family3.py        pre-registered family 3 (H6 turn of month, H7 gap reversal, H8 pre-FOMC drift)
+nq_bot/family4.py        pre-registered family 4 (H9 macro days, H10 pre-holiday, H11 high-range trend)
+nq_bot/fomc_paper.py     forward PAPER tracking of H8 on the IB paper account
+run_family3_prereg.py / run_family3_holdout.py / run_family4_prereg.py / run_h8_es_replication.py
 ```
 
 ## Install
@@ -115,7 +145,7 @@ nq_bot/drill.py          IB paper drills
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys
-pytest -q                                               # should print 56 passed
+pytest -q                                               # should print 69 passed
 ```
 
 ## Commands
@@ -129,6 +159,7 @@ python cli.py walkforward --csv data/mnq_train.csv --folds 5
 python cli.py paper                        # IBKR paper account, needs TWS/Gateway running
 python cli.py reset-kill                   # clear the drawdown kill switch, deliberately
 python cli.py drill status                 # IB paper drills for the execution mechanics (docs/PAPER_DRILLS.md)
+python cli.py fomc-paper                   # forward paper test of H8 at the next FOMC (docs/FOMC_PAPER.md)
 python cli.py paper-replay --csv data/mnq_train.csv --days 5   # rehearse the paper runner on real past sessions
 python cli.py paper-live                   # live data, SIMULATED orders (needs Databento live)
 python cli.py paper-live --strategy tradingview --webhook   # TradingView alerts in, simulated orders out
