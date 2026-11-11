@@ -29,3 +29,20 @@ that proposes ideas makes it easier, not harder.
 py scripts\validate_data.py data\mnq_train.csv
 py scripts\validate_data.py data\m2k_2019_2026.csv --tick 0.10
 ```
+
+## Pre-flight any market before paying for it
+`metadata.get_record_count` is free. Run this **before** every paid download, and record the result in the
+pre-registration:
+```
+py scripts\preflight_coverage.py NKD.v.0 2019-05-06 2026-11-01
+```
+A market can be open nearly 23 hours and still have no trade in the specific minute a rule needs - "the
+market is open" and "the market trades every minute" are different claims, and for an event-window rule only
+the second one matters. NKD was bought for $6.25 and came back INVALID on data coverage: 16 of 59 events,
+against a floor of 50, and no filter choice could have lifted it above 25
+(`docs/RESULTS_H8_NKD_REPLICATION.md`). The pre-flight would have refused it for nothing.
+
+Every pre-registration for a new market must therefore state, in advance:
+- bars/day from the pre-flight, against a dense reference market;
+- the minimum number of events that makes the test valid, and that **no verdict is reported below it**.
+The second of those is what stopped a 16-event number from entering the record, so it stays mandatory.

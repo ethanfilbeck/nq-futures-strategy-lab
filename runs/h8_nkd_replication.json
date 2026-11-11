@@ -1,0 +1,6 @@
+{
+  "market": "NKD (Nikkei 225, USD)",
+  "n": 16,
+  "skipped": 43,
+  "verdict": "INVALID ON DATA COVERAGE - 16 events < 50"
+}
