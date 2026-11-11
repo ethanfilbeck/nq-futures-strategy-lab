@@ -49,6 +49,20 @@ signature of a roll and none that of news:
 Gold's rolls are visible too and are tiny (median **+0.11%**), consistent with gold's near-zero carry, which
 is why the gold control is unaffected.
 
+### The detector is sensitive to its input window, which is why this correction is not the final answer
+
+Running the same detector over MNQ **training only** finds 4 contaminated holds and gives a roll-adjusted
+t of **2.63**. Running it over **training plus holdout** finds 5 (it additionally flags 2022-06-14 at
++0.29%, which is small enough to be a false positive) and gives **2.47**. Both are below the 3.0 bar, so the
+*verdict* is robust — but the *number* is not, and neither figure should be quoted as the corrected result.
+
+This is the limit of adjusting a spliced series, and the reason the fix is not finished. Price adjustment is
+a **proxy**. The exact model is to price each event on the single contract a trader actually held: they buy
+the front contract at 14:00 and sell *that* contract at 13:55 the next day, never rolling, so there is no
+roll cost at all — only a data artifact. `scripts/roll_map.py` (free metadata) plus
+`scripts/fetch_contract_windows.py` (a few cents) plus `run_h8_contract_level.py` do that, and their output
+supersedes every adjusted figure in this document.
+
 The detector is a heuristic and is documented as such in `nq_bot/rolls.py`: the largest positive
 overnight-session one-minute move per expiry month, screened on volume. Its known weakness is that when
 carry is near zero (2020-2021) the true gap is smaller than ordinary overnight noise, so low-rate periods
@@ -92,7 +106,10 @@ measured was the roll. The earlier claim that it was "the strongest thing H8 has
 **Downgraded from "replicated candidate" to "unconfirmed, and below its original bar."** The honest record:
 
 - MNQ training, roll-adjusted: **t 2.63 against a pre-registered bar of 3.0 — a fail.**
-- MNQ holdout: t 0.34 on 11 events — already a fail, and it holds no roll.
+- MNQ holdout, roll-adjusted: t 0.34 → **0.25** on 11 events — already a fail. **Correction, same
+  day:** this document first stated the holdout contained no roll. It contains one, on the
+  2026-06-16 event, at +0.18%. The gap is small and the verdict is unchanged, but the original claim
+  was wrong and is retracted here rather than silently edited.
 - MES replication, roll-adjusted: t 1.66 against 2.0 — a fail.
 - M2K replication, roll-adjusted: t 1.44 against 2.0 — a fail.
 - Gold control: unaffected, still inconclusive.

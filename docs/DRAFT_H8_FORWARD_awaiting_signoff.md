@@ -6,29 +6,50 @@ before the Dec 8-9, 2026 event. Nothing in it may change after the first forward
 This document exists because a good result makes it tempting to move the line. The bar is set here, now,
 by the version of me and the version of Ethan who are not watching a live trade go green.
 
-## 1. The uncomfortable arithmetic, stated first
+## 1. The arithmetic, restated after the November 2026 roll audit
 
-Per-event spread is about **$330** (standard deviation, consistent across the 48-event training split and
-the 11-event holdout). With 8 scheduled FOMC statements a year, that fixes how long any forward test takes:
+**This section was rewritten on 2026-11-11.** The first draft was built on effect sizes that a contract-roll
+defect had inflated (`docs/AUDIT_2026_11_ROLLS.md`). The corrected numbers make this test harder, not easier,
+and the honest consequence is set out below rather than absorbed by lowering the bar.
 
-| If the true edge is | Events for 80% power (one-sided 5%) | Years at 8/yr | Expected t at n=12 | at n=24 | at n=40 |
-|---|---|---|---|---|---|
-| the discovery sample, **$127/event** | 42 | **5.2** | 1.33 | 1.88 | 2.43 |
-| the holdout, **$33/event** | 604 | **75** | 0.35 | 0.50 | 0.64 |
+Per-event spread is about **$318** (roll-adjusted, MNQ, all 59 events). Effect size, roll-adjusted:
 
-Two consequences, both accepted in advance:
+| Source of the estimate | Mean/event | Events for 80% power (one-sided 5%) | Years at 8/yr | Expected t at n=12 | n=24 | n=40 |
+|---|---|---|---|---|---|---|
+| MNQ all 59, roll-adjusted (the optimistic reading) | **$97.44** | **66** | **8.2** | 1.06 | 1.50 | **1.94** |
+| MNQ holdout, roll-adjusted (the only clean test) | **$33.44** | 560 | 70 | 0.36 | 0.52 | 0.67 |
 
-- **A high bar reached quickly is not available.** Any rule demanding t >= 2.5 inside three years is a rule
-  designed to fail, even if H8 is completely real. Setting one would not be rigour; it would be a
-  pre-committed abandonment dressed as rigour.
-- **If the holdout is closer to the truth than the training split, this is not establishable in a human
-  career.** That possibility is not hypothetical: the holdout is the only clean out-of-sample test that
-  exists, and it came in at t 0.34.
+For reference, the inflated figures this document was first drafted on were $126.83/event, 42 events and
+5.2 years. The defect was worth about 30% of the apparent effect.
 
-**Also accepted in advance:** at the discovery effect size, a fully validated H8 earns about
-**$127 x 8 = $1,015 a year on one contract, before tax**. Five years of waiting to unlock about $1,000 a
-year is the actual trade on offer. It is written here so that the decision at the end is made against this
-number and not against the excitement of a passing statistic.
+### The consequence, stated plainly
+
+**At 40 events the expected t-statistic is 1.94 against a bar of 2.0.** Even if H8 is exactly as real as the
+roll-adjusted training data suggests, this design is **more likely to fail than to pass**. It is underpowered
+by construction, and reaching 80% power would take **66 events, about 8.2 years**.
+
+Two responses were available. Lowering the bar until the test could pass is the one this document exists to
+prevent, so it is refused: **the bar stays at t ≥ 2.0.** The other is to accept what the arithmetic says and
+change what the test is *for*.
+
+**So the purpose of the forward test is revised.** It is no longer a path to real money. It is a free,
+automated falsification check whose realistic value is to **kill H8 early** at an interim futility stop, not
+to validate it. The promotion branch in section 4 remains, but it is now only reachable if the forward effect
+turns out to be **materially larger** than every estimate currently available. If the forward mean lands at or
+below the roll-adjusted training estimate, this test will not clear the bar at 40 events — and that is known
+now, in advance, rather than discovered in 2031.
+
+**Also accepted in advance:** at the roll-adjusted effect size a fully validated H8 earns about
+**$97 × 8 ≈ $780 a year on one contract, before tax**, and section 6 requires roughly a $40,000 account
+before any real money. Eight years of waiting to unlock about $780 a year is the actual trade on offer. It is
+written here so the decision is made against this number and not against a passing statistic.
+
+### H8's status entering this test
+
+Not a "replicated candidate." On roll-adjusted data H8 has **never cleared a pre-registered bar**: MNQ
+training t 2.47–2.63 against 3.0, MES 1.66 against 2.0, M2K 1.44 against 2.0, holdout 0.25. The placebo
+still shows the pre-FOMC window is the best of seven series in all three markets, so there is probably
+*something* there. "Probably something" is the whole case.
 
 ## 2. What counts as a forward event
 
@@ -68,8 +89,9 @@ Real money is considered **only** if every one of these holds:
 5. **Both halves positive** - first 20 events and last 20 events.
 6. **No risk-control failure** per section 5.
 
-Falling short is not a tie. If n >= 40 and the result is positive but misses the bar, **H8 is retired as
-"positive but unresolvable at 8 events a year"** and forward trading stops. It does not continue
+Falling short is not a tie, and per section 1 it is the **expected** outcome. If n >= 40 and the result is
+positive but misses the bar, **H8 is retired as "positive but unresolvable at 8 events a year"** and forward
+trading stops. It does not continue
 indefinitely in the hope of eventually clearing. A strategy that needs 20 years to prove itself has, in
 practice, not proved itself.
 

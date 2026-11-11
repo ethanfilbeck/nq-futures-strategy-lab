@@ -106,3 +106,31 @@ def test_roll_detection_finds_an_injected_gap():
     assert abs(rolls.adjust_exit(base * 1.01, entry, exit_ts, found) - base) < 1e-6
     # a hold that ends before the roll is untouched
     assert rolls.adjust_exit(base, entry, march - pd.Timedelta(minutes=1), found) == base
+
+
+def test_research_report_requires_roll_exposure():
+    """Every backtest summary must state roll exposure, and say so loudly when it was not checked."""
+    import pandas as pd
+
+    from nq_bot.family3 import Trade
+    from nq_bot.research_report import Costs, render, summarize
+
+    ts = pd.Timestamp("2025-03-11 14:00", tz="America/New_York")
+    trades = [Trade(ts + pd.Timedelta(days=i), ts + pd.Timedelta(days=i, hours=23), 1,
+                    20000.0, 20000.0 + 10 * (1 if i % 3 else -2), "time") for i in range(12)]
+    pnl = [(t.exit - t.entry) * t.side * 2.0 - 1.24 for t in trades]
+    costs = Costs(commission_rt=1.24, slippage_rt=1.00)
+
+    unchecked = summarize(trades, pnl, costs, label="no roll map")
+    assert unchecked["roll_exposure"]["checked"] is False
+    assert "NOT CHECKED" in unchecked["roll_exposure"]["warning"]
+    assert "NOT CHECKED" in render(unchecked)
+
+    checked = summarize(trades, pnl, costs, roll_map={}, label="clean")
+    assert checked["roll_exposure"]["checked"] is True
+    assert checked["roll_exposure"]["holds_spanning_a_roll"] == 0
+
+    # the standard block must carry everything the audit showed was missing
+    for key in ("expectancy_per_trade", "mean_ci95_approx", "max_drawdown", "costs",
+                "gross_of_all_costs", "double_slippage", "t_dropping_best", "by_year"):
+        assert key in checked, key
