@@ -104,17 +104,38 @@ def cscv(matrix: pd.DataFrame, s_blocks: int = 16) -> dict:
     }
 
 
-def daily_matrix(series: dict[str, pd.Series], calendar: list) -> pd.DataFrame:
+def daily_matrix(series: dict[str, pd.Series], calendar: list,
+                 on_off_calendar: str = "raise") -> pd.DataFrame:
     """Align per-strategy daily P&L onto one calendar.
 
     A day on which a strategy held no position has P&L of exactly zero. That is a REAL observation, not a
-    missing one, so it is filled with 0 deliberately. A strategy that could not be evaluated at all over
-    part of the calendar is a different matter and must be excluded by the caller, not zero-filled.
+    missing one, so it is filled with 0 deliberately.
+
+    P&L dated OUTSIDE the calendar is a different matter entirely. Reindexing would drop it silently, which
+    is how the first version of this function lost $322.70 across ORB, H3, H4 and H5 - trades that settled on
+    exchange half-days, which `family3.Session` excludes because they carry under 300 regular-hours bars
+    (docs/PBO_INDEPENDENT_AUDIT.md). Silently discarding observations is exactly the failure this project's
+    protocol forbids, so it now raises by default.
+
+    `on_off_calendar`: "raise" (default), or "report" to attach the dropped totals to `.attrs["off_calendar"]`
+    and continue - only for a caller that has decided the exclusion is correct and says so in writing.
     """
     idx = pd.Index(sorted(calendar), name="session")
+    known = set(idx)
     out = pd.DataFrame(index=idx)
+    dropped: dict[str, dict] = {}
     for name, s in series.items():
+        off = s[[d not in known for d in s.index]]
+        if len(off):
+            dropped[name] = {"sessions": int(len(off)), "pnl": float(off.sum())}
         out[name] = s.reindex(idx).fillna(0.0).astype(float)
+    if dropped:
+        detail = ", ".join(f"{k}: ${v['pnl']:,.2f} over {v['sessions']} sessions"
+                           for k, v in dropped.items())
+        if on_off_calendar == "raise":
+            raise ValueError(f"P&L falls outside the calendar and would be silently dropped - {detail}. "
+                             "Widen the calendar, or pass on_off_calendar='report' having justified it.")
+        out.attrs["off_calendar"] = dropped
     return out
 
 

@@ -1,5 +1,12 @@
 # Experiment E1: Probability of Backtest Overfitting
 
+> **SUPERSEDED ON ITS NUMBERS, 2026-11-11.** An independent audit found the matrix was
+> silently dropping $322.70 of P&L settled on exchange half-days. Corrected figures, on a
+> complete 1,591-session calendar: **all 12 PBO 11.3%** (was 14.8%), **intraday 56.6%**
+> (was 60.8%), event 25.5% (was 25.9%). No conclusion changes. See
+> `PBO_INDEPENDENT_AUDIT.md`, which also widens the sensitivity range to 7-20%.
+
+
 Run 2026-11-11. Research and simulation only. No strategy rule, pre-registration or published result was
 changed, no data was bought, nothing was executed.
 

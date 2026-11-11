@@ -1,5 +1,5 @@
 {
-  "sessions": 1535,
+  "sessions": 1588,
   "first": "2019-05-06",
   "last": "2025-06-30",
   "rolls_detected": 25,
@@ -19,40 +19,40 @@
       "H10 pre-holiday",
       "H11 opening hour"
     ],
-    "rows_used": 1520,
-    "rows_dropped": 15,
+    "rows_used": 1584,
+    "rows_dropped": 7,
     "s_blocks": 16,
-    "block_size": 95,
+    "block_size": 99,
     "n_combinations": 12870,
-    "pbo": 0.10598290598290598,
-    "lambda_mean": 1.7127852173041975,
+    "pbo": 0.08243978243978244,
+    "lambda_mean": 1.7864609074626365,
     "lambda_median": 2.4849066497880012,
     "median_oos_rank_of_winner": 12.0,
-    "winner_oos_below_median_count": 1364,
+    "winner_oos_below_median_count": 1061,
     "selected_in_sample_counts": {
-      "H8 pre-FOMC": 9978,
-      "H10 pre-holiday": 1764,
-      "H9 macro days": 425,
-      "H6 turn of month": 286,
-      "H11 opening hour": 208,
-      "H2 rest-of-day": 109,
-      "H3 overnight drift": 67,
-      "H7 gap reversal": 29,
-      "H1 first-half-hour": 3,
-      "H5 VWAP pullback": 1,
+      "H8 pre-FOMC": 10021,
+      "H10 pre-holiday": 2051,
+      "H9 macro days": 510,
+      "H6 turn of month": 118,
+      "H11 opening hour": 62,
+      "H2 rest-of-day": 50,
+      "H3 overnight drift": 29,
+      "H7 gap reversal": 26,
+      "H5 VWAP pullback": 3,
       "ORB": 0,
+      "H1 first-half-hour": 0,
       "H4 liquidity sweep": 0
     },
-    "mean_is_sharpe_of_winner": 0.0708834444009306,
-    "mean_oos_sharpe_of_winner": 0.045721526767014777,
-    "prob_winner_oos_sharpe_negative": 0.1209013209013209,
+    "mean_is_sharpe_of_winner": 0.07400505574989044,
+    "mean_oos_sharpe_of_winner": 0.05053243656446531,
+    "prob_winner_oos_sharpe_negative": 0.08881118881118881,
     "active_days": {
-      "ORB": 1276,
+      "ORB": 1291,
       "H1 first-half-hour": 1277,
       "H2 rest-of-day": 1277,
-      "H3 overnight drift": 1520,
-      "H4 liquidity sweep": 283,
-      "H5 VWAP pullback": 1035,
+      "H3 overnight drift": 1576,
+      "H4 liquidity sweep": 285,
+      "H5 VWAP pullback": 1044,
       "H6 turn of month": 73,
       "H7 gap reversal": 439,
       "H8 pre-FOMC": 48,
@@ -72,53 +72,81 @@
       "H8 pre-FOMC": "regenerated from nq_bot.family3.run_h8, 48 trades",
       "H9 macro days": "regenerated from nq_bot.family4.run_h9, 141 trades",
       "H10 pre-holiday": "regenerated from nq_bot.family4.run_h10, 59 trades",
-      "H11 opening hour": "regenerated from nq_bot.family4.run_h11, 253 trades"
+      "H11 opening hour": "regenerated from nq_bot.family4.run_h11, 253 trades",
+      "_calendar_extended": "3 non-regular-session dates added because a strategy traded on them: ['2021-04-02', '2023-04-07', '2025-01-09']"
     },
     "sensitivity_by_block_count": {
       "8": {
-        "pbo": 0.08571428571428572,
+        "pbo_trim_tail": 0.08571428571428572,
+        "pbo_trim_head": 0.07142857142857142,
         "combinations": 70,
-        "block_size": 191,
+        "block_size": 198,
         "rows_dropped": 7
       },
       "10": {
-        "pbo": 0.10714285714285714,
+        "pbo_trim_tail": 0.0873015873015873,
+        "pbo_trim_head": 0.09523809523809523,
         "combinations": 252,
-        "block_size": 153,
-        "rows_dropped": 5
+        "block_size": 159,
+        "rows_dropped": 1
       },
       "12": {
-        "pbo": 0.18831168831168832,
+        "pbo_trim_tail": 0.1699134199134199,
+        "pbo_trim_head": 0.13203463203463203,
         "combinations": 924,
-        "block_size": 127,
-        "rows_dropped": 11
+        "block_size": 132,
+        "rows_dropped": 7
       },
       "14": {
-        "pbo": 0.1343240093240093,
+        "pbo_trim_tail": 0.11101398601398602,
+        "pbo_trim_head": 0.047494172494172496,
         "combinations": 3432,
-        "block_size": 109,
+        "block_size": 113,
         "rows_dropped": 9
       },
       "16": {
-        "pbo": 0.10598290598290598,
+        "pbo_trim_tail": 0.08243978243978244,
+        "pbo_trim_head": 0.11414141414141414,
         "combinations": 12870,
-        "block_size": 95,
-        "rows_dropped": 15
+        "block_size": 99,
+        "rows_dropped": 7
       }
     },
+    "subgroup_pbo": {
+      "intraday_high_frequency": 0.565967365967366,
+      "event_low_frequency": 0.18492618492618493
+    },
+    "subgroup_members": {
+      "intraday_high_frequency": [
+        "ORB",
+        "H1 first-half-hour",
+        "H2 rest-of-day",
+        "H3 overnight drift",
+        "H4 liquidity sweep",
+        "H5 VWAP pullback",
+        "H7 gap reversal",
+        "H11 opening hour"
+      ],
+      "event_low_frequency": [
+        "H6 turn of month",
+        "H8 pre-FOMC",
+        "H9 macro days",
+        "H10 pre-holiday"
+      ]
+    },
     "net_by_strategy": {
-      "ORB": -6520.880000000001,
-      "H1 first-half-hour": -6059.480000000003,
-      "H2 rest-of-day": -2610.9800000000023,
-      "H3 overnight drift": -463.8000000000018,
-      "H4 liquidity sweep": 1179.8600000000004,
-      "H5 VWAP pullback": -2279.3600000000015,
-      "H6 turn of month": 2891.879999999989,
-      "H7 gap reversal": -3741.6100000000033,
+      "ORB": -6720.980000000002,
+      "H1 first-half-hour": -6059.480000000002,
+      "H2 rest-of-day": -2610.9800000000027,
+      "H3 overnight drift": -575.7400000000016,
+      "H4 liquidity sweep": 1203.88,
+      "H5 VWAP pullback": -2336.260000000001,
+      "H6 turn of month": 2891.8799999999906,
+      "H7 gap reversal": -3741.6100000000024,
       "H8 pre-FOMC": 7114.98,
-      "H9 macro days": 1247.4649999999906,
+      "H9 macro days": 1247.464999999991,
       "H10 pre-holiday": 3875.915,
-      "H11 opening hour": 1982.7799999999972
+      "H11 opening hour": 1982.7799999999984
     }
   },
   "roll_adjusted": {
@@ -137,40 +165,40 @@
       "H10 pre-holiday",
       "H11 opening hour"
     ],
-    "rows_used": 1520,
-    "rows_dropped": 15,
+    "rows_used": 1584,
+    "rows_dropped": 7,
     "s_blocks": 16,
-    "block_size": 95,
+    "block_size": 99,
     "n_combinations": 12870,
-    "pbo": 0.1477078477078477,
-    "lambda_mean": 1.3675602956955675,
+    "pbo": 0.11313131313131314,
+    "lambda_mean": 1.4997065960552198,
     "lambda_median": 1.7047480922384253,
     "median_oos_rank_of_winner": 11.0,
-    "winner_oos_below_median_count": 1901,
+    "winner_oos_below_median_count": 1456,
     "selected_in_sample_counts": {
-      "H8 pre-FOMC": 8666,
-      "H10 pre-holiday": 2706,
-      "H9 macro days": 456,
-      "H6 turn of month": 425,
-      "H11 opening hour": 321,
-      "H2 rest-of-day": 139,
-      "H3 overnight drift": 109,
-      "H7 gap reversal": 43,
-      "H1 first-half-hour": 3,
-      "H4 liquidity sweep": 1,
-      "H5 VWAP pullback": 1,
-      "ORB": 0
+      "H8 pre-FOMC": 8854,
+      "H10 pre-holiday": 2902,
+      "H9 macro days": 620,
+      "H6 turn of month": 232,
+      "H11 opening hour": 97,
+      "H2 rest-of-day": 63,
+      "H3 overnight drift": 50,
+      "H7 gap reversal": 49,
+      "H5 VWAP pullback": 3,
+      "ORB": 0,
+      "H1 first-half-hour": 0,
+      "H4 liquidity sweep": 0
     },
-    "mean_is_sharpe_of_winner": 0.06485536053506563,
-    "mean_oos_sharpe_of_winner": 0.03186582536278925,
-    "prob_winner_oos_sharpe_negative": 0.16767676767676767,
+    "mean_is_sharpe_of_winner": 0.06833220911528373,
+    "mean_oos_sharpe_of_winner": 0.03807169855532235,
+    "prob_winner_oos_sharpe_negative": 0.12183372183372183,
     "active_days": {
-      "ORB": 1276,
+      "ORB": 1291,
       "H1 first-half-hour": 1277,
       "H2 rest-of-day": 1277,
-      "H3 overnight drift": 1520,
-      "H4 liquidity sweep": 283,
-      "H5 VWAP pullback": 1035,
+      "H3 overnight drift": 1576,
+      "H4 liquidity sweep": 285,
+      "H5 VWAP pullback": 1044,
       "H6 turn of month": 73,
       "H7 gap reversal": 439,
       "H8 pre-FOMC": 48,
@@ -190,53 +218,81 @@
       "H8 pre-FOMC": "regenerated from nq_bot.family3.run_h8, 48 trades, 4 roll-adjusted",
       "H9 macro days": "regenerated from nq_bot.family4.run_h9, 141 trades, 1 roll-adjusted",
       "H10 pre-holiday": "regenerated from nq_bot.family4.run_h10, 59 trades, 0 roll-adjusted",
-      "H11 opening hour": "regenerated from nq_bot.family4.run_h11, 253 trades, 0 roll-adjusted"
+      "H11 opening hour": "regenerated from nq_bot.family4.run_h11, 253 trades, 0 roll-adjusted",
+      "_calendar_extended": "3 non-regular-session dates added because a strategy traded on them: ['2021-04-02', '2023-04-07', '2025-01-09']"
     },
     "sensitivity_by_block_count": {
       "8": {
-        "pbo": 0.11428571428571428,
+        "pbo_trim_tail": 0.11428571428571428,
+        "pbo_trim_head": 0.1,
         "combinations": 70,
-        "block_size": 191,
+        "block_size": 198,
         "rows_dropped": 7
       },
       "10": {
-        "pbo": 0.12698412698412698,
+        "pbo_trim_tail": 0.10714285714285714,
+        "pbo_trim_head": 0.10317460317460317,
         "combinations": 252,
-        "block_size": 153,
-        "rows_dropped": 5
+        "block_size": 159,
+        "rows_dropped": 1
       },
       "12": {
-        "pbo": 0.21536796536796537,
+        "pbo_trim_tail": 0.20238095238095238,
+        "pbo_trim_head": 0.15151515151515152,
         "combinations": 924,
-        "block_size": 127,
-        "rows_dropped": 11
+        "block_size": 132,
+        "rows_dropped": 7
       },
       "14": {
-        "pbo": 0.16724941724941725,
+        "pbo_trim_tail": 0.14685314685314685,
+        "pbo_trim_head": 0.06497668997668998,
         "combinations": 3432,
-        "block_size": 109,
+        "block_size": 113,
         "rows_dropped": 9
       },
       "16": {
-        "pbo": 0.1477078477078477,
+        "pbo_trim_tail": 0.11313131313131314,
+        "pbo_trim_head": 0.13434343434343435,
         "combinations": 12870,
-        "block_size": 95,
-        "rows_dropped": 15
+        "block_size": 99,
+        "rows_dropped": 7
       }
     },
+    "subgroup_pbo": {
+      "intraday_high_frequency": 0.565967365967366,
+      "event_low_frequency": 0.2545454545454545
+    },
+    "subgroup_members": {
+      "intraday_high_frequency": [
+        "ORB",
+        "H1 first-half-hour",
+        "H2 rest-of-day",
+        "H3 overnight drift",
+        "H4 liquidity sweep",
+        "H5 VWAP pullback",
+        "H7 gap reversal",
+        "H11 opening hour"
+      ],
+      "event_low_frequency": [
+        "H6 turn of month",
+        "H8 pre-FOMC",
+        "H9 macro days",
+        "H10 pre-holiday"
+      ]
+    },
     "net_by_strategy": {
-      "ORB": -6520.880000000001,
-      "H1 first-half-hour": -6059.480000000003,
-      "H2 rest-of-day": -2610.9800000000023,
-      "H3 overnight drift": -463.8000000000018,
-      "H4 liquidity sweep": 1179.8600000000004,
-      "H5 VWAP pullback": -2279.3600000000015,
-      "H6 turn of month": 2714.114807513827,
-      "H7 gap reversal": -3741.6100000000033,
+      "ORB": -6720.980000000002,
+      "H1 first-half-hour": -6059.480000000002,
+      "H2 rest-of-day": -2610.9800000000027,
+      "H3 overnight drift": -575.7400000000016,
+      "H4 liquidity sweep": 1203.88,
+      "H5 VWAP pullback": -2336.260000000001,
+      "H6 turn of month": 2714.1148075138285,
+      "H7 gap reversal": -3741.6100000000024,
       "H8 pre-FOMC": 5957.024086040754,
-      "H9 macro days": 859.2044543343559,
+      "H9 macro days": 859.2044543343563,
       "H10 pre-holiday": 3875.915,
-      "H11 opening hour": 1982.7799999999972
+      "H11 opening hour": 1982.7799999999984
     }
   }
 }

@@ -30,12 +30,19 @@ CSV_SOURCES = {
 }
 
 
-def calendar(bars) -> list:
+def calendar(bars, min_bars: int = 1) -> list:
+    """Sessions with at least `min_bars` regular-hours bars.
+
+    min_bars=1 gives 1,588 sessions and is what the matrix uses: it is the only setting that keeps every
+    observation. min_bars=300 gives 1,535 - the definition `family3.Session` uses - and silently discarded
+    $322.70 of ORB/H3/H4/H5 P&L settled on exchange half-days until the independent audit caught it
+    (docs/PBO_INDEPENDENT_AUDIT.md). The 53-session difference is half-days carrying 185-210 bars.
+    """
     t = times(bars)
     mins = t.hour * 60 + t.minute
     rth = (mins >= 570) & (mins < 960) & (t.weekday < 5)
     counts = pd.Series(1, index=t[rth]).groupby(t[rth].date).sum()
-    return [d for d, n in counts.items() if n >= 300]
+    return [d for d, n in counts.items() if n >= min_bars]
 
 
 def from_csv(path: str) -> pd.Series:
@@ -71,7 +78,15 @@ def build(bars, cal, roll_map=None) -> tuple[pd.DataFrame, dict]:
         spanning = sum(1 for x in tr if roll_map and rolls.spans(x.entry_ts, x.exit_ts, roll_map))
         notes[name] = (f"regenerated from nq_bot.{mod.__name__.split('.')[-1]}.{fn}, {len(tr)} trades"
                        + (f", {spanning} roll-adjusted" if roll_map else ""))
-    return daily_matrix(series, cal), notes
+    # H3 trades 02:00-03:00 ET, so it can settle on a date with no regular session at all. The matrix
+    # calendar is therefore the UNION of regular sessions and every date any strategy actually traded,
+    # which drops nothing by construction. Extra dates are reported, never silently added or removed.
+    extra = sorted({d for s in series.values() for d in s.index} - set(cal))
+    if extra:
+        notes["_calendar_extended"] = (f"{len(extra)} non-regular-session dates added because a strategy "
+                                       f"traded on them: {[str(d) for d in extra]}")
+    full = sorted(set(cal) | set(extra))
+    return daily_matrix(series, full), notes
 
 
 def main() -> None:
@@ -92,15 +107,27 @@ def main() -> None:
         sens = {}
         for s_blocks in (8, 10, 12, 14, 16):
             r = cscv(M, s_blocks)
-            sens[s_blocks] = {"pbo": r["pbo"], "combinations": r["n_combinations"],
-                              "block_size": r["block_size"], "rows_dropped": r["rows_dropped"]}
-            print(f"  S={s_blocks:2d}: PBO {r['pbo']:6.1%}  ({r['n_combinations']:>6,} splits, "
-                  f"blocks of {r['block_size']}, {r['rows_dropped']} rows dropped)")
+            drop = len(M) - r["rows_used"]
+            head = cscv(M.iloc[drop:], s_blocks)["pbo"] if drop else r["pbo"]
+            sens[s_blocks] = {"pbo_trim_tail": r["pbo"], "pbo_trim_head": head,
+                              "combinations": r["n_combinations"], "block_size": r["block_size"],
+                              "rows_dropped": drop}
+            print(f"  S={s_blocks:2d}: PBO {r['pbo']:6.1%} (trim tail) / {head:6.1%} (trim head)  "
+                  f"({r['n_combinations']:>6,} splits, blocks of {r['block_size']}, {drop} rows dropped)")
+        # subgroups, split on trading frequency at a threshold fixed before looking at any outcome
+        hi = [c for c in M.columns if (M[c] != 0).sum() >= 200]
+        lo = [c for c in M.columns if c not in hi]
+        groups = {"intraday_high_frequency": cscv(M[hi], 16)["pbo"],
+                  "event_low_frequency": cscv(M[lo], 16)["pbo"]}
+        print(f"  subgroups: intraday ({len(hi)}) PBO {groups['intraday_high_frequency']:.1%}, "
+              f"event ({len(lo)}) PBO {groups['event_low_frequency']:.1%}")
         print()
         out[tag] = {k: v for k, v in res.items() if not k.startswith("_")}
         out[tag]["active_days"] = nz
         out[tag]["sources"] = notes
         out[tag]["sensitivity_by_block_count"] = sens
+        out[tag]["subgroup_pbo"] = groups
+        out[tag]["subgroup_members"] = {"intraday_high_frequency": hi, "event_low_frequency": lo}
         out[tag]["net_by_strategy"] = {c: float(M[c].sum()) for c in M.columns}
 
     Path("runs").mkdir(exist_ok=True)
