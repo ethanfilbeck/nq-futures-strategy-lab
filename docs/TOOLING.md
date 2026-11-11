@@ -21,11 +21,17 @@ A failure in any required gate exits non-zero and prints the tool's full output.
 | **scripts/validate_data.py** | Sanity-checks a bar file before any backtest uses it (ordering, duplicates, OHLC consistency, tick grid, gaps, jumps) | flags | Run by hand on each new download (data is licensed, so CI cannot hold it) |
 | **mypy** | Type checking | `pyproject.toml` | **Clean** (0 findings, 35 files). Was 117 on 2026-11-10; fixed the same day and promoted to a required gate |
 
-**Why the dev tools are pinned.** They decide whether CI passes. Unpinned, `pandas-stubs` resolved differently
-on Python 3.10 than on 3.12 (3.10 gets pandas 2.x, and the stubs target 3.x), so the type gate passed on one CI
-job and failed on another for the same commit. The code no longer depends on how `DataFrame.index` is typed
-(`nq_bot.data.times()` returns a declared `DatetimeIndex`), and the tools are pinned to a major version so an
-upgrade arrives as a Dependabot pull request that CI checks before it reaches `main`.
+**Python 3.12+, and why the dev tools are pinned.** Both came out of the same CI failure. Unpinned,
+`pandas-stubs` resolved differently per Python version: 3.10 cannot install the 3.x stubs at all (they need
+3.11+), so it silently got a 2.2 release that types `DataFrame.index` as `Index[Any]`, and the type gate passed
+on one CI job while failing on another for the same commit. Three changes fixed it for good:
+1. The code no longer depends on how `DataFrame.index` is typed — `nq_bot.data.times()` returns a declared
+   `DatetimeIndex` and is used wherever bar times are read.
+2. The floor is Python 3.12, matching the PC that runs the bot. 3.10 reached end of life in October 2026 and has
+   been dropped by pandas-stubs and by numpy 2.5+; keeping it would have pinned the whole project to old
+   libraries to satisfy a version nobody here runs.
+3. The dev tools are pinned to a major version, so an upgrade arrives as a Dependabot pull request that CI
+   checks before it reaches `main`.
 | **GitHub Actions** | Runs `scripts/check.py` on Ubuntu (Python 3.10, 3.12) and Windows (3.12) on every push, pull request and weekly | `.github/workflows/ci.yml` | Added; first run happens on push |
 | **Gitleaks (CI only)** | Scans the full git history for secrets on every push | `.gitleaks.toml` | Added. A manual pattern scan of the full history found only the `.env.example` placeholder |
 | **Dependabot** | Weekly pull requests for outdated or vulnerable dependencies and Actions | `.github/dependabot.yml` | Added |

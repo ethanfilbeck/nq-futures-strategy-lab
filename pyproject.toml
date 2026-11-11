@@ -1,7 +1,9 @@
 # Tooling config only (the project is run from the repo folder, not installed as a package).
+# Python 3.12+. 3.10 reached end of life in October 2026, and pandas-stubs (3.x) and numpy (2.5+) have both
+# dropped it, which left the type checker running against stubs years older than the pandas actually installed.
 [tool.ruff]
 line-length = 120
-target-version = "py310"
+target-version = "py312"
 extend-exclude = ["data", "logs", "runs", "tradingview"]
 
 [tool.ruff.lint]
@@ -22,7 +24,7 @@ ignore = [
 "tests/*" = ["S", "DTZ", "B"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 ignore_missing_imports = true      # ib_async / databento ship partial or no stubs
 check_untyped_defs = true
 warn_unused_ignores = true

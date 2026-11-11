@@ -148,6 +148,7 @@ scripts/validate_data.py    sanity-checks a bar file before a backtest uses it
 ## Install
 
 ```bash
+# Python 3.12 or newer
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys

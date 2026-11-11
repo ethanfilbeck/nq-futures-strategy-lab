@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -55,7 +56,7 @@ class Session:
         mins = t.hour * 60 + t.minute
         rth = (mins >= 570) & (mins < 960) & (t.weekday < 5)
         counts = pd.Series(1, index=t[rth]).groupby(t[rth].date).sum()
-        self.days = [d for d, n in counts.items() if n >= 300]
+        self.days: list[date] = [cast(date, d) for d, n in counts.items() if n >= 300]
         self.day_index = {d: i for i, d in enumerate(self.days)}
         self._minute: dict[str, dict] = {}
         for hm in ("09:30", "09:31", "13:55", "14:00", "15:55", "15:59"):

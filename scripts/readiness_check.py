@@ -65,15 +65,14 @@ def main():
         results["paper_matches_backtest"] = bool(same)
         ok = ok and bool(same)
         # 3: protection and session rules
+        exits_ok = same_day = all_had_stops = True
         if len(paper):
-            exits_ok = paper["exit_kind"].isin(["stop", "target", "flatten"]).all()
-            same_day = (pd.to_datetime(paper["entry_ts"]).map(lambda x: x.date())
-                        == pd.to_datetime(paper["exit_ts"]).map(lambda x: x.date())).all()
+            exits_ok = bool(paper["exit_kind"].isin(["stop", "target", "flatten"]).all())
+            same_day = bool((pd.to_datetime(paper["entry_ts"]).map(lambda x: x.date())
+                             == pd.to_datetime(paper["exit_ts"]).map(lambda x: x.date())).all())
             journal_lines = r.journal.path.read_text().splitlines() if r.journal.path else []
             stops = [json.loads(line) for line in journal_lines if '"event": "order"' in line]
             all_had_stops = all(o["signal"]["stop"] is not None for o in stops)
-        else:
-            exits_ok, same_day, all_had_stops = True, True, True
         results["every_order_had_a_stop"] = bool(all_had_stops)
         results["exits_are_stop_target_or_flatten"] = bool(exits_ok)
         results["no_overnight_positions"] = bool(same_day)

@@ -47,7 +47,10 @@ def add_momentum_features(feats: pd.DataFrame, cfg) -> pd.DataFrame:
                                s.stop_mult * lh.shift(1).rolling(s.stop_lookback_days,
                                                                  min_periods=s.min_history_days).median())
 
-    get = lambda col: sd.map(d[col]).astype(float)  # noqa: E731
+    def get(col: str) -> pd.Series:
+        """Map each bar's session date onto that day's value of `col`."""
+        return sd.map(d[col]).astype(float)
+
     out["mom_prev_close"] = get("prev_close")
     out["mom_p1000"] = get("c0959").where(m >= M_1000)
     out["mom_p1530"] = get("c1529").where(m >= M_1529)

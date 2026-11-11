@@ -18,8 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest, python: "3.10" }
-          - { os: ubuntu-latest, python: "3.12" }
+          - { os: ubuntu-latest, python: "3.12" }    # the version on the PC that runs the bot
+          - { os: ubuntu-latest, python: "3.13" }    # next version, so upgrades are not a surprise
           - { os: windows-latest, python: "3.12" }   # the bot's real home is a Windows PC
     steps:
       - uses: actions/checkout@v4
