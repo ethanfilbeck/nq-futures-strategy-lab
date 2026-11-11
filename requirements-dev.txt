@@ -2,7 +2,7 @@
 # Needs Python 3.12+ (see pyproject.toml). Pinned to a major version on purpose: these decide whether CI
 # passes, so a new release must not be able to fail main unannounced. Dependabot proposes upgrades as pull
 # requests, where CI checks them first.
-ruff>=0.17,<0.18          # lint, import order, security rules (Bandit rule set), naive-datetime checks
+ruff>=0.17.4,<0.18          # lint, import order, security rules (Bandit rule set), naive-datetime checks
 mypy>=2.4,<3              # type checking
 pip-audit>=2.10,<3        # known-vulnerability scan of dependencies
 types-PyYAML
