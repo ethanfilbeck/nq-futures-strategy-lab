@@ -23,7 +23,11 @@ def _normalize(df: pd.DataFrame, tz: str = TZ) -> pd.DataFrame:
     idx = pd.DatetimeIndex(df.index)
     idx = idx.tz_localize("UTC") if idx.tz is None else idx
     df.index = idx.tz_convert(tz)
+    # `symbol` rides along as a string when present: for a continuous series it is the exact roll record
+    sym = df["symbol"].astype("string") if "symbol" in df.columns else None
     df = df[need].astype(float).sort_index()
+    if sym is not None:
+        df["symbol"] = sym.reindex(df.index)
     df = df[~df.index.duplicated(keep="last")]
     bad = (df["high"] < df[["open", "close"]].max(axis=1)) | (df["low"] > df[["open", "close"]].min(axis=1))
     if bad.any():
@@ -53,8 +57,16 @@ def load_csv(path: str, tz_of_file: str = "UTC") -> pd.DataFrame:
 def fetch_databento(symbol: str, start: str, end: str, out_csv: str | None = None) -> pd.DataFrame:
     """Download 1-minute bars. symbol examples: 'MNQ.v.0' (volume-rolled continuous),
     'NQ.c.0' (calendar-rolled), or a specific contract like 'MNQZ6'.
-    Continuous series are unadjusted: expect price jumps at rolls; the strategy only
-    compares prices within one session, so this does not leak across rolls.
+
+    WARNING: continuous series are spliced WITHOUT back-adjustment, so the price jumps by the calendar
+    spread at every roll - positive for equity index futures, and about 1% a quarter at 2023-2025 rates.
+    Any strategy that holds ACROSS a roll books that gap as profit it would never have received. This
+    docstring previously claimed the opposite ("the strategy only compares prices within one session, so
+    this does not leak across rolls"); that was true when the bot was intraday-only and became false when
+    the overnight and event families were added, and it is what the November 2026 audit found inflating H8
+    (docs/AUDIT_2026_11_ROLLS.md). The `symbol` column is kept below so roll dates are exact - use
+    `nq_bot.rolls` to find them and to adjust any hold that spans one.
+
     Check the cost estimate in your Databento portal before large pulls."""
     import databento as db  # pip install databento
 
@@ -66,7 +78,9 @@ def fetch_databento(symbol: str, start: str, end: str, out_csv: str | None = Non
     data = client.timeseries.get_range(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[symbol],
                                        stype_in=stype, start=start, end=end)
     df = data.to_df()  # prices already converted to floats, index = ts_event (UTC)
-    df = _normalize(df[["open", "high", "low", "close", "volume"]])
+    # keep `symbol` when the feed gives it: for a continuous series it is the only exact record of roll dates
+    cols = ["open", "high", "low", "close", "volume"] + (["symbol"] if "symbol" in df.columns else [])
+    df = _normalize(df[cols])
     if out_csv:
         df.tz_convert("UTC").rename_axis("timestamp").to_csv(out_csv)
     return df

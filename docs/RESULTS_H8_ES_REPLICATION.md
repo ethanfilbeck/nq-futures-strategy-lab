@@ -1,5 +1,9 @@
 # Result: H8 (pre-FOMC drift) replication on MES — run once, 2026-11-10
 
+> **SUPERSEDED IN PART, 2026-11-11.** A contract-roll defect inflated this result; see
+> `AUDIT_2026_11_ROLLS.md`. Roll-adjusted figures: MES t 3.56 -> **1.66**, which FAILS the pre-registered bar of 2.0.
+
+
 Pre-registration: `PREREG_H8_ES_REPLICATION.md` (hash in `PREREG_HASH.txt`, frozen before any ES data was
 downloaded). Data: Databento `MES.v.0` 1-minute, 2019-05-06 → 2026-10-31 (2,640,477 bars; Databento flagged a
 few days as degraded quality, e.g. 2020-02-27/28). 59 scheduled FOMC statements, none skipped, no stop hit.

@@ -1,5 +1,9 @@
 # Result: H8 placebo tests - run once, 2026-11-11
 
+> **SUPERSEDED IN PART, 2026-11-11.** A contract-roll defect inflated this result; see
+> `AUDIT_2026_11_ROLLS.md`. Roll-adjusted figures: MNQ 2.89 -> **2.63**, MES 3.56 -> **1.66**, M2K 2.45 -> **1.44**. The real window is still the best of all seven series in each market, so the qualitative conclusion stands, but it is no longer significant on its own and part of what this test measured was the roll.
+
+
 Pre-registration: `PREREG_H8_PLACEBO.md` (hash in `PREREG_HASH.txt`, frozen before any placebo statistic was
 computed). Data already on disk: MNQ (`mnq_train.csv` + `mnq_holdout.csv`, all 59 events), MES, M2K. No new
 data was bought for this. Rule unchanged and not re-fit.

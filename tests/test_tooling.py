@@ -74,3 +74,35 @@ def test_research_modules_do_not_import_execution_code():
                 names = [node.module or ""] + [a.name for a in node.names]
             hit = {part for n in names for part in n.split(".")} & EXECUTION
             assert not hit, f"{f.name} imports execution code: {hit}"
+
+
+def test_roll_detection_finds_an_injected_gap():
+    """nq_bot.rolls must find a roll-shaped jump, and adjust_exit must divide it back out.
+
+    Regression test for the November 2026 audit: an unadjusted continuous series jumps at every roll, and
+    a strategy holding across one books that gap as profit it never received (docs/AUDIT_2026_11_ROLLS.md).
+    """
+    import pandas as pd
+
+    from nq_bot import rolls
+    from nq_bot.data import synthetic_bars
+
+    bars = synthetic_bars(days=40).copy()
+    # a roll is a quiet overnight level shift, so build one: March, 20:00 ET, low volume, +1%.
+    # Anchor the block to the last real close so the injected gap is the only discontinuity.
+    march = pd.Timestamp("2025-03-12 20:00", tz="America/New_York")
+    base = float(bars["close"].iloc[-1])
+    overnight = pd.DataFrame({"open": base, "high": base, "low": base, "close": base, "volume": 1.0},
+                             index=pd.date_range(march - pd.Timedelta(minutes=5), periods=11, freq="1min"))
+    overnight.loc[march:, ["open", "high", "low", "close"]] *= 1.01     # the gap
+    bars = pd.concat([bars, overnight]).sort_index()
+
+    found = rolls.detect(bars)
+    assert march in found, f"the injected roll at {march} was not detected: {found}"
+    assert abs(found[march] - 0.01) < 1e-6
+
+    entry, exit_ts = march - pd.Timedelta(minutes=3), march + pd.Timedelta(minutes=3)
+    assert rolls.spans(entry, exit_ts, found), "a hold spanning the roll must report it"
+    assert abs(rolls.adjust_exit(base * 1.01, entry, exit_ts, found) - base) < 1e-6
+    # a hold that ends before the roll is untouched
+    assert rolls.adjust_exit(base, entry, march - pd.Timedelta(minutes=1), found) == base

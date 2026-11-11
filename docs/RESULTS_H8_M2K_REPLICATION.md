@@ -1,5 +1,9 @@
 # Result: H8 (pre-FOMC drift) replication on Russell 2000 micro futures (M2K) — run once, 2026-11-10
 
+> **SUPERSEDED IN PART, 2026-11-11.** A contract-roll defect inflated this result; see
+> `AUDIT_2026_11_ROLLS.md`. Roll-adjusted figures: M2K t 2.45 -> **1.44**, which FAILS the pre-registered bar of 2.0.
+
+
 Pre-registration: `PREREG_H8_M2K_REPLICATION.md` (hash in `PREREG_HASH.txt`, frozen and pushed to GitHub before any
 Russell 2000 data was downloaded). Data: Databento `M2K.v.0` 1-minute, 2019-05-06 → 2026-10-31 (2,503,777 bars;
 Databento flagged a few days as degraded quality, e.g. 2020-02-27/28, 2020-05-05). 59 scheduled FOMC statements,
