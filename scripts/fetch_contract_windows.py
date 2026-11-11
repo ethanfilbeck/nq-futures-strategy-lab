@@ -2,14 +2,21 @@
 
     py scripts\\fetch_contract_windows.py runs/rollmap_MNQ.json              # cost estimate only
     py scripts\\fetch_contract_windows.py runs/rollmap_MNQ.json --confirm    # then download
+    py scripts\\fetch_contract_windows.py runs/rollmap_MNQ.json --confirm --max-cost 5.00
+
+COST. --confirm authorises a BILLED download against the Databento account. An early estimate of
+"a few cents" was wrong by about an order of magnitude; extrapolating from the one measured pull
+(MNQ full range, 2.17M bars, ~$9.50) this is roughly $1-5. That is an extrapolation, not a
+measurement. The script therefore prints the REAL per-window estimate from the free metadata API,
+refuses to download above --max-cost (default $3.00), and lists every request it will make.
 
 Why: adjusting a spliced series is a PROXY. A trader buys the front contract at 14:00 and sells THAT
 contract at 13:55 the next day - never rolling, so there is no roll cost, only a data artifact. Holding one
 contract's real prices across the window removes the artifact instead of estimating it
 (docs/AUDIT_2026_11_ROLLS.md).
 
-Each window is one contract over about three calendar days, so the whole set is a tiny fraction of a
-full-range pull. The estimate is printed first and nothing downloads without --confirm.
+Each window is one contract over six calendar days. The estimate is printed first, the ceiling is
+enforced, and nothing downloads without --confirm.
 """
 import json
 import os
@@ -50,7 +57,10 @@ def windows(periods: list[dict]) -> list[tuple[str, str, str]]:
     return out
 
 
-def main(mapfile: str, confirm: bool) -> int:
+MAX_COST_DEFAULT = 3.00
+
+
+def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int:
     import databento as db
     from dotenv import load_dotenv
 
@@ -64,15 +74,29 @@ def main(mapfile: str, confirm: bool) -> int:
     print(f"{market}: {len(w)} contract windows for {len(EVENTS)} events\n")
 
     client = db.Historical(key)
+    print("exactly what will be requested, if you confirm:")
+    print("  dataset GLBX.MDP3   schema ohlcv-1m   stype_in raw_symbol   venue CME Globex")
     total = 0.0
+    per = []
     for c, a, b in w:
-        cost = client.metadata.get_cost(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
-                                        stype_in="raw_symbol", start=a, end=b)
-        total += float(cost)
-    print(f"estimated total cost: ${total:.4f}")
+        cost = float(client.metadata.get_cost(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
+                                              stype_in="raw_symbol", start=a, end=b))
+        per.append((c, a, b, cost))
+        total += cost
+    for c, a, b, cost in per[:8]:
+        print(f"    {c:10s} {a} .. {b}   ${cost:.4f}")
+    if len(per) > 8:
+        print(f"    ... and {len(per)-8} more windows")
+    print(f"\n  {len(w)} requests, estimated total ${total:.4f}  (ceiling ${max_cost:.2f})")
+    print("  this is Databento's own figure from the free metadata API, not an extrapolation")
+    if total > max_cost:
+        print(f"\nREFUSED: ${total:.4f} exceeds the --max-cost ceiling of ${max_cost:.2f}. "
+              "Nothing was downloaded. Raise the ceiling deliberately if the figure is acceptable.")
+        return 2
     if not confirm:
-        print("\nestimate only. re-run with --confirm to download.")
+        print("\nestimate only - nothing downloaded. Re-run with --confirm to authorise the charge.")
         return 0
+    print("\n--confirm given: downloading now. This is a BILLED request.")
 
     frames = []
     for i, (c, a, b) in enumerate(w, 1):
@@ -98,4 +122,5 @@ def main(mapfile: str, confirm: bool) -> int:
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         raise SystemExit(__doc__)
-    sys.exit(main(sys.argv[1], "--confirm" in sys.argv))
+    mc = float(sys.argv[sys.argv.index("--max-cost") + 1]) if "--max-cost" in sys.argv else MAX_COST_DEFAULT
+    sys.exit(main(sys.argv[1], "--confirm" in sys.argv, mc))
