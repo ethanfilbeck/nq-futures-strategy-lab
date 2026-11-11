@@ -134,3 +134,32 @@ def test_research_report_requires_roll_exposure():
     for key in ("expectancy_per_trade", "mean_ci95_approx", "max_drawdown", "costs",
                 "gross_of_all_costs", "double_slippage", "t_dropping_best", "by_year"):
         assert key in checked, key
+
+
+# Experiments that predate the integrity gate. This set may SHRINK, never grow: a new run_*.py that does
+# not gate its data will fail the test below. Tracked as debt in docs/DATA_INTEGRITY.md.
+NOT_YET_GATED = {
+    "run_family2_prereg.py", "run_family3_prereg.py", "run_family4_prereg.py", "run_family3_holdout.py",
+    "run_momentum_prereg.py", "run_h8_es_replication.py", "run_h8_m2k_replication.py",
+    "run_h8_gold_control.py", "run_h8_nkd_replication.py", "run_h8_placebo.py",
+    "run_h8_contract_level.py", "run_statarb_s1.py", "research_edge.py", "wf_edge.py",
+}
+
+
+def test_new_experiments_must_use_the_data_integrity_gate():
+    """Every experiment must reconcile its data before computing. The allowlist is a ratchet.
+
+    Twice a defect in the data path, not the method, changed this project's numbers
+    (docs/AUDIT_2026_11_ROLLS.md, docs/PBO_INDEPENDENT_AUDIT.md). Neither was caught by a test.
+    """
+    root = Path(__file__).resolve().parent.parent
+    scripts = {p.name for p in root.glob("run_*.py")} | {"research_edge.py", "wf_edge.py"}
+    ungated = {n for n in scripts
+               if "nq_bot.integrity" not in (root / n).read_text(encoding="utf-8")}
+    new = ungated - NOT_YET_GATED
+    assert not new, (f"these experiments do not use the integrity gate: {sorted(new)}. "
+                     "Add Gate(...).enforce() before any computation, or justify an addition to "
+                     "NOT_YET_GATED.")
+    stale = NOT_YET_GATED - ungated
+    assert not stale, (f"these are now gated and must be removed from NOT_YET_GATED: {sorted(stale)} "
+                       "- the allowlist is a ratchet and may only shrink.")

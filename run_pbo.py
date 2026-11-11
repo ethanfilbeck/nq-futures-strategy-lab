@@ -17,6 +17,7 @@ from nq_bot import family3 as f3
 from nq_bot import family4 as f4
 from nq_bot import rolls
 from nq_bot.data import load_csv, times
+from nq_bot.integrity import Gate, trade_total
 from nq_bot.pbo import cscv, daily_matrix, summary_text
 
 TRAIN_END = "2025-06-30 23:59"
@@ -60,7 +61,7 @@ def from_trades(trades, pt=2.0, comm=1.24, roll_map=None) -> pd.Series:
     return pd.Series(rows)
 
 
-def build(bars, cal, roll_map=None) -> tuple[pd.DataFrame, dict]:
+def build(bars, cal, roll_map=None, gate: Gate | None = None) -> tuple[pd.DataFrame, dict]:
     s = f4.Session4(bars)
     series, notes = {}, {}
     for name, path in CSV_SOURCES.items():
@@ -69,12 +70,17 @@ def build(bars, cal, roll_map=None) -> tuple[pd.DataFrame, dict]:
             continue
         series[name] = from_csv(path)
         notes[name] = f"from {path} (intraday or same-session exit; no roll adjustment applies)"
+        if gate is not None:                    # reconcile against the ORIGINAL trade file, not ourselves
+            src = pd.read_csv(path)
+            gate.reconcile_total(name, float(src["net"].sum()), float(series[name].sum()))
     for name, fn, mod in (("H6 turn of month", "run_h6", f3), ("H7 gap reversal", "run_h7", f3),
                           ("H8 pre-FOMC", "run_h8", f3), ("H9 macro days", "run_h9", f4),
                           ("H10 pre-holiday", "run_h10", f4), ("H11 opening hour", "run_h11", f4)):
         r = getattr(mod, fn)(s)
         tr = r[0] if isinstance(r, tuple) else r
         series[name] = from_trades(tr, roll_map=roll_map)
+        if gate is not None and roll_map is None:
+            gate.reconcile_total(name, trade_total(tr, 2.0, 1.24), float(series[name].sum()))
         spanning = sum(1 for x in tr if roll_map and rolls.spans(x.entry_ts, x.exit_ts, roll_map))
         notes[name] = (f"regenerated from nq_bot.{mod.__name__.split('.')[-1]}.{fn}, {len(tr)} trades"
                        + (f", {spanning} roll-adjusted" if roll_map else ""))
@@ -86,7 +92,14 @@ def build(bars, cal, roll_map=None) -> tuple[pd.DataFrame, dict]:
         notes["_calendar_extended"] = (f"{len(extra)} non-regular-session dates added because a strategy "
                                        f"traded on them: {[str(d) for d in extra]}")
     full = sorted(set(cal) | set(extra))
-    return daily_matrix(series, full), notes
+    M = daily_matrix(series, full)
+    if gate is not None:
+        traded = {d for sr in series.values() for d in sr.index}
+        gate.no_dates_lost("matrix calendar", traded, set(M.index))
+        gate.zero_is_not_missing("matrix", M)
+        gate.documented("matrix calendar", notes.get("_calendar_extended",
+                                                     "regular sessions only; no extension needed"))
+    return M, notes
 
 
 def main() -> None:
@@ -96,9 +109,12 @@ def main() -> None:
     rm = rolls.detect(bars)
     print(f"calendar: {len(cal)} sessions, {cal[0]} -> {cal[-1]}; {len(rm)} rolls detected\n")
 
+    gate = Gate("E1 PBO")
+    gate.bars(bars, "MNQ training bars").contract_identity(bars, "MNQ training bars")
+
     out = {"sessions": len(cal), "first": str(cal[0]), "last": str(cal[-1]), "rolls_detected": len(rm)}
     for tag, roll_map in (("as_published", None), ("roll_adjusted", rm)):
-        M, notes = build(bars, cal, roll_map)
+        M, notes = build(bars, cal, roll_map, gate=gate)
         print(f"===== {tag}: {M.shape[1]} strategies x {M.shape[0]} sessions =====")
         nz = {c: int((M[c] != 0).sum()) for c in M.columns}
         print("  active days per strategy: " + ", ".join(f"{k.split()[0]} {v}" for k, v in nz.items()))
@@ -129,6 +145,10 @@ def main() -> None:
         out[tag]["subgroup_pbo"] = groups
         out[tag]["subgroup_members"] = {"intraday_high_frequency": hi, "event_low_frequency": lo}
         out[tag]["net_by_strategy"] = {c: float(M[c].sum()) for c in M.columns}
+
+    # nothing below this line runs unless every integrity check passed
+    out["integrity"] = gate.enforce("runs/pbo_integrity.json")
+    print(gate.report())
 
     Path("runs").mkdir(exist_ok=True)
     Path("runs/pbo.json").write_text(json.dumps(out, indent=2, default=str))

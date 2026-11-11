@@ -1,0 +1,249 @@
+{
+  "experiment": "E1 PBO",
+  "checks": [
+    {
+      "check": "MNQ training bars: index is a timezone-aware DatetimeIndex",
+      "ok": true,
+      "detail": "DatetimeIndex"
+    },
+    {
+      "check": "MNQ training bars: timestamps strictly increasing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "MNQ training bars: no duplicate timestamps",
+      "ok": true,
+      "detail": "0 duplicates"
+    },
+    {
+      "check": "MNQ training bars: has OHLCV columns",
+      "ok": true,
+      "detail": "missing []"
+    },
+    {
+      "check": "MNQ training bars: no NaN in OHLCV",
+      "ok": true,
+      "detail": "0 NaN cells"
+    },
+    {
+      "check": "MNQ training bars: high/low consistent with open/close",
+      "ok": true,
+      "detail": "0 bad bars"
+    },
+    {
+      "check": "MNQ training bars: contract identity",
+      "ok": true,
+      "detail": "HEURISTIC (no symbol column): 25 suspected rolls. Figures derived from this inherit the detector's uncertainty.",
+      "roll_source": "heuristic",
+      "rolls": 25
+    },
+    {
+      "check": "ORB: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-6,720.98 vs derived $-6,720.98 (diff $+0.00)",
+      "source_total": -6720.980000000003,
+      "derived_total": -6720.980000000001,
+      "diff": 1.8189894035458565e-12
+    },
+    {
+      "check": "H1 first-half-hour: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-6,059.48 vs derived $-6,059.48 (diff $+0.00)",
+      "source_total": -6059.480000000001,
+      "derived_total": -6059.480000000001,
+      "diff": 0.0
+    },
+    {
+      "check": "H2 rest-of-day: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-2,610.98 vs derived $-2,610.98 (diff $+0.00)",
+      "source_total": -2610.9800000000023,
+      "derived_total": -2610.9800000000023,
+      "diff": 0.0
+    },
+    {
+      "check": "H3 overnight drift: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-575.74 vs derived $-575.74 (diff $+0.00)",
+      "source_total": -575.7400000000014,
+      "derived_total": -575.7400000000014,
+      "diff": 0.0
+    },
+    {
+      "check": "H4 liquidity sweep: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $1,203.88 vs derived $1,203.88 (diff $+0.00)",
+      "source_total": 1203.8799999999999,
+      "derived_total": 1203.88,
+      "diff": 2.2737367544323206e-13
+    },
+    {
+      "check": "H5 VWAP pullback: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-2,336.26 vs derived $-2,336.26 (diff $+0.00)",
+      "source_total": -2336.2600000000025,
+      "derived_total": -2336.260000000002,
+      "diff": 4.547473508864641e-13
+    },
+    {
+      "check": "H6 turn of month: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $2,891.88 vs derived $2,891.88 (diff $-0.00)",
+      "source_total": 2891.8799999999974,
+      "derived_total": 2891.879999999992,
+      "diff": -5.4569682106375694e-12
+    },
+    {
+      "check": "H7 gap reversal: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-3,741.61 vs derived $-3,741.61 (diff $-0.00)",
+      "source_total": -3741.609999999934,
+      "derived_total": -3741.6100000000038,
+      "diff": -6.957634468562901e-11
+    },
+    {
+      "check": "H8 pre-FOMC: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $7,114.98 vs derived $7,114.98 (diff $-0.00)",
+      "source_total": 7114.980000000005,
+      "derived_total": 7114.98,
+      "diff": -5.4569682106375694e-12
+    },
+    {
+      "check": "H9 macro days: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $1,247.46 vs derived $1,247.46 (diff $-0.00)",
+      "source_total": 1247.4649999999967,
+      "derived_total": 1247.464999999991,
+      "diff": -5.6843418860808015e-12
+    },
+    {
+      "check": "H10 pre-holiday: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $3,875.92 vs derived $3,875.92 (diff $-0.00)",
+      "source_total": 3875.9150000000054,
+      "derived_total": 3875.915000000001,
+      "diff": -4.547473508864641e-12
+    },
+    {
+      "check": "H11 opening hour: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $1,982.78 vs derived $1,982.78 (diff $-0.00)",
+      "source_total": 1982.7800000000013,
+      "derived_total": 1982.7799999999982,
+      "diff": -3.183231456205249e-12
+    },
+    {
+      "check": "matrix calendar: no dates lost in processing",
+      "ok": true,
+      "detail": "none",
+      "lost": 0
+    },
+    {
+      "check": "matrix: no NaN left after alignment (zero != missing)",
+      "ok": true,
+      "detail": "0 NaN cells; genuine no-position days per column: ORB=300, H1=314, H2=314, H3=15, H4=1306, H5=547, H6=1518, H7=1152, H8=1543, H9=1450, H10=1532, H11=1338",
+      "zeros": {
+        "ORB": 300,
+        "H1 first-half-hour": 314,
+        "H2 rest-of-day": 314,
+        "H3 overnight drift": 15,
+        "H4 liquidity sweep": 1306,
+        "H5 VWAP pullback": 547,
+        "H6 turn of month": 1518,
+        "H7 gap reversal": 1152,
+        "H8 pre-FOMC": 1543,
+        "H9 macro days": 1450,
+        "H10 pre-holiday": 1532,
+        "H11 opening hour": 1338
+      }
+    },
+    {
+      "check": "matrix calendar: transformation documented",
+      "ok": true,
+      "detail": "3 non-regular-session dates added because a strategy traded on them: ['2021-04-02', '2023-04-07', '2025-01-09']"
+    },
+    {
+      "check": "ORB: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-6,720.98 vs derived $-6,720.98 (diff $+0.00)",
+      "source_total": -6720.980000000003,
+      "derived_total": -6720.980000000001,
+      "diff": 1.8189894035458565e-12
+    },
+    {
+      "check": "H1 first-half-hour: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-6,059.48 vs derived $-6,059.48 (diff $+0.00)",
+      "source_total": -6059.480000000001,
+      "derived_total": -6059.480000000001,
+      "diff": 0.0
+    },
+    {
+      "check": "H2 rest-of-day: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-2,610.98 vs derived $-2,610.98 (diff $+0.00)",
+      "source_total": -2610.9800000000023,
+      "derived_total": -2610.9800000000023,
+      "diff": 0.0
+    },
+    {
+      "check": "H3 overnight drift: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-575.74 vs derived $-575.74 (diff $+0.00)",
+      "source_total": -575.7400000000014,
+      "derived_total": -575.7400000000014,
+      "diff": 0.0
+    },
+    {
+      "check": "H4 liquidity sweep: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $1,203.88 vs derived $1,203.88 (diff $+0.00)",
+      "source_total": 1203.8799999999999,
+      "derived_total": 1203.88,
+      "diff": 2.2737367544323206e-13
+    },
+    {
+      "check": "H5 VWAP pullback: derived total reconciles with source",
+      "ok": true,
+      "detail": "source $-2,336.26 vs derived $-2,336.26 (diff $+0.00)",
+      "source_total": -2336.2600000000025,
+      "derived_total": -2336.260000000002,
+      "diff": 4.547473508864641e-13
+    },
+    {
+      "check": "matrix calendar: no dates lost in processing",
+      "ok": true,
+      "detail": "none",
+      "lost": 0
+    },
+    {
+      "check": "matrix: no NaN left after alignment (zero != missing)",
+      "ok": true,
+      "detail": "0 NaN cells; genuine no-position days per column: ORB=300, H1=314, H2=314, H3=15, H4=1306, H5=547, H6=1518, H7=1152, H8=1543, H9=1450, H10=1532, H11=1338",
+      "zeros": {
+        "ORB": 300,
+        "H1 first-half-hour": 314,
+        "H2 rest-of-day": 314,
+        "H3 overnight drift": 15,
+        "H4 liquidity sweep": 1306,
+        "H5 VWAP pullback": 547,
+        "H6 turn of month": 1518,
+        "H7 gap reversal": 1152,
+        "H8 pre-FOMC": 1543,
+        "H9 macro days": 1450,
+        "H10 pre-holiday": 1532,
+        "H11 opening hour": 1338
+      }
+    },
+    {
+      "check": "matrix calendar: transformation documented",
+      "ok": true,
+      "detail": "3 non-regular-session dates added because a strategy traded on them: ['2021-04-02', '2023-04-07', '2025-01-09']"
+    }
+  ],
+  "n_checks": 31,
+  "n_failed": 0,
+  "passed": true
+}
