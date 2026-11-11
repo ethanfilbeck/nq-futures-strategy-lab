@@ -17,6 +17,7 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import sys
 import time
 from dataclasses import dataclass
 from datetime import date, timedelta
@@ -237,11 +238,12 @@ def ct(ts) -> str:
 
 def keep_awake(on: bool = True) -> None:
     """On Windows, stop the PC from sleeping while a trade is being tracked (no effect elsewhere)."""
+    if sys.platform != "win32":                     # mypy narrows on this, so no platform-specific ignore
+        return
     try:
         import ctypes
         ES_CONTINUOUS, ES_SYSTEM_REQUIRED = 0x80000000, 0x00000001
-        kernel32 = ctypes.windll.kernel32           # type: ignore[attr-defined]  # Windows only
-        kernel32.SetThreadExecutionState(ES_CONTINUOUS | (ES_SYSTEM_REQUIRED if on else 0))
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | (ES_SYSTEM_REQUIRED if on else 0))
     except (AttributeError, OSError):
         pass
 
