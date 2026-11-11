@@ -6,3 +6,5 @@ PREREG_FAMILY4.md sha256=9922304e9da74fd762a3800504c658e8c1db023d592bcd305c69b47
 PREREG_H8_ES_REPLICATION.md sha256=a1f9c0652970a8fbcd725f2d9fea64550e4567521dff7306657da96d377c2a63 frozen_at=2026-11-09 22:18 CST (before any ES/MES data downloaded)
 PREREG_H8_M2K_REPLICATION.md sha256=3d613b0d56641b9910e6f24c2984d7c9ea5f8f70e29ee1a10fcd5df750909de2 frozen_at=2026-11-10 13:15 CST (before any Russell 2000 / M2K data downloaded)
 PREREG_H8_GOLD_CONTROL.md sha256=9802a20dad123f3a3549eb567f3ddbe8c7c8d894ee46189f6a37a9f6c847d0a1 frozen_at=2026-11-10 22:53 CST (before any gold / MGC data downloaded)
+PREREG_H8_PLACEBO.md sha256=4d251a8bcc04ed2785557e6717d3cbbfd412eba96a14c62d50841ca4b4f584a5 frozen_at=2026-11-11 10:52 CST (before any sham-date or Wednesday-null statistic computed; data already on disk - see the limitation recorded in the doc)
+PREREG_H8_NKD_REPLICATION.md sha256=89a88f47abe2bd75426d702abe0d8bc35d21f6459deb973a3bd5acf1db2ecd0f frozen_at=2026-11-11 10:52 CST (before any Nikkei / NKD data downloaded)
