@@ -1,0 +1,39 @@
+{
+  "market": "MGC (Micro Gold)",
+  "data": [
+    "2019-05-05 20:00:00-04:00",
+    "2026-10-30 16:59:00-04:00"
+  ],
+  "n": 55,
+  "skipped": 4,
+  "net": 1647.6100000000442,
+  "mean": 29.95654545454626,
+  "median": 6.760000000001819,
+  "pf": 1.4118829355605744,
+  "t": 0.5926298465087549,
+  "win_rate": 0.5454545454545454,
+  "stops_hit": 1,
+  "random_mean": 12.338267530937621,
+  "random_p95": 90.75202727272708,
+  "net_2019_2022": -0.4799999999686513,
+  "net_2023_2026": 1648.090000000013,
+  "by_year": {
+    "2019": 162.04000000000272,
+    "2020": 563.3200000000118,
+    "2021": -431.9199999999914,
+    "2022": -293.9199999999919,
+    "2023": 409.3200000000132,
+    "2024": 747.3200000000195,
+    "2025": -239.67999999999006,
+    "2026": 731.1299999999703
+  },
+  "checks": {
+    "net>0 and PF>=1.20": true,
+    "t>=2.0": false,
+    "beats random 24h longs (>95th pct)": false,
+    "both halves positive": false
+  },
+  "control_checks_all_cleared": false,
+  "verdict": "INCONCLUSIVE - positive but short of the bar; H8 status unchanged, caveat recorded",
+  "trades_file": "runs/h8_gold_control_trades.jsonl (git-ignored: prices derived from licensed data)"
+}

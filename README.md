@@ -39,6 +39,7 @@ that makes the one *yes* earn it.
 | ↳ H8 on held-out MNQ (2025-07 → 2026-10) | run once, rule frozen | 11 | — | +$368 | Consistent, weak (t 0.34) |
 | ↳ H8 on S&P 500 micro (MES), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 3.55 | +$5,141 (MES) | **Replicates** (t 3.56) — [details](docs/RESULTS_H8_ES_REPLICATION.md) |
 | ↳ H8 on Russell 2000 micro (M2K), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 2.29 | +$2,325 (M2K) | **Replicates** (t 2.45) — [details](docs/RESULTS_H8_M2K_REPLICATION.md) |
+| ↳ H8 on **gold** (MGC) — *negative control*, 2019-05 → 2026-10 | pre-registered, run once; clearing the bar would count **against** H8 | 55 | 1.41 | +$1,648 (MGC) | **Inconclusive** (t 0.59; −0.13 without its best trade) — [details](docs/RESULTS_H8_GOLD_CONTROL.md) |
 | H9 CPI / jobs-report days | pre-registered, t ≥ 3.5 + beat random longs | 141 | 1.05 | +$1,247 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 | H10 pre-holiday | pre-registered, t ≥ 3.5 + beat random longs | 59 | 1.84 | +$3,876 | **Fail** (t 1.70) — [details](docs/RESULTS_FAMILY4.md) |
 | H11 opening-hour trend after a high-range day | pre-registered, t ≥ 3.5 | 253 | 1.08 | +$1,983 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
@@ -46,7 +47,15 @@ that makes the one *yes* earn it.
 **Why H8 is still not "proven":** all three markets were tested on the same Fed meetings (48 of the 59 are the MNQ
 training dates), so luck specific to those particular meetings would show up in all three. The Russell 2000 test is the
 more informative replication (it moves less with the Nasdaq, and random long holds there lost money), but it is
-weaker (t 2.45) and rests on a few good meetings. Published
+weaker (t 2.45) and rests on a few good meetings.
+
+A **negative control on gold** was then pre-registered and run once: gold carries no equity risk premium, so a
+drift there would have meant the effect belongs to those 59 dates rather than to stocks. Gold came in at t 0.59,
+and at −0.13 once its single best event is removed — no drift that clears the bar, which is what the equity
+explanation predicts. It is weak evidence rather than none: with 55 events the test could only have caught a
+large effect, and gold is not fully inert to the Fed because it tracks real interest rates. **No outcome of that
+control could have raised H8's status, and none did.** Paid replication stops here; the next real evidence is
+forward. Published
 research found the drift had faded in 2016–2019; it reappeared in 2020–2026, a period of unusual rate
 uncertainty. The deciding evidence is forward: FOMC meetings no test has seen.
 
