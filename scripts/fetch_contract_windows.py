@@ -19,6 +19,7 @@ Each window is one contract over six calendar days. The estimate is printed firs
 enforced, and nothing downloads without --confirm.
 """
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -70,7 +71,32 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
         raise SystemExit("DATABENTO_API_KEY is not set (expected in .env).")
     m = json.loads(Path(mapfile).read_text())
     market = m["symbol"].split(".")[0]
+
+    # the roll map decides which contract each event is priced on, so validate it before trusting it
+    bad = []
+    for i, per_ in enumerate(m["periods"]):
+        c, a, b = per_.get("contract"), per_.get("from"), per_.get("to")
+        if not c or not str(c).strip():
+            bad.append(f"period {i}: empty contract")
+            continue
+        try:
+            d0, d1 = pd.Timestamp(a), pd.Timestamp(b)
+        except Exception:
+            bad.append(f"period {i} ({c}): unparseable dates {a!r}..{b!r}")
+            continue
+        if pd.isna(d0) or pd.isna(d1) or d0 > d1:
+            bad.append(f"period {i} ({c}): bad range {a}..{b}")
+    if bad:
+        print("REFUSED: the roll map is not usable:")
+        for line in bad:
+            print(f"    {line}")
+        return 2
+    print(f"roll map validated: {len(m['periods'])} contract periods, all with a symbol and ordered dates")
+
     w = windows(m["periods"])
+    if not w:
+        print("REFUSED: no windows were produced from the roll map.")
+        return 2
     print(f"{market}: {len(w)} contract windows for {len(EVENTS)} events\n")
 
     client = db.Historical(key)
@@ -79,10 +105,23 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     total = 0.0
     per = []
     for c, a, b in w:
-        cost = float(client.metadata.get_cost(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
-                                              stype_in="raw_symbol", start=a, end=b))
+        try:
+            raw = client.metadata.get_cost(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
+                                           stype_in="raw_symbol", start=a, end=b)
+            cost = float(raw)
+        except Exception as e:                       # a window we cannot price is a window we cannot buy
+            print(f"REFUSED: could not price {c} {a}..{b}: {type(e).__name__}: {e}")
+            print("  Nothing was downloaded. Every window must have a quote before any charge.")
+            return 2
+        # NaN silently defeats a `total > max_cost` comparison, so reject non-finite quotes explicitly
+        if not math.isfinite(cost) or cost < 0:
+            print(f"REFUSED: {c} {a}..{b} returned an unusable quote ({raw!r}). Nothing was downloaded.")
+            return 2
         per.append((c, a, b, cost))
         total += cost
+    if len(per) != len(w):                            # coverage: priced set must equal requested set
+        print(f"REFUSED: priced {len(per)} windows but {len(w)} were requested.")
+        return 2
     for c, a, b, cost in per[:8]:
         print(f"    {c:10s} {a} .. {b}   ${cost:.4f}")
     if len(per) > 8:
@@ -99,6 +138,7 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     print("\n--confirm given: downloading now. This is a BILLED request.")
 
     frames = []
+    assert [(c, a, b) for c, a, b, _ in per] == list(w), "priced windows differ from the ones to download"
     for i, (c, a, b) in enumerate(w, 1):
         data = client.timeseries.get_range(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
                                            stype_in="raw_symbol", start=a, end=b)

@@ -73,6 +73,13 @@ def main(market: str, contracts_csv: str, continuous_csv: str) -> None:
         if a is None or b is None:
             skipped.append((ds, f"{contract}: missing 14:00 or 13:55 bar"))
             continue
+        # THE invariant of this script: entry and exit are the same physical contract, so no splice can
+        # enter the result. If this ever fails the answer is wrong in exactly the way the audit found.
+        entry_sym = str(frame.loc[a[0], "symbol"])
+        exit_sym = str(frame.loc[b[0], "symbol"])
+        if not (entry_sym == exit_sym == contract):
+            raise AssertionError(f"{ds}: entry on {entry_sym} but exit on {exit_sym} (expected {contract}). "
+                                 "This script must price both legs on ONE held contract.")
         # identical rule to f3.run_h8, on one contract only
         entry_px = float(a[1].open) + f3.TICK
         stop = entry_px * 0.97
@@ -89,6 +96,8 @@ def main(market: str, contracts_csv: str, continuous_csv: str) -> None:
 
     print(f"{market}: {len(trades)} of {len(EVENTS)} events priced on the actual contract held, "
           f"{len(skipped)} skipped")
+    print("  method: ONE contract per event, entry and exit from the same symbol, verified per event.")
+    print("  No continuous series and no price adjustment is used anywhere in this result.")
     for ds, why in skipped[:10]:
         print(f"   skipped {ds}: {why}")
     print(f"contracts used: {len({c for _, c in used})}\n")
