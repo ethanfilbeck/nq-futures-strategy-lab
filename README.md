@@ -1,5 +1,8 @@
 # NQ / MNQ Futures Strategy Lab — a system that decides whether a strategy has an edge
 
+> **Start here: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)** — the consolidated research status. No strategy in this project has been validated; that document says exactly where each one stands and what evidence would be needed.
+
+
 > **⚠️ Not a money-making bot.** 11 of 12 tested strategies failed. One (the pre-FOMC drift) passed and replicated
 > on two more markets (S&P 500 and Russell 2000), and is now being tested forward **on paper only**. This is a research and software-engineering
 > project, not trading advice. Nothing has been traded with real money.
