@@ -1,0 +1,14 @@
+{
+  "n": 1535,
+  "adf_t": -1.027866471739697,
+  "vr_20": 0.9032494918657593,
+  "half_life_days": 397.7523058739591,
+  "mean": 0.7936181188553891,
+  "sd": 0.1257257603402777,
+  "checks": {
+    "A1 ADF rejects a random walk": false,
+    "A2 VR(20) < 0.85": false,
+    "A3 half-life <= 30 days": false
+  },
+  "verdict": "S1 FAILS AT STAGE A - the spread does not mean-revert; no trading rule is written and statistical arbitrage is closed"
+}

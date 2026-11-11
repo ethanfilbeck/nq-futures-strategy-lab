@@ -1,0 +1,152 @@
+{
+  "cost_per_trade": {
+    "commission_rt": 1.24,
+    "slippage_1tick_both_sides": 1.0
+  },
+  "rows": [
+    {
+      "name": "ORB + VWAP/trend (walk-forward OOS)",
+      "n": 1204,
+      "net": -6120.4599999998145,
+      "mean": -5.083438538205826,
+      "pf": 0.83,
+      "t": -2.8483377812457125,
+      "sd": 61.92689854359711,
+      "zero_cost_net": -3423.4999999998145,
+      "zero_cost_t": -1.5932273708339673,
+      "cost_caused": "no - unprofitable even free"
+    },
+    {
+      "name": "H1 first half-hour momentum",
+      "n": 1277,
+      "net": -6059.479999999856,
+      "mean": -4.745090054815862,
+      "pf": 0.84,
+      "t": -2.2492950721525817,
+      "sd": 75.38648183427868,
+      "zero_cost_net": -3198.9999999998554,
+      "zero_cost_t": -1.1874772976915438,
+      "cost_caused": "no - unprofitable even free"
+    },
+    {
+      "name": "H2 rest-of-day momentum",
+      "n": 1277,
+      "net": -2610.979999999947,
+      "mean": -2.044620203602151,
+      "pf": 0.93,
+      "t": -0.9744876241634491,
+      "sd": 74.97764035945721,
+      "zero_cost_net": 249.50000000005366,
+      "zero_cost_t": 0.0931200783724263,
+      "cost_caused": "YES - gross edge too small to pay costs"
+    },
+    {
+      "name": "H3 overnight drift 2-3am",
+      "n": 1576,
+      "net": -575.74,
+      "mean": -0.36531725888324873,
+      "pf": 0.98,
+      "t": -0.33,
+      "sd": 43.94751843691005,
+      "zero_cost_net": 2954.5,
+      "zero_cost_t": 1.693446694688575,
+      "cost_caused": "YES - gross edge too small to pay costs"
+    },
+    {
+      "name": "H4 liquidity sweep",
+      "n": 288,
+      "net": 1203.88,
+      "mean": 4.180138888888889,
+      "pf": 1.2,
+      "t": 0.71,
+      "sd": 99.91452015667382,
+      "zero_cost_net": 1849.0000000000002,
+      "zero_cost_t": 1.090465827158853,
+      "cost_caused": "n/a - profitable net"
+    },
+    {
+      "name": "H5 VWAP pullback",
+      "n": 1399,
+      "net": -2336.26,
+      "mean": -1.669949964260186,
+      "pf": 0.94,
+      "t": -0.95,
+      "sd": 65.74893322288486,
+      "zero_cost_net": 797.5,
+      "zero_cost_t": 0.32428967666270003,
+      "cost_caused": "YES - gross edge too small to pay costs"
+    },
+    {
+      "name": "H6 turn of the month",
+      "n": 73,
+      "net": 2891.879999999992,
+      "mean": 39.61479452054783,
+      "pf": 1.1414190019864028,
+      "t": 0.4482159825606514,
+      "sd": 755.1469959189693,
+      "zero_cost_net": 3055.399999999992,
+      "zero_cost_t": 0.4735601453434494,
+      "cost_caused": "n/a - profitable net"
+    },
+    {
+      "name": "H7 overnight-gap reversal",
+      "n": 439,
+      "net": -3741.6100000000038,
+      "mean": -8.523029612756273,
+      "pf": 0.9151064739762423,
+      "t": -0.7374297139137651,
+      "sd": 242.1617935133537,
+      "zero_cost_net": -2758.2500000000036,
+      "zero_cost_t": -0.5436203956058069,
+      "cost_caused": "no - unprofitable even free"
+    },
+    {
+      "name": "H8 pre-FOMC drift",
+      "n": 48,
+      "net": 7114.98,
+      "mean": 148.22875,
+      "pf": 3.3421180839017195,
+      "t": 3.021516057838908,
+      "sd": 339.8819946382205,
+      "zero_cost_net": 7222.5,
+      "zero_cost_t": 3.067176538478185,
+      "cost_caused": "n/a - profitable net"
+    },
+    {
+      "name": "H9 macro announcement days",
+      "n": 141,
+      "net": 1247.464999999991,
+      "mean": 8.847269503546036,
+      "pf": 1.0528323262440027,
+      "t": 0.23196428269843156,
+      "sd": 452.8951759262983,
+      "zero_cost_net": 1563.3049999999912,
+      "zero_cost_t": 0.29069426634324175,
+      "cost_caused": "n/a - profitable net"
+    },
+    {
+      "name": "H10 pre-holiday",
+      "n": 59,
+      "net": 3875.915000000001,
+      "mean": 65.6934745762712,
+      "pf": 1.8393123377938128,
+      "t": 1.7049108365935577,
+      "sd": 295.9692331549972,
+      "zero_cost_net": 4008.0750000000007,
+      "zero_cost_t": 1.7630444685654156,
+      "cost_caused": "n/a - profitable net"
+    },
+    {
+      "name": "H11 opening-hour trend after high-range day",
+      "n": 253,
+      "net": 1982.7799999999982,
+      "mean": 7.837075098814222,
+      "pf": 1.0761872192614055,
+      "t": 0.35549827803446304,
+      "sd": 350.6523611231675,
+      "zero_cost_net": 2549.499999999998,
+      "zero_cost_t": 0.45710712224697825,
+      "cost_caused": "n/a - profitable net"
+    }
+  ]
+}
