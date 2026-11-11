@@ -20,6 +20,12 @@ A failure in any required gate exits non-zero and prints the tool's full output.
 | **scripts/prepublish_check.py** | Blocks API keys, broker account IDs, emails, local paths, licensed data, trade prices in tracked files | in the script | Clean |
 | **scripts/validate_data.py** | Sanity-checks a bar file before any backtest uses it (ordering, duplicates, OHLC consistency, tick grid, gaps, jumps) | flags | Run by hand on each new download (data is licensed, so CI cannot hold it) |
 | **mypy** | Type checking | `pyproject.toml` | **Clean** (0 findings, 35 files). Was 117 on 2026-11-10; fixed the same day and promoted to a required gate |
+
+**Why the dev tools are pinned.** They decide whether CI passes. Unpinned, `pandas-stubs` resolved differently
+on Python 3.10 than on 3.12 (3.10 gets pandas 2.x, and the stubs target 3.x), so the type gate passed on one CI
+job and failed on another for the same commit. The code no longer depends on how `DataFrame.index` is typed
+(`nq_bot.data.times()` returns a declared `DatetimeIndex`), and the tools are pinned to a major version so an
+upgrade arrives as a Dependabot pull request that CI checks before it reaches `main`.
 | **GitHub Actions** | Runs `scripts/check.py` on Ubuntu (Python 3.10, 3.12) and Windows (3.12) on every push, pull request and weekly | `.github/workflows/ci.yml` | Added; first run happens on push |
 | **Gitleaks (CI only)** | Scans the full git history for secrets on every push | `.gitleaks.toml` | Added. A manual pattern scan of the full history found only the `.env.example` placeholder |
 | **Dependabot** | Weekly pull requests for outdated or vulnerable dependencies and Actions | `.github/dependabot.yml` | Added |

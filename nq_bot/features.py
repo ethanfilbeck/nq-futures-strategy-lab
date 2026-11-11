@@ -8,6 +8,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from .data import times
+
 
 def _hm(s: str) -> int:
     h, m = s.split(":")
@@ -17,7 +19,7 @@ def _hm(s: str) -> int:
 def add_features(df: pd.DataFrame, cfg) -> pd.DataFrame:
     f = cfg.features
     out = df.copy()
-    idx = out.index
+    idx = times(out)
     minutes = pd.Series(idx.hour * 60 + idx.minute, index=idx)
     out["minute_of_day"] = minutes
     out["session_date"] = idx.date

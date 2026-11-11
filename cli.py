@@ -145,9 +145,9 @@ def main():
         if args.cmd == "paper-replay":
             import pandas as pd
 
-            from nq_bot.data import load_csv
+            from nq_bot.data import load_csv, times
             bars = load_csv(args.csv)
-            sessions = sorted({d for d in bars.between_time("09:30", "15:59").index.date})[-args.days:]
+            sessions = sorted(set(times(bars.between_time("09:30", "15:59")).date))[-args.days:]
             start = pd.Timestamp(f"{sessions[0]} 00:00", tz=cfg.session.timezone)
             hist = bars[(bars.index < start) & (bars.index >= start - pd.Timedelta(days=35))]
             runner = PaperRunner(cfg, hist, args.out)
@@ -158,6 +158,7 @@ def main():
             import pandas as pd
 
             from nq_bot.contracts import front_month
+            from nq_bot.data import times
             from nq_bot.paper import databento_history, run_databento_live
             key = os.environ.get("DATABENTO_API_KEY")
             if not key:
@@ -165,9 +166,11 @@ def main():
             fm = front_month(cfg.instrument.root, date.today(), cfg.instrument.roll_days_before_expiry)
             print(f"Contract: {fm.local_symbol} (roll on/after {fm.roll_date}). Loading warm-up history...")
             hist = databento_history(key, fm.local_symbol)
-            gap = pd.Timestamp.now(tz="UTC") - hist.index[-1].tz_convert("UTC")
-            start = (hist.index[-1] + pd.Timedelta(minutes=1)).tz_convert("UTC").isoformat() if gap < pd.Timedelta(hours=23) else None
-            print(f"History: {len(hist):,} bars to {hist.index[-1]}. Live replay from: {start or 'now'}")
+            last_bar = times(hist)[-1]
+            gap = pd.Timestamp.now(tz="UTC") - last_bar.tz_convert("UTC")
+            live_from = ((last_bar + pd.Timedelta(minutes=1)).tz_convert("UTC").isoformat()
+                         if gap < pd.Timedelta(hours=23) else None)
+            print(f"History: {len(hist):,} bars to {last_bar}. Live replay from: {live_from or 'now'}")
             runner = PaperRunner(cfg, hist, args.out)
             if runner.engine.risk.killed_reason:
                 raise SystemExit(f"Kill switch is set ({runner.engine.risk.killed_reason}). Run reset-kill first.")
@@ -180,7 +183,7 @@ def main():
                 serve(gate, port=args.webhook_port)
                 print(f"Webhook receiver on http://127.0.0.1:{args.webhook_port}/tv (expose with a tunnel; see docs/AUTOMATION.md)")
             try:
-                run_databento_live(runner, key, fm.local_symbol, start=start)
+                run_databento_live(runner, key, fm.local_symbol, start=live_from)
             except KeyboardInterrupt:
                 runner.kill("stopped by user (Ctrl+C)")
     elif args.cmd == "kill":

@@ -1,6 +1,8 @@
 # Development and CI tools (not needed to run the bot).   py -m pip install -r requirements-dev.txt
-ruff>=0.6          # lint, import order, security rules (Bandit rule set), naive-datetime checks
-mypy>=1.11         # type checking (advisory for now)
-pip-audit>=2.7     # known-vulnerability scan of dependencies
+# Pinned to a major version on purpose: these decide whether CI passes, so a new release must not be able to
+# fail main unannounced. Dependabot proposes upgrades as pull requests, where CI checks them first.
+ruff>=0.17,<0.18          # lint, import order, security rules (Bandit rule set), naive-datetime checks
+mypy>=2.4,<3              # type checking
+pip-audit>=2.10,<3        # known-vulnerability scan of dependencies
 types-PyYAML
-pandas-stubs
+pandas-stubs>=3.1,<4      # typed pandas; the stubs target pandas 3.x

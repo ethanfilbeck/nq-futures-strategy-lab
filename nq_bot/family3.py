@@ -4,6 +4,7 @@ pre-registered fills and costs. Nothing here is wired into the live/paper bot.""
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -98,7 +99,7 @@ def _hold(s: Session, entry_ts, entry_px, exit_ts, exit_px_raw, stop_frac):
 # ---------------------------------------------------------------- H6 turn of the month
 def tom_windows(s: Session):
     """(day -2, day +3) pairs for every month boundary in the data."""
-    out = []
+    out: list[tuple[date, date]] = []
     d = s.days
     for i in range(1, len(d) - 3):
         if d[i].month != d[i + 1].month:            # d[i] is day -1, d[i+1] is day +1

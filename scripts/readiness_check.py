@@ -20,7 +20,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from nq_bot.backtest import run_backtest  # noqa: E402
 from nq_bot.config import load_settings, override  # noqa: E402
-from nq_bot.data import load_csv  # noqa: E402
+from nq_bot.data import load_csv, times  # noqa: E402
 from nq_bot.journal import Alerts  # noqa: E402
 from nq_bot.paper import PaperRunner, replay  # noqa: E402
 
@@ -39,7 +39,7 @@ def main():
 
     cfg = override(load_settings("config/settings.yaml"), {**SIZE, "strategy.name": a.strategy, "events.file": "none.csv"})
     bars = load_csv(a.csv)
-    sessions = sorted({d for d in bars.between_time("09:30", "15:59").index.date})
+    sessions = sorted(set(times(bars.between_time("09:30", "15:59")).date))
     end = pd.Timestamp(a.end).date() if a.end else sessions[-1]
     replay_days = [d for d in sessions if d <= end][-a.days:]
     start_ts = pd.Timestamp(f"{replay_days[0]} 00:00", tz="America/New_York")
@@ -73,7 +73,7 @@ def main():
             stops = [json.loads(line) for line in journal_lines if '"event": "order"' in line]
             all_had_stops = all(o["signal"]["stop"] is not None for o in stops)
         else:
-            exits_ok = same_day = all_had_stops = True
+            exits_ok, same_day, all_had_stops = True, True, True
         results["every_order_had_a_stop"] = bool(all_had_stops)
         results["exits_are_stop_target_or_flatten"] = bool(exits_ok)
         results["no_overnight_positions"] = bool(same_day)
@@ -85,8 +85,9 @@ def main():
 
         # 4: kill switch mid-session, then restart
         k = PaperRunner(cfg, hist, tmp / "kill", alerts=Alerts(enabled=False), persist=True)
-        first_day = live[live.index.date == replay_days[0]]
-        half = first_day[first_day.index.hour * 60 + first_day.index.minute < 11 * 60]
+        first_day = live[times(live).date == replay_days[0]]
+        fd_t = times(first_day)
+        half = first_day[fd_t.hour * 60 + fd_t.minute < 11 * 60]
         for ts, b in half.iterrows():
             k.on_bar(ts, b["open"], b["high"], b["low"], b["close"], b["volume"])
         k.kill("readiness drill")
