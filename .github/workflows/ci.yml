@@ -22,7 +22,7 @@ jobs:
           - { os: ubuntu-latest, python: "3.13" }    # next version, so upgrades are not a surprise
           - { os: windows-latest, python: "3.12" }   # the bot's real home is a Windows PC
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
@@ -37,7 +37,7 @@ jobs:
     name: Secret scan (full git history)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
