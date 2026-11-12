@@ -32,5 +32,5 @@ warn_unused_ignores = true
 disallow_untyped_defs = false        # most functions are still unannotated; annotate as modules are touched
 warn_redundant_casts = true
 no_implicit_optional = true
-exclude = ["^data/", "^logs/", "^runs/", "^tests/"]
+exclude = ["^data/", "^logs/", "^runs/", "^tests/", "^_to_delete/"]
 

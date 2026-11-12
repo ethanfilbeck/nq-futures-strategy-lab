@@ -24,6 +24,7 @@ import os
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -157,9 +158,11 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     client = db.Historical(key)
     print("exactly what will be requested, if you confirm:")
     print(f"  dataset GLBX.MDP3   schema ohlcv-1m   stype_in {'/'.join(kinds)}   venue CME Globex")
-    kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m")
+    # dict[str, Any], not dict[str, str]: splatting a str-valued dict into the SDK signatures
+    # (whose later positionals are int | None) is a type error even though every value here is a str.
+    kw: dict[str, Any] = dict(dataset="GLBX.MDP3", schema="ohlcv-1m")
     total, total_bars = 0.0, 0
-    per = []
+    per: list[tuple[str, str, str, str, float, int]] = []
     cache = load_cache(market)
     reused = 0
     for c, a, b, st in w:

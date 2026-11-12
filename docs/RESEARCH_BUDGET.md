@@ -19,7 +19,7 @@ until something passes by luck, and with a high enough bar and enough attempts s
 | 9 | H9 macro announcement days | t ≥ 3.5 | Fail |
 | 10 | H10 pre-holiday | t ≥ 3.5 | Fail |
 | 11 | H11 opening-hour trend after high-range day | t ≥ 3.5 | Fail |
-| 12 | S1 statistical arbitrage MES/M2K | t ≥ 3.5 | pre-registered 2026-11-11, **not yet run** |
+| 12 | S1 statistical arbitrage MES/M2K | t ≥ 3.5 | **Fail at Stage A** (ADF −1.03, VR(20) 0.903, half-life 398 days — no trading rule written) |
 
 ORB is counted as the baseline rather than a budget line because it predates the protocol; counting it would
 make the total 13 of 16. Either way the budget below is what remains.
@@ -27,10 +27,11 @@ make the total 13 of 16. Either way the budget below is what remains.
 H8's replications, the gold negative control, the placebo tests and the Nikkei attempt are **not** budget
 lines. They are follow-ups on an already-spent hypothesis, and they are pre-registered individually.
 
-## Remaining: 3
+## Remaining: 2
 
-**Three hypotheses remain for the lifetime of this project.** S1 is the first. When the budget reaches zero
-the search ends and the project concludes with whatever it has, including nothing.
+**Two hypotheses remain for the lifetime of this project.** S1 was the first of the three and is now spent:
+it failed at Stage A without reaching a trading rule. When the budget reaches zero the search ends and the
+project concludes with whatever it has, including nothing.
 
 Rules for spending one:
 1. The idea comes from **published research or an economic argument that does not come from looking at this
@@ -53,6 +54,7 @@ Rules for spending one:
 | Machine learning on this data | **Closed.** ~1,900 independent daily observations and 59 events cannot support a search over a large hypothesis space; it would invert the discipline that makes this project credible. `nq_bot/regime.py` already states the only condition under which a classifier would be adopted, and nothing meets it. |
 | More paid replication markets for H8 | **Closed** by `PREREG_H8_NKD_REPLICATION.md`. |
 | Longer horizons (multi-day to weekly) | Eligible, but it is asset allocation rather than trading, and is better served by the retirement-account plan than by this bot. |
+| Calendar-spread / basis carry | **Closed on power, not on plausibility.** `FEASIBILITY_CALENDAR_SPREAD.md`. The premium is probably real, but the literature's tradeable version is cross-sectional across 12+ countries; the single-market timing variant is Sharpe 0.38, needing 85 years for t 3.5. Clearing 3.5 in the 7.5 years available needs Sharpe 1.28, which no equity carry variant in the literature reaches. Also: the owned contract dataset has **0** timestamps with two contracts quoted at once, so it cannot price a spread at all. |
 
 ## How the project ends
 
