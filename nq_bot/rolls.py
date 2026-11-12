@@ -13,6 +13,8 @@ The reliable fix is the `symbol` column, which `data.fetch_databento` now keeps:
 """
 from __future__ import annotations
 
+from typing import cast
+
 import pandas as pd
 
 from .data import times
@@ -33,7 +35,8 @@ def detect(bars: pd.DataFrame, quarterly_only: bool = True) -> dict[pd.Timestamp
     quiet = bars["volume"] <= bars["volume"].quantile(0.75)
     overnight = (t.hour >= 18) | (t.hour < 8)
     best: dict[tuple[int, int], tuple[pd.Timestamp, float]] = {}
-    for ts, r in ret[overnight & (ret > 0) & quiet].dropna().items():
+    for raw_ts, r in ret[overnight & (ret > 0) & quiet].dropna().items():
+        ts = cast(pd.Timestamp, raw_ts)       # a bars index label is a Timestamp; the stubs say Hashable
         if quarterly_only and ts.month not in QUARTERLY:
             continue
         key = (ts.year, ts.month)
@@ -72,14 +75,15 @@ def from_roll_map(bars: pd.DataFrame, periods: list[dict], search_hours: int = 1
     """
     ret = bars["close"].pct_change()
     out: dict[pd.Timestamp, float] = {}
+    tz = cast(pd.DatetimeIndex, bars.index).tz   # loop-invariant, and the stubs type .index as Index[Any]
     for per in periods[1:]:                       # the first period is not a roll
         d = pd.Timestamp(per["from"])
-        lo = (d - pd.Timedelta(days=1)).tz_localize(bars.index.tz).replace(hour=17, minute=0)
+        lo = (d - pd.Timedelta(days=1)).tz_localize(tz).replace(hour=17, minute=0)
         hi = lo + pd.Timedelta(hours=search_hours)
         win = ret[(ret.index >= lo) & (ret.index <= hi)].dropna()
         if win.empty:
             continue
-        ts = win.abs().idxmax()
+        ts = cast(pd.Timestamp, win.abs().idxmax())
         out[ts] = float(win.loc[ts])
     return out
 
