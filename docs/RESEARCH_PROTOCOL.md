@@ -46,3 +46,45 @@ Every pre-registration for a new market must therefore state, in advance:
 - bars/day from the pre-flight, against a dense reference market;
 - the minimum number of events that makes the test valid, and that **no verdict is reported below it**.
 The second of those is what stopped a 16-event number from entering the record, so it stays mandatory.
+
+## Pre-flight the POWER before spending an idea
+
+The coverage pre-flight asks whether the data can support the rule. This one asks whether the **sample can
+support the bar** - and it must run **before** a pre-registration is written, not after a null result:
+```
+py scripts\preflight_power.py --years 7.5 --bar 3.5 --trials 12
+py scripts\preflight_power.py --observations 59 --bar 3.5
+```
+A t-statistic on an annualised Sharpe `S` observed over `T` years is approximately `S * sqrt(T)`, so
+clearing a bar `B` requires `S >= B / sqrt(T)`. **This does not depend on the hypothesis.** For this
+project's 7.5 years of MNQ data at `B = 3.5` it demands a net Sharpe of **1.28**, which is above every
+documented effect for a single liquid index future traded directionally:
+
+| Reference | Net Sharpe |
+|---|---|
+| Cross-asset time-series momentum (Moskowitz/Ooi/Pedersen 2012) | 0.80 |
+| Equity carry, 13-country cross-section (Koijen et al. 2018) | 0.91 |
+| Equity basis, single-market **timing** (Hazelkorn et al. 2020) | 0.38 |
+| Volatility-managed market, **out of sample** (Cederburg et al. 2020) | 0.42 |
+| Buy-and-hold NDX, 2010-2025 | 0.90 |
+
+So a hypothesis tested on this sample at this bar can only pass by being stronger than anything in the
+published record, or by luck. **That is the structural reason eleven of twelve failed at literally zero
+cost**, and the reason a thirteenth on the same sample would be a coin flip dressed as a t-statistic.
+
+This matters because of what a null result is worth. A null from a powered test is evidence the effect is
+absent. A null from an underpowered test is evidence of nothing at all, and spending a budget line to buy
+one is the most expensive way to learn nothing. The gate exits non-zero and refuses.
+
+**The only honest lever is sample length, and it is free.** Lowering the bar is prohibited
+(`RESEARCH_BUDGET.md` rule 3) and widening the ceiling is just the bar by another name. Longer daily
+history costs nothing: 30 years brings the required Sharpe to 0.64, which is inside the documented range.
+A hypothesis that needs 1-minute MNQ data is therefore limited to what 7.5 years can show, whereas a
+daily-horizon hypothesis can be screened over decades first - and the paid data and the remaining budget
+lines are then spent only on something that already survived.
+
+Two hypotheses have been closed by this gate before costing anything:
+`docs/FEASIBILITY_CALENDAR_SPREAD.md` (calendar-spread carry) and volatility management, which Moreira &
+Muir (JF 2017) report as a 25% Sharpe improvement in sample but which Cederburg et al. (JFE 2020) show
+degrades out of sample for the market factor specifically - 0.42 managed against 0.46 unmanaged, with 53 of
+103 strategies higher and 50 lower, i.e. a coin flip.

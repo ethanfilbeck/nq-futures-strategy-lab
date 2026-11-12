@@ -39,8 +39,12 @@ Rules for spending one:
 2. It is **pre-registered and hashed before any data is examined for it**, including exploratory charts.
 3. The bar is **t ≥ 3.5** or higher. It does not fall.
 4. It must state in advance what result would make it fail, and the failure must be published.
-5. If it needs new paid data, `scripts/preflight_coverage.py` runs first (`docs/RESEARCH_PROTOCOL.md`). No
-   further paid data is currently planned.
+5. `scripts/preflight_power.py` runs **before the pre-registration is written**, and must pass. A
+   sample that cannot reach the bar even if the hypothesis is true buys a null that means nothing.
+   On the 7.5-year MNQ sample at t ≥ 3.5 this gate **REFUSES**, which is why lines 13 and 14 cannot
+   be spent on 1-minute MNQ data at all. If it needs new paid data,
+   `scripts/preflight_coverage.py` runs too (`docs/RESEARCH_PROTOCOL.md`). No further paid data is
+   currently planned.
 6. Re-testing a rejected hypothesis, in any re-parameterised form, on this data is **prohibited** and does not
    cost a budget line because it is not permitted at all.
 
