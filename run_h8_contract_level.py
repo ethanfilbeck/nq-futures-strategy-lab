@@ -29,7 +29,7 @@ def trading_days(bars) -> list:
     """Dates with a real regular session, from the continuous file. Dates only - no prices used."""
     t = times(bars)
     mins = t.hour * 60 + t.minute
-    rth = (mins >= 570) & (mins < 960) & (t.weekday < 5)
+    rth = (mins >= 570) & (mins < 960) & (t.day_of_week < 5)
     counts = pd.Series(1, index=t[rth]).groupby(t[rth].date).sum()
     return [d for d, n in counts.items() if n >= 300]
 

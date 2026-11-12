@@ -22,6 +22,7 @@ import json
 import math
 import os
 import sys
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -68,6 +69,45 @@ def windows(periods: list[dict]) -> list[tuple[str, str, str, str]]:
 
 
 MAX_COST_DEFAULT = 3.00
+RETRIES = 4                       # a read timeout is a reason to retry, not to abandon 58 good quotes
+PERMANENT = ("symbology_invalid", "422", "not found", "unauthor", "forbidden")
+
+
+def _transient(e: Exception) -> bool:
+    """A network hiccup is retryable; a rejected request is not, and must fail immediately."""
+    return not any(k in f"{type(e).__name__} {e}".lower() for k in PERMANENT)
+
+
+def with_retry(fn, what: str):
+    """Call fn(), retrying transient failures with backoff. Raises the last error if all attempts fail."""
+    for attempt in range(1, RETRIES + 1):
+        try:
+            return fn()
+        except Exception as e:
+            if not _transient(e) or attempt == RETRIES:
+                raise
+            wait = 2 ** attempt
+            print(f"    {what}: {type(e).__name__} (attempt {attempt}/{RETRIES}), retrying in {wait}s")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")
+
+
+def cache_path(market: str) -> Path:
+    return Path("runs") / f".quote_cache_{market}.json"
+
+
+def load_cache(market: str) -> dict:
+    p = cache_path(market)
+    try:
+        return json.loads(p.read_text()) if p.exists() else {}
+    except Exception:
+        return {}
+
+
+def save_cache(market: str, cache: dict) -> None:
+    p = cache_path(market)
+    p.parent.mkdir(exist_ok=True)
+    p.write_text(json.dumps(cache, indent=2))
 
 
 def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int:
@@ -120,26 +160,45 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m")
     total, total_bars = 0.0, 0
     per = []
+    cache = load_cache(market)
+    reused = 0
     for c, a, b, st in w:
-        try:
-            raw = client.metadata.get_cost(symbols=[c], start=a, end=b, stype_in=st, **kw)
-            cost = float(raw)
-        except Exception as e:                       # a window we cannot price is a window we cannot buy
-            print(f"REFUSED: could not price {c} {a}..{b}: {type(e).__name__}: {e}")
-            print("  Nothing was downloaded. Every window must have a quote before any charge.")
-            return 2
-        # NaN silently defeats a `total > max_cost` comparison, so reject non-finite quotes explicitly
-        if not math.isfinite(cost) or cost < 0:
-            print(f"REFUSED: {c} {a}..{b} returned an unusable quote ({raw!r}). Nothing was downloaded.")
-            return 2
-        try:                                          # record count is also unbilled metadata
-            bars = int(client.metadata.get_record_count(symbols=[c], start=a, end=b,
-                                                        stype_in=st, **kw))
-        except Exception:
-            bars = -1                                 # not fatal: the COST is what authorises the charge
+        key = f"{st}|{c}|{a}|{b}"
+        if key in cache:                              # quotes are free but slow; don't re-ask 59 times
+            cost, bars = float(cache[key]["cost"]), int(cache[key]["bars"])
+            reused += 1
+        else:
+            try:
+                raw = with_retry(
+                    lambda c=c, a=a, b=b, st=st: client.metadata.get_cost(
+                        symbols=[c], start=a, end=b, stype_in=st, **kw), f"{c} {a}")
+                cost = float(raw)
+            except Exception as e:                    # a window we cannot price is one we cannot buy
+                how = (f"after {RETRIES} attempts" if _transient(e)
+                       else "- the request was rejected, so retrying would not help")
+                print(f"REFUSED: could not price {c} {a}..{b} {how}: {type(e).__name__}: {e}")
+                print(f"  Nothing was downloaded. {len(per)} quotes are cached, so re-running resumes "
+                      "from here rather than starting over.")
+                save_cache(market, cache)
+                return 2
+            # NaN silently defeats a `total > max_cost` comparison, so reject non-finite quotes
+            if not math.isfinite(cost) or cost < 0:
+                print(f"REFUSED: {c} {a}..{b} returned an unusable quote ({raw!r}). Nothing downloaded.")
+                save_cache(market, cache)
+                return 2
+            try:                                      # record count is also unbilled metadata
+                bars = int(with_retry(
+                    lambda c=c, a=a, b=b, st=st: client.metadata.get_record_count(
+                        symbols=[c], start=a, end=b, stype_in=st, **kw), f"{c} {a} count"))
+            except Exception:
+                bars = -1                             # not fatal: the COST authorises the charge
+            cache[key] = {"cost": cost, "bars": bars}
         per.append((c, a, b, st, cost, bars))
         total += cost
         total_bars += max(bars, 0)
+    save_cache(market, cache)
+    if reused:
+        print(f"  ({reused} of {len(w)} quotes reused from {cache_path(market)})")
     if len(per) != len(w):                            # coverage: priced set must equal requested set
         print(f"REFUSED: priced {len(per)} windows but {len(w)} were requested.")
         return 2

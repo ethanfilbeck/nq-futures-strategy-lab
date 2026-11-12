@@ -32,3 +32,4 @@ _to_delete/
 .vscode/
 .idea/
 runs/*_trades.jsonl
+runs/.quote_cache_*.json
