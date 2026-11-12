@@ -58,6 +58,32 @@ def from_symbols(bars: pd.DataFrame) -> dict[pd.Timestamp, float]:
     return out
 
 
+def from_roll_map(bars: pd.DataFrame, periods: list[dict], search_hours: int = 19) -> dict:
+    """Exact roll minutes and their gaps, using KNOWN roll dates from Databento symbology.
+
+    `periods` is scripts/roll_map.py's output: each entry's "from" is the first session date of a new
+    contract. A CME session for date D opens at 18:00 ET on D-1, and the spliced series steps to the new
+    contract somewhere in that evening, so the jump is found by taking the largest single-minute move in
+    [D-1 17:00, D-1 17:00 + search_hours].
+
+    This beats `detect` because the date is known rather than guessed: `detect` has to find the roll by
+    looking for a large quiet jump, which fails when carry is near zero and the true gap is smaller than
+    ordinary overnight noise - it missed 11 of 25 rolls in 2019-2021 for exactly that reason.
+    """
+    ret = bars["close"].pct_change()
+    out: dict[pd.Timestamp, float] = {}
+    for per in periods[1:]:                       # the first period is not a roll
+        d = pd.Timestamp(per["from"])
+        lo = (d - pd.Timedelta(days=1)).tz_localize(bars.index.tz).replace(hour=17, minute=0)
+        hi = lo + pd.Timedelta(hours=search_hours)
+        win = ret[(ret.index >= lo) & (ret.index <= hi)].dropna()
+        if win.empty:
+            continue
+        ts = win.abs().idxmax()
+        out[ts] = float(win.loc[ts])
+    return out
+
+
 def spans(entry_ts, exit_ts, rolls: dict[pd.Timestamp, float]) -> list[float]:
     """Gaps of every roll strictly after entry_ts and at or before exit_ts. Empty means the hold is clean."""
     return [g for ts, g in rolls.items() if entry_ts < ts <= exit_ts]

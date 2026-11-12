@@ -41,182 +41,182 @@
     {
       "from": "2020-06-17",
       "to": "2020-09-16",
-      "contract": "PW:XS 05DFAL-FTL20K9",
+      "contract": "MNQU0",
       "instrument_id": "13081",
       "stype": "raw_symbol"
     },
     {
       "from": "2020-09-16",
       "to": "2020-12-14",
-      "contract": "AKXM924",
+      "contract": "MNQZ0",
       "instrument_id": "17706",
       "stype": "raw_symbol"
     },
     {
       "from": "2020-12-14",
       "to": "2021-03-17",
-      "contract": "QC3Z9",
+      "contract": "MNQH1",
       "instrument_id": "6227",
       "stype": "raw_symbol"
     },
     {
       "from": "2021-03-17",
       "to": "2021-06-14",
-      "contract": "HTTU9-HTTV9",
+      "contract": "MNQM1",
       "instrument_id": "9485",
       "stype": "raw_symbol"
     },
     {
       "from": "2021-06-14",
       "to": "2021-09-13",
-      "contract": "CUSK0-CHIK0",
+      "contract": "MNQU1",
       "instrument_id": "3601",
       "stype": "raw_symbol"
     },
     {
       "from": "2021-09-13",
       "to": "2021-12-13",
-      "contract": "A59M919",
+      "contract": "MNQZ1",
       "instrument_id": "1447",
       "stype": "raw_symbol"
     },
     {
       "from": "2021-12-13",
       "to": "2022-03-16",
-      "contract": "HILU9-HILF0",
+      "contract": "MNQH2",
       "instrument_id": "7575",
       "stype": "raw_symbol"
     },
     {
       "from": "2022-03-16",
       "to": "2022-06-15",
-      "contract": "VDL:SA 02D 09K9",
+      "contract": "MNQM2",
       "instrument_id": "13505",
       "stype": "raw_symbol"
     },
     {
       "from": "2022-06-15",
       "to": "2022-09-14",
-      "contract": "G3BU9 C-1500",
+      "contract": "MNQU2",
       "instrument_id": "7688",
       "stype": "raw_symbol"
     },
     {
       "from": "2022-09-14",
       "to": "2022-12-14",
-      "contract": "ICI:SA 12M F1",
+      "contract": "MNQZ2",
       "instrument_id": "20332",
       "stype": "raw_symbol"
     },
     {
       "from": "2022-12-14",
       "to": "2023-03-15",
-      "contract": "YM:BF M9-U9-Z9",
+      "contract": "MNQH3",
       "instrument_id": "8071",
       "stype": "raw_symbol"
     },
     {
       "from": "2023-03-15",
       "to": "2023-06-14",
-      "contract": "GE:CF Z9M0Z0M1",
+      "contract": "MNQM3",
       "instrument_id": "4973",
       "stype": "raw_symbol"
     },
     {
       "from": "2023-06-14",
       "to": "2023-09-13",
-      "contract": "GE:BF U1-Z1-H2",
+      "contract": "MNQU3",
       "instrument_id": "9235",
       "stype": "raw_symbol"
     },
     {
       "from": "2023-09-13",
       "to": "2023-12-14",
-      "contract": "HRCK0-HRCN2",
+      "contract": "MNQZ3",
       "instrument_id": "34070",
       "stype": "raw_symbol"
     },
     {
       "from": "2023-12-14",
       "to": "2024-03-13",
-      "contract": "HILG0-HILZ0",
+      "contract": "MNQH4",
       "instrument_id": "7101",
       "stype": "raw_symbol"
     },
     {
       "from": "2024-03-13",
       "to": "2024-06-19",
-      "contract": "BOSK0-MIAK0",
+      "contract": "MNQM4",
       "instrument_id": "10",
       "stype": "raw_symbol"
     },
     {
       "from": "2024-06-19",
       "to": "2024-09-18",
-      "contract": "CUK1",
+      "contract": "MNQU4",
       "instrument_id": "13941",
       "stype": "raw_symbol"
     },
     {
       "from": "2024-09-18",
       "to": "2024-12-19",
-      "contract": "DNMN318 P105",
+      "contract": "MNQZ4",
       "instrument_id": "42008411",
       "stype": "raw_symbol"
     },
     {
       "from": "2024-12-19",
       "to": "2025-03-20",
-      "contract": "B2KU311",
+      "contract": "MNQH5",
       "instrument_id": "42003617",
       "stype": "raw_symbol"
     },
     {
       "from": "2025-03-20",
       "to": "2025-06-18",
-      "contract": "ICDN318 P7225",
+      "contract": "MNQM5",
       "instrument_id": "42009475",
       "stype": "raw_symbol"
     },
     {
       "from": "2025-06-18",
       "to": "2025-09-18",
-      "contract": "AB7V313",
+      "contract": "MNQU5",
       "instrument_id": "42003472",
       "stype": "raw_symbol"
     },
     {
       "from": "2025-09-18",
       "to": "2025-12-18",
-      "contract": "AR1U315",
+      "contract": "MNQZ5",
       "instrument_id": "42001149",
       "stype": "raw_symbol"
     },
     {
       "from": "2025-12-18",
       "to": "2026-03-19",
-      "contract": "UFEU4",
+      "contract": "MNQH6",
       "instrument_id": "42004946",
       "stype": "raw_symbol"
     },
     {
       "from": "2026-03-19",
       "to": "2026-06-17",
-      "contract": "TD3U4-TD3Q5",
+      "contract": "MNQM6",
       "instrument_id": "42004936",
       "stype": "raw_symbol"
     },
     {
       "from": "2026-06-17",
       "to": "2026-09-17",
-      "contract": "A8LK5-A8LQ5",
+      "contract": "MNQU6",
       "instrument_id": "42004800",
       "stype": "raw_symbol"
     },
     {
       "from": "2026-09-17",
       "to": "2026-11-01",
-      "contract": "MNBN4-MNBQ5",
+      "contract": "MNQZ6",
       "instrument_id": "42005282",
       "stype": "raw_symbol"
     }
