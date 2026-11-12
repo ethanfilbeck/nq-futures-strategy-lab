@@ -41,6 +41,14 @@ def front_contract(periods: list[dict], day: pd.Timestamp) -> str | None:
     return None
 
 
+def stype_of(periods: list[dict]) -> str:
+    """Whether the roll map carries raw contract codes or instrument ids. Both identify a contract."""
+    kinds = {p.get("stype", "raw_symbol") for p in periods}
+    if len(kinds) > 1:
+        raise SystemExit(f"roll map mixes symbol types {kinds}; re-run scripts/roll_map.py")
+    return kinds.pop()
+
+
 def windows(periods: list[dict]) -> list[tuple[str, str, str]]:
     """(contract, start, end) covering each event's hold: the day before the event through the event day."""
     out, seen, uncovered = [], set(), []
@@ -94,7 +102,9 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
         for line in bad:
             print(f"    {line}")
         return 2
-    print(f"roll map validated: {len(m['periods'])} contract periods, all with a symbol and ordered dates")
+    stype = stype_of(m["periods"])
+    print(f"roll map validated: {len(m['periods'])} contract periods, all with a symbol and ordered dates"
+          f"  (identified by {stype})")
 
     w = windows(m["periods"])
     if not w:
@@ -108,8 +118,8 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
 
     client = db.Historical(key)
     print("exactly what will be requested, if you confirm:")
-    print("  dataset GLBX.MDP3   schema ohlcv-1m   stype_in raw_symbol   venue CME Globex")
-    kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m", stype_in="raw_symbol")
+    print(f"  dataset GLBX.MDP3   schema ohlcv-1m   stype_in {stype}   venue CME Globex")
+    kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m", stype_in=stype)
     total, total_bars = 0.0, 0
     per = []
     for c, a, b in w:
@@ -156,8 +166,7 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     frames = []
     assert [(c, a, b) for c, a, b, _ in per] == list(w), "priced windows differ from the ones to download"
     for i, (c, a, b) in enumerate(w, 1):
-        data = client.timeseries.get_range(dataset="GLBX.MDP3", schema="ohlcv-1m", symbols=[c],
-                                           stype_in="raw_symbol", start=a, end=b)
+        data = client.timeseries.get_range(symbols=[c], start=a, end=b, **kw)
         df = data.to_df()
         if df.empty:
             print(f"  [{i}/{len(w)}] {c} {a}..{b}: EMPTY")
