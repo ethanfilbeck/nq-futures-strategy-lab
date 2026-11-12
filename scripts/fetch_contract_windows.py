@@ -33,36 +33,34 @@ from nq_bot.data import _normalize  # noqa: E402
 EVENTS = f3.FOMC_DAYS + f3.HOLDOUT_FOMC_DAYS
 
 
-def front_contract(periods: list[dict], day: pd.Timestamp) -> str | None:
-    """The contract the continuous series pointed at on `day`."""
+def front_contract(periods: list[dict], day: pd.Timestamp) -> tuple[str, str] | None:
+    """(symbol, stype) the continuous series pointed at on `day`.
+
+    An instrument id is recycled over time, so it is only unambiguous inside its own period - which is
+    exactly the window each request uses, so carrying the stype per window is safe and lets a partially
+    resolved roll map still be used.
+    """
     for p in periods:
         if pd.Timestamp(p["from"]) <= day <= pd.Timestamp(p["to"]):
-            return str(p["contract"])
+            return str(p["contract"]), str(p.get("stype", "raw_symbol"))
     return None
 
 
-def stype_of(periods: list[dict]) -> str:
-    """Whether the roll map carries raw contract codes or instrument ids. Both identify a contract."""
-    kinds = {p.get("stype", "raw_symbol") for p in periods}
-    if len(kinds) > 1:
-        raise SystemExit(f"roll map mixes symbol types {kinds}; re-run scripts/roll_map.py")
-    return kinds.pop()
-
-
-def windows(periods: list[dict]) -> list[tuple[str, str, str]]:
+def windows(periods: list[dict]) -> list[tuple[str, str, str, str]]:
     """(contract, start, end) covering each event's hold: the day before the event through the event day."""
     out, seen, uncovered = [], set(), []
     for ds in EVENTS:
         ev = pd.Timestamp(ds)
         start, end = ev - pd.Timedelta(days=4), ev + pd.Timedelta(days=1)
-        c = front_contract(periods, ev - pd.Timedelta(days=1))
-        if not c:
+        hit = front_contract(periods, ev - pd.Timedelta(days=1))
+        if not hit:
             uncovered.append(str(ev.date()))
             continue
-        key = (c, start.date(), end.date())
+        c, st = hit
+        key = (c, st, start.date(), end.date())
         if key not in seen:
             seen.add(key)
-            out.append((c, str(start.date()), str(end.date())))
+            out.append((c, str(start.date()), str(end.date()), st))
     if uncovered:
         print(f"  {len(uncovered)} of {len(EVENTS)} events have NO contract in the roll map and cannot be "
               f"priced: {uncovered[:4]}{' ...' if len(uncovered) > 4 else ''}")
@@ -102,9 +100,9 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
         for line in bad:
             print(f"    {line}")
         return 2
-    stype = stype_of(m["periods"])
+    kinds = sorted({p.get("stype", "raw_symbol") for p in m["periods"]})
     print(f"roll map validated: {len(m['periods'])} contract periods, all with a symbol and ordered dates"
-          f"  (identified by {stype})")
+          f"  (identified by {', '.join(kinds)})")
 
     w = windows(m["periods"])
     if not w:
@@ -118,13 +116,13 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
 
     client = db.Historical(key)
     print("exactly what will be requested, if you confirm:")
-    print(f"  dataset GLBX.MDP3   schema ohlcv-1m   stype_in {stype}   venue CME Globex")
-    kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m", stype_in=stype)
+    print(f"  dataset GLBX.MDP3   schema ohlcv-1m   stype_in {'/'.join(kinds)}   venue CME Globex")
+    kw = dict(dataset="GLBX.MDP3", schema="ohlcv-1m")
     total, total_bars = 0.0, 0
     per = []
-    for c, a, b in w:
+    for c, a, b, st in w:
         try:
-            raw = client.metadata.get_cost(symbols=[c], start=a, end=b, **kw)
+            raw = client.metadata.get_cost(symbols=[c], start=a, end=b, stype_in=st, **kw)
             cost = float(raw)
         except Exception as e:                       # a window we cannot price is a window we cannot buy
             print(f"REFUSED: could not price {c} {a}..{b}: {type(e).__name__}: {e}")
@@ -135,19 +133,20 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
             print(f"REFUSED: {c} {a}..{b} returned an unusable quote ({raw!r}). Nothing was downloaded.")
             return 2
         try:                                          # record count is also unbilled metadata
-            bars = int(client.metadata.get_record_count(symbols=[c], start=a, end=b, **kw))
+            bars = int(client.metadata.get_record_count(symbols=[c], start=a, end=b,
+                                                        stype_in=st, **kw))
         except Exception:
             bars = -1                                 # not fatal: the COST is what authorises the charge
-        per.append((c, a, b, cost, bars))
+        per.append((c, a, b, st, cost, bars))
         total += cost
         total_bars += max(bars, 0)
     if len(per) != len(w):                            # coverage: priced set must equal requested set
         print(f"REFUSED: priced {len(per)} windows but {len(w)} were requested.")
         return 2
-    print(f"    {'contract':10s} {'from':12s} {'to':12s} {'bars':>10s} {'cost':>10s}")
-    for c, a, b, cost, bars in per:
-        print(f"    {c:10s} {a:12s} {b:12s} {bars if bars >= 0 else '?':>10} ${cost:>9.4f}")
-    empty = [(c, a, b) for c, a, b, _, bars in per if bars == 0]
+    print(f"    {'contract':12s} {'from':12s} {'to':12s} {'bars':>10s} {'cost':>10s}")
+    for c, a, b, st, cost, bars in per:
+        print(f"    {c:12s} {a:12s} {b:12s} {bars if bars >= 0 else '?':>10} ${cost:>9.4f}")
+    empty = [(c, a, b) for c, a, b, _, _, bars in per if bars == 0]
     if empty:
         print(f"\n  WARNING: {len(empty)} window(s) contain ZERO bars - that contract has no data in that "
               f"range, so those events cannot be priced: {empty[:5]}")
@@ -164,9 +163,9 @@ def main(mapfile: str, confirm: bool, max_cost: float = MAX_COST_DEFAULT) -> int
     print("\n--confirm given: downloading now. This is a BILLED request.")
 
     frames = []
-    assert [(c, a, b) for c, a, b, _ in per] == list(w), "priced windows differ from the ones to download"
-    for i, (c, a, b) in enumerate(w, 1):
-        data = client.timeseries.get_range(symbols=[c], start=a, end=b, **kw)
+    assert [(c, a, b, st) for c, a, b, st, _, _ in per] == list(w), "priced windows differ from download set"
+    for i, (c, a, b, st) in enumerate(w, 1):
+        data = client.timeseries.get_range(symbols=[c], start=a, end=b, stype_in=st, **kw)
         df = data.to_df()
         if df.empty:
             print(f"  [{i}/{len(w)}] {c} {a}..{b}: EMPTY")
