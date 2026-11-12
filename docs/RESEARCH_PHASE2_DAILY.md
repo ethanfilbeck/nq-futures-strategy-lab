@@ -3,9 +3,28 @@
 Written 2026-11-11. **No trading rules were written, no data was purchased, no budget line was spent, and
 no holdout was touched.** This is the feasibility review that has to come first.
 
+> ## RETRACTED, 2026-11-11 (same day)
+>
+> **The surviving candidate in this report is REJECTED.** See `FOMC_CYCLE_LITERATURE_AUDIT.md`.
+>
+> Knox & Vissing-Jorgensen (FEDS 2026-023) - by one of the original authors - find no systematically higher
+> even-week equity premium **apart from day 0**, and report a **sign flip to -12.01 bps (t = -1.84)** in
+> 2017-2021. Three things follow, each independently disqualifying:
+>
+> 1. The weeks-2/4/6 design I proposed to satisfy rule 6 removes the **only** component with surviving
+>    evidence. My reasoning was exactly backwards.
+> 2. The Sharpe of 0.92 below belongs to the **full** even-week strategy, not the 2/4/6 subset. I ran the
+>    power gate against a figure that did not belong to the design I specified. Recalculated from the
+>    paper's own decomposition, the subset implies Sharpe **0.19** against **0.71** required.
+> 3. The 2017-2026 holdout is **burned** - 2017-2021 is now published. Only 2022-2026 is unread, needing a
+>    Sharpe of **2.06**.
+>
+> The analysis below is left unaltered so the error is legible. **No candidate survives Phase 2.**
+
 ## Verdict
 
-**One candidate survives: the FOMC-cycle even-week premium (Cieslak, Morse & Vissing-Jorgensen, JF 2019).**
+**SUPERSEDED - see the retraction above.** One candidate was judged to survive: the FOMC-cycle even-week
+premium (Cieslak, Morse & Vissing-Jorgensen, JF 2019).
 Nine directions were reviewed; eight are rejected, two of them by peer-reviewed rebuttals that refute the
 original finding out of sample.
 

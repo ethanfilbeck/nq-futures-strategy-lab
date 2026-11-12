@@ -47,6 +47,33 @@ Every pre-registration for a new market must therefore state, in advance:
 - the minimum number of events that makes the test valid, and that **no verdict is reported below it**.
 The second of those is what stopped a 16-event number from entering the record, so it stays mandatory.
 
+## Search for a refutation of the candidate you LIKE
+
+Mandatory before any candidate may be called researchable, and it exists because of a specific failure.
+
+In the daily-horizon phase (2026-11-11) rebuttals were found for time-series momentum (Huang et al., JFE
+2020) and volatility management (Cederburg et al., JFE 2020), and both were rejected on that basis. **The
+same search was not run on the candidate that was being advanced.** The refuting paper existed, was
+published by the Federal Reserve, and was co-authored by one of the original authors - and it inverted the
+recommendation completely (`docs/FOMC_CYCLE_LITERATURE_AUDIT.md`). Ethan found it; the research did not.
+
+Applying adversarial scrutiny only to the ideas you are discarding is worse than not applying it at all,
+because it produces a well-cited recommendation that is wrong. No test suite catches this: it is a gap in
+what gets checked, not a bug in code.
+
+So for the surviving candidate, and only after it looks good:
+1. Search explicitly for **later work by the original authors**. An author revising their own finding is the
+   strongest evidence available and the easiest to miss.
+2. Search for replication failures, out-of-sample tests and post-publication decay by name.
+3. Separate the original sample from genuinely post-publication data, and state both.
+4. Check that any headline Sharpe or effect size belongs to **the subset actually being proposed**, not to a
+   broader strategy that contains it.
+5. Confirm the holdout still exists. A window whose answer has since been published is not a holdout.
+6. **Record the search that was run, with its terms, even when it finds nothing.** An absence of rebuttals is
+   only evidence if someone looked.
+
+A candidate that has not survived a deliberate attempt to refute it has not survived anything.
+
 ## Pre-flight the POWER before spending an idea
 
 The coverage pre-flight asks whether the data can support the rule. This one asks whether the **sample can
