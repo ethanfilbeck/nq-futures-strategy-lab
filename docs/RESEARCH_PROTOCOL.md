@@ -83,7 +83,15 @@ A hypothesis that needs 1-minute MNQ data is therefore limited to what 7.5 years
 daily-horizon hypothesis can be screened over decades first - and the paid data and the remaining budget
 lines are then spent only on something that already survived.
 
-Two hypotheses have been closed by this gate before costing anything:
+The gate was itself audited by Monte Carlo the day it was written, and **four defects were found and
+fixed** - it had reported the Sharpe for a 50% chance rather than a powered one, ignored serial
+correlation, ignored overlapping observations, and evaluated Bailey's MinBTL at a flattering Sharpe.
+The overlap defect was the serious one: a 30-year daily study with a monthly hold clears t >= 3.5 on
+**pure noise about one time in five**. Always declare `--hold-days` and `--autocorr`, and compute the
+final t on non-overlapping observations or with Newey-West. See `docs/POWER_GATE_AUDIT.md`, including
+its section 6 on where the gate can still be wrong in both directions.
+
+Hypotheses closed by this gate before costing anything:
 `docs/FEASIBILITY_CALENDAR_SPREAD.md` (calendar-spread carry) and volatility management, which Moreira &
 Muir (JF 2017) report as a 25% Sharpe improvement in sample but which Cederburg et al. (JFE 2020) show
 degrades out of sample for the market factor specifically - 0.42 managed against 0.46 unmanaged, with 53 of
