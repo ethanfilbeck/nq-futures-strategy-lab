@@ -1,0 +1,96 @@
+{
+  "market": "MNQ",
+  "events_priced": 59,
+  "skipped": [],
+  "contracts": [
+    "MNQH0",
+    "MNQH1",
+    "MNQH2",
+    "MNQH3",
+    "MNQH4",
+    "MNQH5",
+    "MNQH6",
+    "MNQM0",
+    "MNQM1",
+    "MNQM2",
+    "MNQM3",
+    "MNQM4",
+    "MNQM5",
+    "MNQM6",
+    "MNQM9",
+    "MNQU0",
+    "MNQU1",
+    "MNQU2",
+    "MNQU3",
+    "MNQU4",
+    "MNQU5",
+    "MNQU6",
+    "MNQU9",
+    "MNQZ0",
+    "MNQZ1",
+    "MNQZ2",
+    "MNQZ3",
+    "MNQZ4",
+    "MNQZ5",
+    "MNQZ6",
+    "MNQZ9"
+  ],
+  "summary": {
+    "label": "H8 on MNQ, actual contract held (no splice)",
+    "n": 59,
+    "net": 5274.84,
+    "expectancy_per_trade": 89.40406779661018,
+    "median": 64.76,
+    "sd_per_trade": 314.63284638534964,
+    "profit_factor": 2.1884874320682797,
+    "win_rate": 0.6271186440677966,
+    "t_stat": 2.182625504894092,
+    "mean_ci95_approx": [
+      9.119120842387375,
+      169.689014750833
+    ],
+    "ci_excludes_zero": true,
+    "max_drawdown": -965.96,
+    "costs": {
+      "per_round_turn": 2.24,
+      "commission_rt": 1.24,
+      "slippage_rt": 1.0,
+      "total_charged": 132.16000000000003
+    },
+    "gross_of_all_costs": {
+      "net": 5407.0,
+      "t_stat": 2.2373107250575095
+    },
+    "double_slippage": {
+      "net": 5215.84,
+      "t_stat": 2.1582124601782806
+    },
+    "exit_kinds": {
+      "time": 59
+    },
+    "by_year": {
+      "2019": -144.7,
+      "2020": 1085.32,
+      "2021": -273.42,
+      "2022": 2655.08,
+      "2023": 575.08,
+      "2024": 1502.08,
+      "2025": -29.92,
+      "2026": -94.68
+    },
+    "t_dropping_best": {
+      "1": 1.91558133794355,
+      "2": 1.6501313436939349,
+      "3": 1.385068711617214
+    },
+    "roll_exposure": {
+      "checked": true,
+      "holds_spanning_a_roll": 0,
+      "rolls_in_map": 0,
+      "share_of_holds": 0.0,
+      "artifact_dollars": 0.0,
+      "net_roll_adjusted": 5274.84,
+      "t_roll_adjusted": 2.182625504894092
+    }
+  }
+}

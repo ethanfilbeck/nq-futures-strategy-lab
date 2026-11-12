@@ -10,8 +10,9 @@ same quantity, the roll-adjusted one is the better estimate and both are shown.
 
 ## Bottom line
 
-**No strategy in this project has been validated. One survives as an unconfirmed candidate, and its apparent
-pass came partly from a data defect.**
+**No strategy in this project has been validated, and as of 2026-11-11 none ever passed a pre-registered bar
+on clean data. H8, the last survivor, failed once its prices were corrected to the contracts actually held:
+training t 2.50 against a 3.0 bar, and a holdout that is now NEGATIVE (`RESULTS_H8_CONTRACT_LEVEL.md`).**
 
 The project's genuine output so far is **methodological**: it found two defects in its own data path, each of
 which changed a headline number, and it now has automated gates that would catch both. The research
@@ -20,10 +21,10 @@ conclusion is a well-evidenced negative.
 | | |
 |---|---|
 | Hypotheses tested | 12 (+ 1 statistical-arbitrage, failed) |
-| Passed a pre-registered bar on **clean** data | **0** |
+| Passed a pre-registered bar on **clean** data | **0 of 12** |
 | Strategy search status | intraday **closed**; paid replication **closed**; stat-arb **closed** |
 | Research budget | 13 of 15 spent, **2 remain** |
-| Money spent to date | ~$45 of Databento credits, $80.99 remaining |
+| Money spent to date | ~$46 of Databento credits ($0.92 for the roll correction) |
 | Real money at risk | **$0**, and no live execution path has ever been enabled |
 
 ---
@@ -118,8 +119,9 @@ multiple-testing thresholds.
 
 | Test | Result | Reading |
 |---|---|---|
-| MNQ training (48) | t 3.02 → **2.47–2.63** roll-adjusted | **fails** its 3.0 bar |
-| MNQ holdout (11), run once | t 0.34 → **0.25** | the only clean out-of-sample test — **failed** |
+| **MNQ training (48), actual contracts held** | **t 2.50** | **FAILS its 3.0 bar — definitive** |
+| **MNQ holdout (11), actual contracts held** | **t −0.27, −$253** | **now NEGATIVE, not merely weak** |
+| MNQ training/holdout on the spliced series | 3.02 / 0.34 | superseded; the series was contaminated |
 | MES replication (59) | t 3.56 → **1.66** | fails its 2.0 bar |
 | M2K replication (59) | t 2.45 → **1.44** | fails its 2.0 bar |
 | Gold negative control (55) | t 0.59 | inconclusive; unaffected by rolls |
@@ -129,8 +131,9 @@ multiple-testing thresholds.
 | PBO | low, but blind to the holdout | no support either way |
 | Forward paper events | **0 so far**; first Dec 8–9 | the only clean evidence available |
 
-**Status: unconfirmed, below its original bar, and sitting on the multiple-testing line.** Not a candidate
-strategy — a reason to keep collecting forward events.
+**Status: FAILED.** On the contracts a trader would actually have held, H8 does not clear its pre-registered
+bar (2.50 vs 3.0), sits below the 5% familywise line of 2.63, and its only clean out-of-sample test loses
+money. It is not a candidate strategy. It joins the other eleven.
 
 The forward test's own arithmetic is sobering: on roll-adjusted effect size ($97.44/event, spread $318),
 80% power needs **66 events ≈ 8.2 years**, and at 40 events the expected t is **1.94 against a 2.0 bar**.
@@ -168,7 +171,8 @@ Detail: `EXECUTION_COST_AUDIT.md`.
 
 | # | Issue | Blocks |
 |---|---|---|
-| **U1** | **Roll correction incomplete.** Every roll-adjusted figure rests on a *heuristic* detector, which gives 2.47 or 2.63 for H8 depending on its input window. The exact fix needs `scripts/roll_map.py` → `fetch_contract_windows.py` → `run_h8_contract_level.py`, which only Ethan's machine can run. | Any final H8 number |
+| ~~U1~~ | **RESOLVED 2026-11-11.** 59 of 59 events priced on the actual contracts held, $0.92. Training t 2.50, holdout t −0.27. `RESULTS_H8_CONTRACT_LEVEL.md`. | — |
+| U7 | Databento flagged degraded data on 2024-09-18 and 2025-09-17, both FOMC days, so 2 of 59 events rest on reduced-quality bars. Too small to move a verdict this far from its bar. | nothing currently |
 | U2 | H6's ~5-session holds are booked entirely to the exit day; no mark-to-market data exists. Effect unquantified. | PBO precision |
 | U3 | Effective trial count for multiple testing is approximated by return-stream correlation; the right notion is correlation of test statistics. | Threshold precision |
 | U4 | Realised slippage has never been measured, only modelled. | Resolved only by forward fills |
@@ -205,11 +209,13 @@ Any strategy failing any one of these is **not validated**, however good it look
 
 ## 10. Next
 
-1. **Finish the roll correction (U1).** Free metadata call, then a few cents of contract-window data. Nothing
-   else should be built on an unresolved H8 number.
-2. **Sign or amend the forward pre-registration (U6)** before Dec 8.
-3. **Then, and only then**, consider spending a budget line on futures carry (Q1/Q2), which share one cheap
-   download.
+1. **~~Finish the roll correction~~ — done.** It closed the project's last open research question, and it
+   closed it negatively.
+2. **Decide on the forward test (U6)** before Dec 8. With H8 failed on clean data, the honest options are to
+   let it run as a free falsification check or to stop. Validation is no longer a realistic outcome.
+3. **Decide whether to spend a remaining budget line at all.** With 0 of 12 passing, the case for a
+   thirteenth hypothesis is weaker than it was, and concluding the project with a well-evidenced negative is
+   a legitimate ending.
 
 **No real money, no live brokerage execution, no orders. Everything in this project is research and
 simulation.**
