@@ -1,0 +1,518 @@
+PowerShell 7.7.0
+PS C:\Windows\System32> py -m pytest tests/test_sessions.py
+================================================= test session starts =================================================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0
+rootdir: C:\Windows\System32
+plugins: platformdirs-4.14.5
+collected 0 items
+Traceback (most recent call last):
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 333, in wrap_session
+    session.exitstatus = doit(config, session) or 0
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 386, in _main
+    config.hook.pytest_collection(session=session)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_caller.py", line 197, in __call__
+    return self._hookexec(
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 195, in _multicall
+    raise exception
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\logging.py", line 816, in pytest_collection
+    return (yield)
+            ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\warnings.py", line 84, in pytest_collection
+    return (yield)
+            ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\config\__init__.py", line 1617, in pytest_collection
+    return (yield)
+            ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 397, in pytest_collection
+    session.perform_collect()
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 829, in perform_collect
+    resolve_collection_argument(
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 1176, in resolve_collection_argument
+    raise UsageError(msg.format(arg=arg))
+pytest.UsageError: file or directory not found: tests/test_sessions.py
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pytest\__main__.py", line 9, in <module>
+    raise SystemExit(_console_main())
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\config\__init__.py", line 286, in _console_main
+    code = _main(prog=_get_prog_name(sys.argv))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\config\__init__.py", line 262, in _main
+    ret: ExitCode | int = config.hook.pytest_cmdline_main(config=config)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_caller.py", line 197, in __call__
+    return self._hookexec(
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 195, in _multicall
+    raise exception
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 380, in pytest_cmdline_main
+    return wrap_session(config, _main)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 368, in wrap_session
+    config.hook.pytest_sessionfinish(
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_caller.py", line 197, in __call__
+    return self._hookexec(
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 183, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 195, in _multicall
+    raise exception
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\logging.py", line 901, in pytest_sessionfinish
+    return (yield)
+            ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\terminal.py", line 992, in pytest_sessionfinish
+    result = yield
+             ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 167, in _multicall
+    teardown.throw(exception)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\warnings.py", line 104, in pytest_sessionfinish
+    return (yield)
+            ^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_execution.py", line 147, in _multicall
+    res = hook_impl.function(*args)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\cacheprovider.py", line 487, in pytest_sessionfinish
+    config.cache.set("cache/nodeids", sorted(str(n) for n in self.cached_nodeids))
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\cacheprovider.py", line 234, in set
+    self._mkdir(path.parent)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\cacheprovider.py", line 161, in _mkdir
+    self._ensure_cache_dir_and_supporting_files()
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\cacheprovider.py", line 253, in _ensure_cache_dir_and_supporting_files
+    _make_cachedir(self._cachedir)
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\cacheprovider.py", line 67, in _make_cachedir
+    path = Path(tempfile.mkdtemp(prefix="pytest-cache-files-", dir=target.parent))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\tempfile.py", line 390, in mkdtemp
+    if (_os.name == 'nt' and _os.path.isdir(dir) and
+                             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\thebo\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 447, in __fspath__
+    def __fspath__(self):
+
+KeyboardInterrupt
+PS C:\Windows\System32> cd "C:\Users\thebo\OneDrive\Documents\nq_bot"
+>> py -m pytest tests/test_sessions.py -v
+================================================= test session starts =================================================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\thebo\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\thebo\OneDrive\Documents\nq_bot
+configfile: pytest.ini
+plugins: platformdirs-4.14.5
+collected 136 items
+
+tests/test_sessions.py::test_exact_recovery_of_returns_and_volumes_across_dst PASSED                             [  0%]
+tests/test_sessions.py::test_session_spanning_a_dst_change_is_a_data_error PASSED                                [  1%]
+tests/test_sessions.py::test_half_day_triggers_E1_and_the_next_session_E2 PASSED                                 [  2%]
+tests/test_sessions.py::test_globex_only_session_triggers_E5_and_is_never_an_observation PASSED                  [  2%]
+tests/test_sessions.py::test_missing_boundary_windows_trigger_E3_without_imputation PASSED                       [  3%]
+tests/test_sessions.py::test_missing_interior_minutes_are_zero_volume_not_missing_data PASSED                    [  4%]
+tests/test_sessions.py::test_zero_volume_bar_stops_the_run PASSED                                                [  5%]
+tests/test_sessions.py::test_overlapping_files_with_a_session_split_across_them PASSED                           [  5%]
+tests/test_sessions.py::test_overlapping_files_that_disagree_are_a_data_error PASSED                             [  6%]
+tests/test_sessions.py::test_roll_discontinuity_is_excluded_and_cannot_move_any_result PASSED                    [  7%]
+tests/test_sessions.py::test_E6_removes_statement_day_and_preceding_session_symmetrically PASSED                 [  8%]
+tests/test_sessions.py::test_fomc_day_outside_the_loaded_data_marks_nothing PASSED                               [  8%]
+tests/test_sessions.py::test_exclusion_rules_apply_in_order_with_overlaps_counted_once PASSED                    [  9%]
+tests/test_sessions.py::test_ewma_is_causal PASSED                                                               [ 10%]
+tests/test_sessions.py::test_hill_recovers_pareto_alpha PASSED                                                   [ 11%]
+tests/test_sessions.py::test_hill_on_gaussian_tails_is_finite_and_k_dependent_documented PASSED                  [ 11%]
+tests/test_sessions.py::test_hill_refuses_too_few_observations PASSED                                            [ 12%]
+tests/test_sessions.py::test_wpc_identity_volume_share_and_zero_cc_sessions PASSED                               [ 13%]
+tests/test_sessions.py::test_wpc_known_values PASSED                                                             [ 13%]
+tests/test_sessions.py::test_l1_known_construction PASSED                                                        [ 14%]
+tests/test_sessions.py::test_l1_ties_broken_by_earlier_position PASSED                                           [ 15%]
+tests/test_sessions.py::test_centered_p_and_intervals_behave PASSED                                              [ 16%]
+tests/test_sessions.py::test_holm_hand_example_exactly PASSED                                                    [ 16%]
+tests/test_sessions.py::test_holm_stops_at_first_failure_and_rejects_iff_adjusted_below_alpha PASSED             [ 17%]
+tests/test_sessions.py::test_bh_q_values_are_monotone_and_bounded PASSED                                         [ 18%]
+tests/test_sessions.py::test_stationary_bootstrap_mean_block_and_reproducibility PASSED                          [ 19%]
+tests/test_sessions.py::test_week_block_bootstrap_keeps_whole_weeks PASSED                                       [ 19%]
+tests/test_sessions.py::test_run_family_recovers_known_effects_and_reports_everything PASSED                     [ 20%]
+tests/test_sessions.py::test_contradicted_classification_when_effect_has_the_wrong_sign PASSED                   [ 21%]
+tests/test_sessions.py::test_v1_interval_coverage_over_200_seeds PASSED                                          [ 22%]
+tests/test_sessions.py::test_v1_size_under_the_null_1000_seeds PASSED                                            [ 22%]
+tests/test_sessions.py::test_minimum_sizes_refuse PASSED                                                         [ 23%]
+tests/test_sessions.py::test_price_limit_censoring_and_reopening_overshoot_effects_are_documented PASSED         [ 24%]
+tests/test_sessions.py::test_price_limit_flags_and_S2_S3_masks_fire PASSED                                       [ 25%]
+tests/test_sessions.py::test_official_verdict_is_inconclusive_for_every_possible_development_outcome PASSED      [ 25%]
+tests/test_sessions.py::test_official_verdict_has_no_path_for_o2 PASSED                                          [ 26%]
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict PASSED                         [ 27%]
+tests/test_sessions.py::test_runner_development_end_to_end_on_synthetic_files PASSED                             [ 27%]
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered PASSED             [ 28%]
+tests/test_sessions.py::test_holdout_refusals PASSED                                                             [ 29%]
+tests/test_sessions.py::test_runner_refuses_without_frozen_protocol_or_with_edited_protocol PASSED               [ 30%]
+tests/test_sessions.py::test_runner_refuses_on_hash_mismatch_and_count_mismatch PASSED                           [ 30%]
+tests/test_sessions.py::test_runner_defaults_pin_the_recorded_hashes PASSED                                      [ 31%]
+tests/test_sessions.py::test_forbidden_guard_catches[corr_on_rth] PASSED                                         [ 32%]
+tests/test_sessions.py::test_forbidden_guard_catches[cov] PASSED                                                 [ 33%]
+tests/test_sessions.py::test_forbidden_guard_catches[ON_RTH_covariance] PASSED                                   [ 33%]
+tests/test_sessions.py::test_forbidden_guard_catches[var_cc] PASSED                                              [ 34%]
+tests/test_sessions.py::test_forbidden_guard_catches[regression_beta] PASSED                                     [ 35%]
+tests/test_sessions.py::test_forbidden_guard_catches[slope] PASSED                                               [ 36%]
+tests/test_sessions.py::test_forbidden_guard_catches[hourly_mean_return] PASSED                                  [ 36%]
+tests/test_sessions.py::test_forbidden_guard_catches[window_mean] PASSED                                         [ 37%]
+tests/test_sessions.py::test_forbidden_guard_catches[cumulative_return_2am] PASSED                               [ 38%]
+tests/test_sessions.py::test_forbidden_guard_catches[half_hour_return] PASSED                                    [ 38%]
+tests/test_sessions.py::test_forbidden_guard_catches[first_30_minutes] PASSED                                    [ 39%]
+tests/test_sessions.py::test_forbidden_guard_catches[sharpe] PASSED                                              [ 40%]
+tests/test_sessions.py::test_forbidden_guard_catches[net_profit] PASSED                                          [ 41%]
+tests/test_sessions.py::test_forbidden_guard_catches[pnl] PASSED                                                 [ 41%]
+tests/test_sessions.py::test_forbidden_guard_catches[trades] PASSED                                              [ 42%]
+tests/test_sessions.py::test_forbidden_guard_catches[entry_price] PASSED                                         [ 43%]
+tests/test_sessions.py::test_forbidden_guard_catches[exit] PASSED                                                [ 44%]
+tests/test_sessions.py::test_forbidden_guard_catches[signal] PASSED                                              [ 44%]
+tests/test_sessions.py::test_forbidden_guard_catches[position_size] PASSED                                       [ 45%]
+tests/test_sessions.py::test_forbidden_guard_catches[strategy] PASSED                                            [ 46%]
+tests/test_sessions.py::test_forbidden_guard_catches[gap_fade] PASSED                                            [ 47%]
+tests/test_sessions.py::test_forbidden_guard_catches[rth_given_on_up] PASSED                                     [ 47%]
+tests/test_sessions.py::test_forbidden_guard_catches[predictive_r2] PASSED                                       [ 48%]
+tests/test_sessions.py::test_forbidden_guard_catches[r_squared] PASSED                                           [ 49%]
+tests/test_sessions.py::test_forbidden_guard_catches[oos_r2] PASSED                                              [ 50%]
+tests/test_sessions.py::test_forbidden_guard_catches[lagged_on] PASSED                                           [ 50%]
+tests/test_sessions.py::test_forbidden_guard_catches[lead] PASSED                                                [ 51%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[price_limit_flag_count] PASSED           [ 52%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[overnight_variance_share] PASSED         [ 52%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[regimes] PASSED                          [ 53%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[holm_reject] PASSED                      [ 54%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R1] PASSED                               [ 55%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R2] PASSED                               [ 55%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R3] PASSED                               [ 56%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R4] PASSED                               [ 57%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[p_on_dominant_extreme_pct] PASSED        [ 58%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[hourly_variance_profile] PASSED          [ 58%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[rv_globex] PASSED                        [ 59%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[alpha_on] PASSED                         [ 60%]
+tests/test_sessions.py::test_source_never_calls_correlation_or_regression[nq_bot/sessions.py] PASSED             [ 61%]
+tests/test_sessions.py::test_source_never_calls_correlation_or_regression[run_sessions_study.py] PASSED          [ 61%]
+tests/test_sessions.py::test_hourly_profile_measures_variance_not_mean_returns PASSED                            [ 62%]
+tests/test_sessions.py::test_research_module_is_listed_with_research_modules PASSED                              [ 63%]
+tests/test_sessions.py::test_runner_uses_the_integrity_gate PASSED                                               [ 63%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[naive-timezone-aware] PASSED                     [ 64%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[unsorted-strictly increasing] PASSED             [ 65%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[nan-NaN] PASSED                                  [ 66%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[negative-non-positive] PASSED                    [ 66%]
+tests/test_sessions.py::test_hill_rejects_nonpositive_threshold_and_bad_k PASSED                                 [ 67%]
+tests/test_sessions.py::test_v42_nonpositive_v1_is_reported_and_the_run_completes PASSED                         [ 68%]
+tests/test_sessions.py::test_v42_no_v1_outcome_halt_exists_in_the_code PASSED                                    [ 69%]
+tests/test_sessions.py::test_v42_p1_and_fwer_disclosures_are_attached PASSED                                     [ 69%]
+tests/test_sessions.py::test_git_commit_check_uses_git PASSED                                                    [ 70%]
+tests/test_sessions.py::test_cli_rejects_unknown_mode_and_default_fomc_comes_from_family3 PASSED                 [ 71%]
+tests/test_sessions.py::test_nan_bootstrap_replicates_are_refused_not_silently_counted PASSED                    [ 72%]
+tests/test_sessions.py::test_tail_stability_is_refused_when_regime_k_is_below_minimum PASSED                     [ 72%]
+tests/test_sessions.py::test_expected_real_regime_hill_k_from_frozen_counts PASSED                               [ 73%]
+tests/test_sessions.py::test_hourly_profile_uses_only_analysis_sessions_so_roll_jumps_cannot_enter PASSED        [ 74%]
+tests/test_sessions.py::test_real_data_guard_blocks_the_project_data_folder PASSED                               [ 75%]
+tests/test_sessions.py::test_synthetic_tests_import_no_webhook_or_execution_module PASSED                        [ 75%]
+tests/test_sessions.py::test_volatility_groups_depend_only_on_earlier_sessions PASSED                            [ 76%]
+tests/test_sessions.py::test_volatility_group_formula_on_a_hand_case PASSED                                      [ 77%]
+tests/test_sessions.py::test_s7_is_withdrawn_and_never_computed PASSED                                           [ 77%]
+tests/test_sessions.py::test_ewma_startup_rule_exact PASSED                                                      [ 78%]
+tests/test_sessions.py::test_calibration_script_runs_every_scenario_deterministically PASSED                     [ 79%]
+tests/test_sessions.py::test_u7_v1_carries_no_inferential_field_and_guard_rejects_one PASSED                     [ 80%]
+tests/test_sessions.py::test_u7_other_four_tests_do_not_depend_on_v1 PASSED                                      [ 80%]
+tests/test_sessions.py::test_u7_holm_uses_m5_with_v1_slot_fixed_at_one PASSED                                    [ 81%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-established] PASSED                 [ 82%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-contradicted] PASSED                [ 83%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-not established] PASSED             [ 83%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-descriptive only (decision U7)] PASSED [ 84%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-anything] PASSED                    [ 85%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-established] PASSED                [ 86%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-contradicted] PASSED               [ 86%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-not established] PASSED            [ 87%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-descriptive only (decision U7)] PASSED [ 88%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-anything] PASSED                   [ 88%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-established] PASSED                 [ 89%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-contradicted] PASSED                [ 90%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-not established] PASSED             [ 91%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-descriptive only (decision U7)] PASSED [ 91%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-anything] PASSED                    [ 92%]
+tests/test_sessions.py::test_u7_v1_sign_is_reported_not_inferential PASSED                                       [ 93%]
+tests/test_sessions.py::test_u7_protocol_and_calibration_artifacts_preserved PASSED                              [ 94%]
+tests/test_sessions.py::test_l4_constants_frozen PASSED                                                          [ 94%]
+tests/test_sessions.py::test_l4_first_eligible_assignment_and_boundaries PASSED                                  [ 95%]
+tests/test_sessions.py::test_l4_short_samples_and_no_look_ahead_at_the_boundary PASSED                           [ 96%]
+tests/test_sessions.py::test_l4_assigned_count_is_n_minus_80 PASSED                                              [ 97%]
+tests/test_sessions.py::test_u8_v1_cannot_change_holm_adjusted_results_of_the_other_four PASSED                  [ 97%]
+tests/test_sessions.py::test_u8_thresholds_are_the_frozen_five_slot_ones PASSED                                  [ 98%]
+tests/test_sessions.py::test_u8_run_family_uses_the_placeholder_and_documents_it PASSED                          [ 99%]
+tests/test_sessions.py::test_l4_one_based_numbering_of_the_warm_up PASSED                                        [100%]
+
+================================================== warnings summary ===================================================
+tests/test_sessions.py: 10829 warnings
+  C:\Users\thebo\OneDrive\Documents\nq_bot\nq_bot\sessions.py:266: Pandas4Warning: Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.day_of_week instead.
+    "long_overnight": (d - p).days > 1, "weekday": d.dayofweek})
+
+tests/test_sessions.py::test_exact_recovery_of_returns_and_volumes_across_dst
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:83: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+    m = smp.join(truth, rsuffix="_true")
+
+tests/test_sessions.py::test_week_block_bootstrap_keeps_whole_weeks
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:345: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    d = d[d.dayofweek.isin([0, 3, 4])]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:515: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    d = d[d.dayofweek.isin([0, 3, 4])][:185]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:519: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    np.asarray(d.dayofweek.isin([3, 4])), d)
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:520: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    dm = pd.bdate_range("2021-01-04", "2024-12-31"); dm = dm[dm.dayofweek.isin([0, 3, 4])]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_holdout_refusals
+tests/test_sessions.py::test_holdout_refusals
+  C:\Users\thebo\OneDrive\Documents\nq_bot\nq_bot\sessions.py:748: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    if set(o2.dates.dayofweek) - {0, 3, 4} or set(matched_dev.dates.dayofweek) - {0, 3, 4}:
+
+tests/test_sessions.py: 2900 warnings
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:568: Pandas4Warning: Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.day_of_week instead.
+    cat = "A_H8" if r.is_fomc_pair else "B_replication_pool" if d.dayofweek in (0, 3, 4) else "P_placebo"
+
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:612: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    m = (b.index >= split) & np.isin(et.dayofweek, [0, 3, 4])
+
+tests/test_sessions.py::test_calibration_script_runs_every_scenario_deterministically
+  C:\Users\thebo\OneDrive\Documents\nq_bot\scripts\sessions_calibration.py:37: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    V1M = np.asarray(DATES.dayofweek.isin([1, 2, 3, 4]))     # Tue-Fri, about 984 (protocol: 983)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=================================== 136 passed, 13745 warnings in 146.03s (0:02:26) ===================================
+PS C:\Users\thebo\OneDrive\Documents\nq_bot> py -c "import sys,numpy,pandas,pytest; print(sys.version); print('numpy',numpy.__version__,'pandas',pandas.__version__,'pytest',pytest.__version__)" 2>&1 | Tee-Object -FilePath docs\review_handoff_v1\evidence\windows_pytest_test_sessions_full_output.txt
+>> py -m pytest tests/test_sessions.py -v 2>&1 | Tee-Object -FilePath docs\review_handoff_v1\evidence\windows_pytest_test_sessions_full_output.txt -Append
+3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+numpy 2.5.4 pandas 3.1.1 pytest 9.2.0
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\thebo\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\thebo\OneDrive\Documents\nq_bot
+configfile: pytest.ini
+plugins: platformdirs-4.14.5
+collecting ... collected 136 items
+
+tests/test_sessions.py::test_exact_recovery_of_returns_and_volumes_across_dst PASSED [  0%]
+tests/test_sessions.py::test_session_spanning_a_dst_change_is_a_data_error PASSED [  1%]
+tests/test_sessions.py::test_half_day_triggers_E1_and_the_next_session_E2 PASSED [  2%]
+tests/test_sessions.py::test_globex_only_session_triggers_E5_and_is_never_an_observation PASSED [  2%]
+tests/test_sessions.py::test_missing_boundary_windows_trigger_E3_without_imputation PASSED [  3%]
+tests/test_sessions.py::test_missing_interior_minutes_are_zero_volume_not_missing_data PASSED [  4%]
+tests/test_sessions.py::test_zero_volume_bar_stops_the_run PASSED        [  5%]
+tests/test_sessions.py::test_overlapping_files_with_a_session_split_across_them PASSED [  5%]
+tests/test_sessions.py::test_overlapping_files_that_disagree_are_a_data_error PASSED [  6%]
+tests/test_sessions.py::test_roll_discontinuity_is_excluded_and_cannot_move_any_result PASSED [  7%]
+tests/test_sessions.py::test_E6_removes_statement_day_and_preceding_session_symmetrically PASSED [  8%]
+tests/test_sessions.py::test_fomc_day_outside_the_loaded_data_marks_nothing PASSED [  8%]
+tests/test_sessions.py::test_exclusion_rules_apply_in_order_with_overlaps_counted_once PASSED [  9%]
+tests/test_sessions.py::test_ewma_is_causal PASSED                       [ 10%]
+tests/test_sessions.py::test_hill_recovers_pareto_alpha PASSED           [ 11%]
+tests/test_sessions.py::test_hill_on_gaussian_tails_is_finite_and_k_dependent_documented PASSED [ 11%]
+tests/test_sessions.py::test_hill_refuses_too_few_observations PASSED    [ 12%]
+tests/test_sessions.py::test_wpc_identity_volume_share_and_zero_cc_sessions PASSED [ 13%]
+tests/test_sessions.py::test_wpc_known_values PASSED                     [ 13%]
+tests/test_sessions.py::test_l1_known_construction PASSED                [ 14%]
+tests/test_sessions.py::test_l1_ties_broken_by_earlier_position PASSED   [ 15%]
+tests/test_sessions.py::test_centered_p_and_intervals_behave PASSED      [ 16%]
+tests/test_sessions.py::test_holm_hand_example_exactly PASSED            [ 16%]
+tests/test_sessions.py::test_holm_stops_at_first_failure_and_rejects_iff_adjusted_below_alpha PASSED [ 17%]
+tests/test_sessions.py::test_bh_q_values_are_monotone_and_bounded PASSED [ 18%]
+tests/test_sessions.py::test_stationary_bootstrap_mean_block_and_reproducibility PASSED [ 19%]
+tests/test_sessions.py::test_week_block_bootstrap_keeps_whole_weeks PASSED [ 19%]
+tests/test_sessions.py::test_run_family_recovers_known_effects_and_reports_everything PASSED [ 20%]
+tests/test_sessions.py::test_contradicted_classification_when_effect_has_the_wrong_sign PASSED [ 21%]
+tests/test_sessions.py::test_v1_interval_coverage_over_200_seeds PASSED  [ 22%]
+tests/test_sessions.py::test_v1_size_under_the_null_1000_seeds PASSED    [ 22%]
+tests/test_sessions.py::test_minimum_sizes_refuse PASSED                 [ 23%]
+tests/test_sessions.py::test_price_limit_censoring_and_reopening_overshoot_effects_are_documented PASSED [ 24%]
+tests/test_sessions.py::test_price_limit_flags_and_S2_S3_masks_fire PASSED [ 25%]
+tests/test_sessions.py::test_official_verdict_is_inconclusive_for_every_possible_development_outcome PASSED [ 25%]
+tests/test_sessions.py::test_official_verdict_has_no_path_for_o2 PASSED  [ 26%]
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict PASSED [ 27%]
+tests/test_sessions.py::test_runner_development_end_to_end_on_synthetic_files PASSED [ 27%]
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered PASSED [ 28%]
+tests/test_sessions.py::test_holdout_refusals PASSED                     [ 29%]
+tests/test_sessions.py::test_runner_refuses_without_frozen_protocol_or_with_edited_protocol PASSED [ 30%]
+tests/test_sessions.py::test_runner_refuses_on_hash_mismatch_and_count_mismatch PASSED [ 30%]
+tests/test_sessions.py::test_runner_defaults_pin_the_recorded_hashes PASSED [ 31%]
+tests/test_sessions.py::test_forbidden_guard_catches[corr_on_rth] PASSED [ 32%]
+tests/test_sessions.py::test_forbidden_guard_catches[cov] PASSED         [ 33%]
+tests/test_sessions.py::test_forbidden_guard_catches[ON_RTH_covariance] PASSED [ 33%]
+tests/test_sessions.py::test_forbidden_guard_catches[var_cc] PASSED      [ 34%]
+tests/test_sessions.py::test_forbidden_guard_catches[regression_beta] PASSED [ 35%]
+tests/test_sessions.py::test_forbidden_guard_catches[slope] PASSED       [ 36%]
+tests/test_sessions.py::test_forbidden_guard_catches[hourly_mean_return] PASSED [ 36%]
+tests/test_sessions.py::test_forbidden_guard_catches[window_mean] PASSED [ 37%]
+tests/test_sessions.py::test_forbidden_guard_catches[cumulative_return_2am] PASSED [ 38%]
+tests/test_sessions.py::test_forbidden_guard_catches[half_hour_return] PASSED [ 38%]
+tests/test_sessions.py::test_forbidden_guard_catches[first_30_minutes] PASSED [ 39%]
+tests/test_sessions.py::test_forbidden_guard_catches[sharpe] PASSED      [ 40%]
+tests/test_sessions.py::test_forbidden_guard_catches[net_profit] PASSED  [ 41%]
+tests/test_sessions.py::test_forbidden_guard_catches[pnl] PASSED         [ 41%]
+tests/test_sessions.py::test_forbidden_guard_catches[trades] PASSED      [ 42%]
+tests/test_sessions.py::test_forbidden_guard_catches[entry_price] PASSED [ 43%]
+tests/test_sessions.py::test_forbidden_guard_catches[exit] PASSED        [ 44%]
+tests/test_sessions.py::test_forbidden_guard_catches[signal] PASSED      [ 44%]
+tests/test_sessions.py::test_forbidden_guard_catches[position_size] PASSED [ 45%]
+tests/test_sessions.py::test_forbidden_guard_catches[strategy] PASSED    [ 46%]
+tests/test_sessions.py::test_forbidden_guard_catches[gap_fade] PASSED    [ 47%]
+tests/test_sessions.py::test_forbidden_guard_catches[rth_given_on_up] PASSED [ 47%]
+tests/test_sessions.py::test_forbidden_guard_catches[predictive_r2] PASSED [ 48%]
+tests/test_sessions.py::test_forbidden_guard_catches[r_squared] PASSED   [ 49%]
+tests/test_sessions.py::test_forbidden_guard_catches[oos_r2] PASSED      [ 50%]
+tests/test_sessions.py::test_forbidden_guard_catches[lagged_on] PASSED   [ 50%]
+tests/test_sessions.py::test_forbidden_guard_catches[lead] PASSED        [ 51%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[price_limit_flag_count] PASSED [ 52%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[overnight_variance_share] PASSED [ 52%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[regimes] PASSED [ 53%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[holm_reject] PASSED [ 54%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R1] PASSED [ 55%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R2] PASSED [ 55%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R3] PASSED [ 56%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[R4] PASSED [ 57%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[p_on_dominant_extreme_pct] PASSED [ 58%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[hourly_variance_profile] PASSED [ 58%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[rv_globex] PASSED [ 59%]
+tests/test_sessions.py::test_forbidden_guard_allows_protocol_quantities[alpha_on] PASSED [ 60%]
+tests/test_sessions.py::test_source_never_calls_correlation_or_regression[nq_bot/sessions.py] PASSED [ 61%]
+tests/test_sessions.py::test_source_never_calls_correlation_or_regression[run_sessions_study.py] PASSED [ 61%]
+tests/test_sessions.py::test_hourly_profile_measures_variance_not_mean_returns PASSED [ 62%]
+tests/test_sessions.py::test_research_module_is_listed_with_research_modules PASSED [ 63%]
+tests/test_sessions.py::test_runner_uses_the_integrity_gate PASSED       [ 63%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[naive-timezone-aware] PASSED [ 64%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[unsorted-strictly increasing] PASSED [ 65%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[nan-NaN] PASSED [ 66%]
+tests/test_sessions.py::test_check_bars_rejects_malformed_input[negative-non-positive] PASSED [ 66%]
+tests/test_sessions.py::test_hill_rejects_nonpositive_threshold_and_bad_k PASSED [ 67%]
+tests/test_sessions.py::test_v42_nonpositive_v1_is_reported_and_the_run_completes PASSED [ 68%]
+tests/test_sessions.py::test_v42_no_v1_outcome_halt_exists_in_the_code PASSED [ 69%]
+tests/test_sessions.py::test_v42_p1_and_fwer_disclosures_are_attached PASSED [ 69%]
+tests/test_sessions.py::test_git_commit_check_uses_git PASSED            [ 70%]
+tests/test_sessions.py::test_cli_rejects_unknown_mode_and_default_fomc_comes_from_family3 PASSED [ 71%]
+tests/test_sessions.py::test_nan_bootstrap_replicates_are_refused_not_silently_counted PASSED [ 72%]
+tests/test_sessions.py::test_tail_stability_is_refused_when_regime_k_is_below_minimum PASSED [ 72%]
+tests/test_sessions.py::test_expected_real_regime_hill_k_from_frozen_counts PASSED [ 73%]
+tests/test_sessions.py::test_hourly_profile_uses_only_analysis_sessions_so_roll_jumps_cannot_enter PASSED [ 74%]
+tests/test_sessions.py::test_real_data_guard_blocks_the_project_data_folder PASSED [ 75%]
+tests/test_sessions.py::test_synthetic_tests_import_no_webhook_or_execution_module PASSED [ 75%]
+tests/test_sessions.py::test_volatility_groups_depend_only_on_earlier_sessions PASSED [ 76%]
+tests/test_sessions.py::test_volatility_group_formula_on_a_hand_case PASSED [ 77%]
+tests/test_sessions.py::test_s7_is_withdrawn_and_never_computed PASSED   [ 77%]
+tests/test_sessions.py::test_ewma_startup_rule_exact PASSED              [ 78%]
+tests/test_sessions.py::test_calibration_script_runs_every_scenario_deterministically PASSED [ 79%]
+tests/test_sessions.py::test_u7_v1_carries_no_inferential_field_and_guard_rejects_one PASSED [ 80%]
+tests/test_sessions.py::test_u7_other_four_tests_do_not_depend_on_v1 PASSED [ 80%]
+tests/test_sessions.py::test_u7_holm_uses_m5_with_v1_slot_fixed_at_one PASSED [ 81%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-established] PASSED [ 82%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-contradicted] PASSED [ 83%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-not established] PASSED [ 83%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-descriptive only (decision U7)] PASSED [ 84%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[True-anything] PASSED [ 85%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-established] PASSED [ 86%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-contradicted] PASSED [ 86%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-not established] PASSED [ 87%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-descriptive only (decision U7)] PASSED [ 88%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[False-anything] PASSED [ 88%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-established] PASSED [ 89%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-contradicted] PASSED [ 90%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-not established] PASSED [ 91%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-descriptive only (decision U7)] PASSED [ 91%]
+tests/test_sessions.py::test_u7_official_verdict_ignores_every_v1_input[None-anything] PASSED [ 92%]
+tests/test_sessions.py::test_u7_v1_sign_is_reported_not_inferential PASSED [ 93%]
+tests/test_sessions.py::test_u7_protocol_and_calibration_artifacts_preserved PASSED [ 94%]
+tests/test_sessions.py::test_l4_constants_frozen PASSED                  [ 94%]
+tests/test_sessions.py::test_l4_first_eligible_assignment_and_boundaries PASSED [ 95%]
+tests/test_sessions.py::test_l4_short_samples_and_no_look_ahead_at_the_boundary PASSED [ 96%]
+tests/test_sessions.py::test_l4_assigned_count_is_n_minus_80 PASSED      [ 97%]
+tests/test_sessions.py::test_u8_v1_cannot_change_holm_adjusted_results_of_the_other_four PASSED [ 97%]
+tests/test_sessions.py::test_u8_thresholds_are_the_frozen_five_slot_ones PASSED [ 98%]
+tests/test_sessions.py::test_u8_run_family_uses_the_placeholder_and_documents_it PASSED [ 99%]
+tests/test_sessions.py::test_l4_one_based_numbering_of_the_warm_up PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_sessions.py: 10829 warnings
+  C:\Users\thebo\OneDrive\Documents\nq_bot\nq_bot\sessions.py:266: Pandas4Warning: Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.day_of_week instead.
+    "long_overnight": (d - p).days > 1, "weekday": d.dayofweek})
+
+tests/test_sessions.py::test_exact_recovery_of_returns_and_volumes_across_dst
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:83: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+    m = smp.join(truth, rsuffix="_true")
+
+tests/test_sessions.py::test_week_block_bootstrap_keeps_whole_weeks
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:345: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    d = d[d.dayofweek.isin([0, 3, 4])]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:515: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    d = d[d.dayofweek.isin([0, 3, 4])][:185]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:519: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    np.asarray(d.dayofweek.isin([3, 4])), d)
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:520: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    dm = pd.bdate_range("2021-01-04", "2024-12-31"); dm = dm[dm.dayofweek.isin([0, 3, 4])]
+
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_secondary_is_labelled_and_cannot_change_a_verdict
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+tests/test_sessions.py::test_holdout_refusals
+tests/test_sessions.py::test_holdout_refusals
+  C:\Users\thebo\OneDrive\Documents\nq_bot\nq_bot\sessions.py:748: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    if set(o2.dates.dayofweek) - {0, 3, 4} or set(matched_dev.dates.dayofweek) - {0, 3, 4}:
+
+tests/test_sessions.py: 2900 warnings
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:568: Pandas4Warning: Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.day_of_week instead.
+    cat = "A_H8" if r.is_fomc_pair else "B_replication_pool" if d.dayofweek in (0, 3, 4) else "P_placebo"
+
+tests/test_sessions.py::test_o2_cannot_change_the_official_verdict_removed_randomised_altered
+  C:\Users\thebo\OneDrive\Documents\nq_bot\tests\test_sessions.py:612: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    m = (b.index >= split) & np.isin(et.dayofweek, [0, 3, 4])
+
+tests/test_sessions.py::test_calibration_script_runs_every_scenario_deterministically
+  C:\Users\thebo\OneDrive\Documents\nq_bot\scripts\sessions_calibration.py:37: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.
+    V1M = np.asarray(DATES.dayofweek.isin([1, 2, 3, 4]))     # Tue-Fri, about 984 (protocol: 983)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============== 136 passed, 13745 warnings in 141.73s (0:02:21) ===============
+PS C:\Users\thebo\OneDrive\Documents\nq_bot>

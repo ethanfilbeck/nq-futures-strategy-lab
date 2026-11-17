@@ -1,0 +1,192 @@
+--- DRAFT_PREREG_SESSIONS_awaiting_signoff.md	2026-11-12 12:31:55.796369000 -0600
++++ DRAFT_PREREG_SESSIONS_v4.2_awaiting_signoff.md	2026-11-12 21:51:55.499556000 -0600
+@@ -1,8 +1,9 @@
+-# Pre-registration (DRAFT v4): overnight vs regular-session behaviour in MNQ — descriptive study
++# Pre-registration (DRAFT v4.2): overnight vs regular-session behaviour in MNQ — descriptive study
+ 
+-**Status: DRAFT v4.1, 2026-11-12 ~13:00 CT (v4 plus decisions U1–U6 of 12:22 CT; no count, threshold or test changed). Not signed, not hashed, not committed. Only the synthetic-data code stage has run; no real-data analysis has started.**
++**Status: DRAFT v4.2, 2026-11-12 ~22:00 CT (v4.1 plus decisions U7, U8, U9, L4, P1 and the D8 status of 2026-11-12; no sample count, exclusion rule, threshold, or definition of T1, T2, P1 or L1 changed). Not signed, not hashed, not committed. Only the synthetic-data code stage has run; no real-data analysis has started.**
++**Supersedes DRAFT v4.1**, which is preserved unchanged as an immutable historical record: `DRAFT_PREREG_SESSIONS_awaiting_signoff.md`, SHA-256 `716e00037ab4d7e20b9f9a44a0af6a146e646f1f631101470a2c8ceb37506021`. Every change is listed in Appendix D, part 5.
+ **Official confirmatory verdict, fixed in advance: INCONCLUSIVE** (decision D2-a = O1; §8).
+-v3 → v4 changes: Appendix D, part 2. v2 → v3 changes: Appendix D, part 1. Companions: `LITERATURE_SESSIONS.md`, `DATA_FEASIBILITY_SESSIONS.md`,
++v4.1 → v4.2 changes: Appendix D, part 5. v3 → v4 changes: Appendix D, part 2. v2 → v3 changes: Appendix D, part 1. Companions: `LITERATURE_SESSIONS.md`, `DATA_FEASIBILITY_SESSIONS.md`,
+ `HOLDOUT_EXPOSURE_INVENTORY.md` with `HOLDOUT_EXPOSURE_SESSIONS.csv`. Scripts: `scripts/sessions_preflight/`.
+ 
+ ---
+@@ -25,7 +26,12 @@
+ | D6 | 2019 excluded from primary; may appear in the data-quality discussion | §3, §5.3 |
+ | D7 | MES removed; reasons documented | §3.1 |
+ | D8 | Ethan is checking library access to the two paywalled papers; nothing unverified is reproduced | `LITERATURE_SESSIONS.md` |
+-| D8 status | **Liu & Tse (2017) and Riedel & Wagner (2015): availability through Murray State UNKNOWN, pending Ethan's check.** Access is not assumed. Until checked, every detail beyond their abstracts remains marked *unverified*, and no test depends on one. | — |
++| D8 status (v4.2) | **Checked 2026-11-12 in the Murray State library catalogue (not signed in): both papers have records but NO full text through the library; Interlibrary Loan needs Ethan's sign-in. Neither has been reviewed.** Both remain marked *not reviewed* until full text is obtained and examined; no other paper is substituted; no test depends on either. | `SESSIONS_RESEARCH_AUDIT_v3.md` §3 |
++| **U7** (2026-11-12) | **V1 is descriptive only.** Its estimate and effect sizes are reported; its p-value and intervals are labelled descriptive and never establish significance; V1 cannot influence the official verdict. Reason: synthetic calibration scenario 2 (independent volatility clustering) rejected V1's true null in 19.4% of 20,000 repetitions at 1%. No substitute method. | §6.1, §7, §7.2 |
++| **U8** (2026-11-12) | **Holm keeps five slots; V1's slot holds the administrative placeholder 1.0**, which is not an observed V1 p-value. Intentionally conservative. T1, T2, P1, L1 unchanged. | §7, §7.1 |
++| **U9** (2026-11-12) | **v4.1's V1 pipeline check is removed.** V1 does not determine whether the pipeline continues; a non-positive V1 is a reported result. Every data-integrity and computation-failure halt is kept. | §7 |
++| **L4** (2026-11-12) | Volatility groups: minimum of **60 prior 20-session averages**, frozen; **session 81 (one-based) is the first eligible assignment**; sessions 1–80 unassigned. | §6.2 |
++| **P1** (2026-11-12) | P1's synthetic calibration limitation is disclosed prominently; P1 is **not** treated as established confirmatory evidence until independently reviewed; **no claim of a verified 1% family-wise error rate**. Frozen method unchanged. | §7.2 |
+ 
+ ## 1. Question
+ 
+@@ -282,12 +288,14 @@
+ 
+ | ID | Statistic | Units | Literature direction |
+ |---|---|---|---|
+-| **V1** | `L = ln(mean RTH²/6.5) − ln(mean ON²/16.5)`, V1 sub-sample | log ratio; reported also as the ratio e^L of per-hour variances | L > 0. **Calibration check.** |
++| **V1** | `L = ln(mean RTH²/6.5) − ln(mean ON²/16.5)`, V1 sub-sample | log ratio; reported also as the ratio e^L of per-hour variances | L > 0 (literature). **Descriptive only (U7, v4.2):** reported, never tested for significance, not a pipeline condition (U9). *v4.1 wording: "L > 0. Calibration check."* |
+ | **T1** | `Δα_lo = α̂_ON − α̂_RTH`: Hill tail index of −z, k = ⌊0.05·n⌋. `z_S(d) = r_S(d)/σ̂_S(d)`, σ̂² an EWMA (λ = 0.94) of the same series' own past squares through *d−1*; 20-session burn-in dropped. | tail-index units | Δα_lo < 0 (Riedel & Wagner) |
+ | **T2** | `Δα_hi`: same on +z | tail-index units | None; either sign |
+ | **P1** | `Δ_P = 100·(WPC_ON − VS_ON)`, specified exactly below (descriptive; D3-a) | percentage points | Δ_P > 0 |
+ | **L1** | `Δp = P(|ON| > |RTH| ∣ extreme day) − P(|ON| > |RTH| ∣ other day)`, extreme = top 5% of \|CC\|, re-ranked in each replicate | percentage points | Δp > 0 |
+ 
++**v4.2 note on the family.** The family keeps five Holm slots (§7). Four tests (T1, T2, P1, L1) are inferential; V1 occupies its slot only through the administrative placeholder 1.0 and is reported descriptively (U7, U8).
++
+ ### P1 in detail (answers D3)
+ 
+ **The statistic.** The weighted price contribution of the overnight period (Barclay & Warner 1993):
+@@ -404,6 +412,10 @@
+   - group: 1 (low) if T[d] ≤ c1[d]; 2 if c1[d] < T[d] ≤ c2[d]; 3 (high) if T[d] > c2[d];
+   - unassigned: the first 20 sessions (T undefined) and the next 60 (fewer than 60 earlier T values), i.e. the
+     first 80 analysis sessions of a period; reported as a count;
++  - **one-based numbering (L4, v4.2 clarification):** session *s* has T_s = mean RV_RTH of sessions *s−20 … s−1*,
++    defined for *s* ≥ 21, so *s − 21* averages precede it. The frozen minimum of **60 prior averages** is first met
++    at **session 81**, whose cut-offs use T_21 … T_80 (RV of sessions 1–79). Sessions 1–80 are unassigned. The
++    minimum of 60 is fixed and is not revisited after any real result is seen;
+   - **independence from outcomes:** session d's group depends only on RV_RTH of sessions strictly before d. It
+     never uses session d's ON, RTH or RV, nor any later session. *(The v4 synthetic build used full-sample
+     cut-offs, which let session d's own RTH variance enter other sessions' trailing means and so the cut-offs.
+@@ -452,15 +464,20 @@
+     t ≥ 20; z[0..19] are dropped. The initial value belongs to the **first scaled session** (t = 20). The other
+     possible reading, assigning it to t = 19 and applying the recursion once, would count r[19]² twice.
+ 
+-**Development family: V1, T1, T2, P1, L1.**
++**Development family: V1, T1, T2, P1, L1** (five Holm slots; V1 descriptive only, U7/U8).
+ - Null θ₀ = 0 for each.
+ - p-value, two-sided centered bootstrap: `p = (1 + #{b : |θ*_b − θ̂| ≥ |θ̂ − θ₀|}) / (B + 1)`.
+ - **Holm step-down, family-wise error 0.01, m = 5:**
++  - **(v4.2, U8)** V1's slot receives the fixed **administrative placeholder p = 1.0**. It is **not an observed V1
++    p-value**; the observed V1 p-value is never an input to the correction. V1 is therefore never rejected and
++    cannot loosen the other thresholds. T1, T2, P1 and L1 keep their existing definitions and face the same
++    thresholds as in v4.1 whenever V1 was not significant (0.002, 0.0025, 0.0033, 0.005 in step-down order).
++    Keeping five slots for four inferential tests is **intentionally conservative**;
+   - order p₍₁₎ ≤ … ≤ p₍₅₎;
+   - reject H₍ᵢ₎ for i = 1, 2, … while p₍ᵢ₎ ≤ 0.01/(5 − i + 1), and stop at the first failure;
+   - Holm-adjusted p: `p̃₍ᵢ₎ = max_{j ≤ i} min(1, (5 − j + 1)·p₍ⱼ₎)`, and H is rejected exactly when p̃ ≤ 0.01.
+   - Benjamini–Hochberg q-values are reported, labelled "information only".
+-- **Classification in development:**
++- **Classification in development** (T1, T2, P1, L1; V1 is always "descriptive only (decision U7)"):
+   - *established*: p̃ ≤ 0.01 and θ̂ in the literature direction (T2: either sign);
+   - *contradicted*: p̃ ≤ 0.01 with θ̂ opposite;
+   - *not established*: anything else.
+@@ -473,13 +490,20 @@
+ 
+ | Test | Reported in natural units |
+ |---|---|
+-| V1 | e^L, the per-hour variance ratio RTH : ON, plus both per-hour variances |
++| V1 | e^L, the per-hour variance ratio RTH : ON, plus both per-hour variances; its p-value and both intervals are reported labelled **descriptive only** with the U7 calibration note (v4.2) |
+ | T1, T2 | α̂_ON, α̂_RTH, Δα |
+ | P1 | WPC_ON, VS_ON and Δ_P in percentage points |
+ | L1 | P(|ON| > |RTH| ∣ extreme), P(… ∣ other), Δp in percentage points |
+ 
+-- **Pipeline check:** V1 not established in development → halt, and report a data or code fault.
+-- **Stability**, for each established claim:
++- ~~**Pipeline check:** V1 not established in development → halt, and report a data or code fault.~~
++  **Removed in v4.2 (U9).** V1 does not determine whether the pipeline continues; its estimate and sign are
++  reported whatever they are. Why v4.1 became incompatible: Appendix D, part 5. **The run still halts on every
++  data-integrity or computation failure:** protocol or data hash mismatch; failed bar-integrity gate;
++  development or holdout counts differing from the frozen 1,308/1,230 and 318/297; O2 membership differing from
++  the hashed CSV; any pre-registered minimum size not met; a non-finite bootstrap replicate or p-value; B too
++  small for Holm's first threshold; a forbidden quantity in the output; a second run of either stage; the
++  holdout stage before the development results are committed.
++- **Stability**, for each established claim (V1 is never established, so it is not assessed):
+   - re-estimate within R1 2020, R2 2021, R3 2022 and R4 2023-01-01 → 2025-06-30, each with its own
+     bootstrap;
+   - *stable* = same sign in at least 3 of 4 regimes, and no regime with a two-sided p < 0.05 in the opposite
+@@ -513,6 +537,9 @@
+     established in development; regime stability not assessable (tail sample below the pre-registered minimum);
+     no unexposed evaluation data**". The minimum is not lowered and the regimes are not redefined;
+   - otherwise → "**INCONCLUSIVE — not established in development**".
++  - **V1 (v4.2, U7):** always "**NOT A CONFIRMATORY CLAIM — descriptive estimate only (decision U7)**", whatever its
++    estimate. The verdict function does not read V1's classification or stability.
++  - **Calibration disclosures (v4.2, §7.2)** are printed with the verdict. They change no label.
+ - The words SUPPORTED and REJECTED are reserved for a future, separately pre-registered evaluation on
+   genuinely new data (O3), and are not used in this phase.
+ - **Prohibited uses of O2 (binding):**
+@@ -542,11 +569,24 @@
+ | WPC identity | `w_d·ON_d/CC_d = (|CC_d|/Σ|CC|)·ON_d/CC_d = sign(CC_d)·ON_d/Σ|CC|`. Identical, and defined at CC_d = 0. |
+ | L1 | Extreme set = the ⌈0.05n⌉ largest \|CC\|; ties are broken by earlier date (deterministic). Both proportions use disjoint sets. Δp ∈ [−100, 100] percentage points. |
+ | Centered p | Standard bootstrap test of θ = θ₀ using the distribution of θ* − θ̂ as the null distribution. The +1 terms prevent p = 0. |
+-| Holm | Formula above is the standard step-down; the adjusted form is monotone. Verified by hand on the example p = (0.001, 0.004, 0.02, 0.3, 0.5): thresholds 0.002, 0.0025 → rejects H₍₁₎ only; p̃ = (0.005, 0.016, 0.06, 0.6, 0.6). This example becomes a unit test. |
++| Holm | Formula above is the standard step-down; the adjusted form is monotone. Verified by hand on the example p = (0.001, 0.004, 0.02, 0.3, 0.5): thresholds 0.002, 0.0025 → rejects H₍₁₎ only; p̃ = (0.005, 0.016, 0.06, 0.6, 0.6). This example becomes a unit test. **v4.2 (U8):** V1's slot holds the placeholder 1.0; a property test confirms that no observed V1 value changes the four other adjusted p-values or decisions. |
+ | Intervals | Percentile intervals from the same 10,000 replicates; the 99.8% level equals 0.01/5 per side-pair. |
+ | Directions | V1 > 0; T1 < 0; T2 none; P1 > 0 (Barclay & Hendershott context, descriptive); L1 > 0. Tests are two-sided; direction enters only the classification. |
+ | Holdout rules | Under O1 the holdout produces no verdict. O2 rules are in §8 and are secondary-only. |
+ 
++### 7.2 Calibration disclosures (binding; v4.2)
++
++Synthetic Monte Carlo calibration (n = 1,230, mean block 20, 20,000 repetitions per scenario; artifacts
++`SESSIONS_CALIBRATION.json` and `SESSIONS_CALIBRATION_P1_B9999.json`, both preserved) found:
++
++| Test | Finding | Consequence (no method changed) |
++|---|---|---|
++| V1 | 19.4% false positives at 1% and 80.1% coverage of the 99% interval when ON and RTH volatility cluster independently (scenario 2); 1.3–1.6% otherwise | Descriptive only (U7) |
++| **P1** | **1.33% (iid) and 1.50% (common volatility) false positives at nominal 1%; 0.33–0.34% at 0.2%; 99% intervals cover 98.3–98.6%. With 9,999 instead of 999 resamples the rates are unchanged (1.34%, 1.50%) and coverage rises only 0.2 points, so the excess belongs to the method at this sample size, not to the resample count.** | P1 is reported with this limitation beside every P1 result. **A development "established" label for P1 is not established confirmatory evidence until P1's statistical validity has been independently reviewed.** |
++| T1, T2 | About 0.3% at nominal 1% (conservative) | Lower power; disclosed |
++| L1 | 0.80–1.09% at nominal 1% | Consistent with nominal |
++| Family | Holm controls the family-wise rate only for valid p-values | **No claim is made that the four-test family has a verified 1% family-wise error rate while P1 remains miscalibrated.** |
++
+ ## 8. Holdout (D2, D2-a)
+ 
+ Inventory, method and dates: `HOLDOUT_EXPOSURE_INVENTORY.md`. Mutually exclusive overlap breakdown:
+@@ -641,7 +681,7 @@
+ | S6 | Tue–Fri non-long sessions only, for T1, P1 and L1 |
+ | ~~S7~~ | **WITHDRAWN (decision U4, 2026-11-12).** GARCH(1,1)-t scaling would need a likelihood optimiser outside the project's dependencies; no new dependency or optimiser is introduced. The five primary tests are unchanged. The runner records S7 as "WITHDRAWN; not computed". |
+ | S8 | Hill k of 2.5% and 10% |
+-| S9 | Block lengths 10 and 40 sessions (holdout: 2 and 8 weeks) |
++| S9 | Block lengths 10 and 40 sessions (holdout: 2 and 8 weeks); V1's p-values here are descriptive only (v4.2) |
+ | S-z | O2 only: EWMA scaling updated on O2 sessions alone (§8) |
+ | P1 thresholds | §6.4 |
+ | H-A, H-P, H-ALL, H-E6 | §8 |
+@@ -682,7 +722,9 @@
+ | D2-a | O1 official (INCONCLUSIVE); O2 secondary, restricted and labelled; O3 documented | **Decided**, implemented in §7–8 |
+ | D3-a | Volume-share comparison, descriptive; specification and limitations | **Decided conditionally**, specified in §6.1. Ethan to confirm the specification is complete. |
+ | D4 | §7 procedures | **Conditional**: §7.1 verification done analytically. The numerical re-verification happens in the synthetic tests (§9), which Ethan reviews before the freeze takes effect. |
+-| D8 | Library availability of Liu & Tse and Riedel & Wagner | **Pending Ethan.** Recorded as UNKNOWN. |
++| D8 | Library availability of Liu & Tse and Riedel & Wagner | **Checked (v4.2): no full text through the library; both not reviewed.** Interlibrary Loan needs Ethan's sign-in. |
++| P1 | Independent review of P1's statistical validity (§7.2) | **Open.** Until done, P1 provides no established confirmatory evidence. |
++| v4.2 | Sign-off of v4.2 | **Open.** v4.1 stays preserved; only the signed version is hashed into `PREREG_HASH.txt`. |
+ | — | Overlap breakdown (Appendix E) and count history (§5.2a) | Done. Ethan to review. |
+ | — | O2 prohibitions (§7) | Added per Ethan 23:39 |
+ | — | **Freeze** | When Ethan signs below. Synthetic-data code work starts after that; real-data runs only after code review and hashing. |
+@@ -762,6 +804,32 @@
+ 
+ ## Appendix D: change log
+ 
++### Part 5: v4.1 → v4.2 (2026-11-12 ~22:00 CT, decisions U7, U8, U9, L4, P1, D8 status)
++
++v4.1 is preserved unchanged (`DRAFT_PREREG_SESSIONS_awaiting_signoff.md`, SHA-256 `716e00037ab4d7e20b9f9a44a0af6a146e646f1f631101470a2c8ceb37506021`).
++
++**Why the v4.1 wording became incompatible with U7.** v4.1 §7 said: "Pipeline check: V1 not established in
++development → halt, and report a data or code fault", and §6.1 called V1 a "Calibration check". "Established"
++requires a Holm-adjusted p ≤ 0.01. U7 made V1 descriptive only: its p-value may never establish significance,
++so V1 can never be "established". Read literally, v4.1 §7 would therefore halt **every** development run and
++suppress every other result, and any repair that kept a V1-based halt would let V1's outcome decide what is
++reported, which U7 and U9 forbid.
++
++Changes (no sample count, exclusion, threshold, minimum size, B, seed, block length, or definition of T1, T2, P1 or L1 changed):
++
++1. **Header and §0:** version, supersession record with v4.1's hash; decision rows U7, U8, U9, L4, P1; D8 status updated from UNKNOWN to checked / not reviewed.
++2. **§6.1:** V1 row direction cell: "Calibration check" replaced by "Descriptive only (U7) … not a pipeline condition (U9)" (v4.1 text quoted in the cell); a note that the family keeps five Holm slots with four inferential tests.
++3. **§6.2 (L4):** one-based statement of the warm-up: 60 prior averages, session 81 first eligible, sessions 1–80 unassigned; the minimum is fixed. The formula is unchanged.
++4. **§7 Holm (U8):** V1's slot holds the administrative placeholder 1.0; not an observed p-value; intentionally conservative; thresholds for the other four unchanged.
++5. **§7 classification, effect sizes, stability:** V1 is always "descriptive only"; its p-value and intervals are labelled descriptive; stability is not assessed for V1.
++6. **§7 pipeline check (U9):** removed; the list of retained integrity and computation-failure halts is written out.
++7. **§7 verdict:** fixed V1 label; calibration disclosures printed with the verdict (no label changed).
++8. **New §7.2:** binding calibration disclosures, including P1's limitation, the bar on treating P1 as established confirmatory evidence before independent review, and the bar on claiming a verified 1% family-wise error rate.
++9. **§7.1** Holm row and **§11** S9 row: one-line notes on the placeholder and on V1's descriptive p-values.
++10. **§14:** D8, P1-review and v4.2 sign-off rows.
++
++Companion: `SESSIONS_ADDENDUM_U7_L4.md` (implementation notes) and `SESSIONS_FINAL_AUDIT_v5.md` (verification of every amendment against v4.1).
++
+ ### Part 4: v4 → v4.1 (2026-11-12 ~13:00 CT, decisions U1–U6)
+ 
+ 1. **U1:** §4.7 now says d⁻ is the previous session **with RTH**. This matches how every frozen count was

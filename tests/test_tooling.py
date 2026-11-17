@@ -56,7 +56,7 @@ def test_validation_warns_on_off_tick_prices_and_big_moves():
 
 # Research code must never be able to reach a broker. Enforced by reading the imports, not by convention.
 RESEARCH = ["backtest", "features", "metrics", "regime", "strategy", "momentum", "family2", "family3", "family4",
-            "risk", "engine", "events", "contracts", "config", "report", "broker/sim", "broker/base"]
+            "risk", "engine", "events", "contracts", "config", "report", "broker/sim", "broker/base", "sessions"]
 EXECUTION = {"ibkr", "live", "drill", "fomc_paper", "ib_async"}
 
 

@@ -1,0 +1,250 @@
+{
+  "diagnostic_only": true,
+  "synthetic_only": true,
+  "approved": "Ethan, 2026-11-12",
+  "n_sessions": 1230,
+  "mean_block": 20,
+  "B_compared": [
+    999,
+    9999
+  ],
+  "seed_rule": "data rng = default_rng([scenario_id, rep, 1]); bootstrap rng = default_rng([scenario_id, rep, 2]), a fresh generator for each B",
+  "python": "3.13.18",
+  "numpy": "2.5.4",
+  "scenarios": {
+    "P1_scenario_4": {
+      "id": 4,
+      "description": "iid Gaussian, equal per-hour variance; volume share set to the population WPC 16.5/23",
+      "reps": 20000,
+      "chunks": [
+        "s4_00000_02500.npy",
+        "s4_02500_05000.npy",
+        "s4_05000_07500.npy",
+        "s4_07500_10000.npy",
+        "s4_10000_12500.npy",
+        "s4_12500_15000.npy",
+        "s4_15000_17500.npy",
+        "s4_17500_20000.npy"
+      ],
+      "B_999": {
+        "alpha_0.05": {
+          "rejections": 1181,
+          "expected": 1000.0,
+          "rate": 0.05905,
+          "wilson95": [
+            0.055867066222366826,
+            0.06240229037818305
+          ]
+        },
+        "alpha_0.01": {
+          "rejections": 266,
+          "expected": 200.0,
+          "rate": 0.0133,
+          "wilson95": [
+            0.011803229427049146,
+            0.014983698472911455
+          ]
+        },
+        "alpha_0.002": {
+          "rejections": 65,
+          "expected": 40.0,
+          "rate": 0.00325,
+          "wilson95": [
+            0.002550919992206292,
+            0.004139867832542896
+          ]
+        },
+        "ci99_coverage": {
+          "covered": 19675,
+          "expected": 19800.0,
+          "rate": 0.98375,
+          "wilson95": [
+            0.9819025352666946,
+            0.9854116698460937
+          ]
+        }
+      },
+      "B_9999": {
+        "alpha_0.05": {
+          "rejections": 1194,
+          "expected": 1000.0,
+          "rate": 0.0597,
+          "wilson95": [
+            0.056500155781258055,
+            0.06306895117241497
+          ]
+        },
+        "alpha_0.01": {
+          "rejections": 267,
+          "expected": 200.0,
+          "rate": 0.01335,
+          "wilson95": [
+            0.011850284564984956,
+            0.015036624131369738
+          ]
+        },
+        "alpha_0.002": {
+          "rejections": 68,
+          "expected": 40.0,
+          "rate": 0.0034,
+          "wilson95": [
+            0.0026830861106614434,
+            0.004307644103270005
+          ]
+        },
+        "ci99_coverage": {
+          "covered": 19717,
+          "expected": 19800.0,
+          "rate": 0.98585,
+          "wilson95": [
+            0.9841173197269615,
+            0.9873960788343785
+          ]
+        }
+      },
+      "paired_comparison": {
+        "alpha_0.05": {
+          "reject_999_only": 54,
+          "reject_9999_only": 67,
+          "both": 1127,
+          "mcnemar_z": 1.1818181818181819
+        },
+        "alpha_0.01": {
+          "reject_999_only": 22,
+          "reject_9999_only": 23,
+          "both": 244,
+          "mcnemar_z": 0.14907119849998599
+        },
+        "alpha_0.002": {
+          "reject_999_only": 11,
+          "reject_9999_only": 14,
+          "both": 54,
+          "mcnemar_z": 0.6
+        },
+        "ci99_coverage": {
+          "covered_999_only": 24,
+          "covered_9999_only": 66,
+          "mcnemar_z": 4.427188724235731
+        },
+        "corr_p999_p9999": 0.9989309675708686
+      }
+    },
+    "P1_scenario_8": {
+      "id": 8,
+      "description": "common GARCH volatility, Gaussian innovations, equal per-hour variance; volume share 16.5/23",
+      "reps": 20000,
+      "chunks": [
+        "s8_00000_02500.npy",
+        "s8_02500_05000.npy",
+        "s8_05000_07500.npy",
+        "s8_07500_10000.npy",
+        "s8_10000_12500.npy",
+        "s8_12500_15000.npy",
+        "s8_15000_17500.npy",
+        "s8_17500_20000.npy"
+      ],
+      "B_999": {
+        "alpha_0.05": {
+          "rejections": 1200,
+          "expected": 1000.0,
+          "rate": 0.06,
+          "wilson95": [
+            0.056792388138968086,
+            0.06337660359306944
+          ]
+        },
+        "alpha_0.01": {
+          "rejections": 300,
+          "expected": 200.0,
+          "rate": 0.015,
+          "wilson95": [
+            0.013406126117794605,
+            0.016780148859564945
+          ]
+        },
+        "alpha_0.002": {
+          "rejections": 66,
+          "expected": 40.0,
+          "rate": 0.0033,
+          "wilson95": [
+            0.002594930758415114,
+            0.004195837862728161
+          ]
+        },
+        "ci99_coverage": {
+          "covered": 19661,
+          "expected": 19800.0,
+          "rate": 0.98305,
+          "wilson95": [
+            0.9811660240573826,
+            0.9847484499058884
+          ]
+        }
+      },
+      "B_9999": {
+        "alpha_0.05": {
+          "rejections": 1199,
+          "expected": 1000.0,
+          "rate": 0.05995,
+          "wilson95": [
+            0.05674368112694112,
+            0.06332532980870234
+          ]
+        },
+        "alpha_0.01": {
+          "rejections": 300,
+          "expected": 200.0,
+          "rate": 0.015,
+          "wilson95": [
+            0.013406126117794605,
+            0.016780148859564945
+          ]
+        },
+        "alpha_0.002": {
+          "rejections": 66,
+          "expected": 40.0,
+          "rate": 0.0033,
+          "wilson95": [
+            0.002594930758415114,
+            0.004195837862728161
+          ]
+        },
+        "ci99_coverage": {
+          "covered": 19695,
+          "expected": 19800.0,
+          "rate": 0.98475,
+          "wilson95": [
+            0.9829561591666655,
+            0.9863576618740045
+          ]
+        }
+      },
+      "paired_comparison": {
+        "alpha_0.05": {
+          "reject_999_only": 57,
+          "reject_9999_only": 56,
+          "both": 1143,
+          "mcnemar_z": -0.09407208683835973
+        },
+        "alpha_0.01": {
+          "reject_999_only": 32,
+          "reject_9999_only": 32,
+          "both": 268,
+          "mcnemar_z": 0.0
+        },
+        "alpha_0.002": {
+          "reject_999_only": 19,
+          "reject_9999_only": 19,
+          "both": 47,
+          "mcnemar_z": 0.0
+        },
+        "ci99_coverage": {
+          "covered_999_only": 30,
+          "covered_9999_only": 64,
+          "mcnemar_z": 3.5068322372798972
+        },
+        "corr_p999_p9999": 0.9989163921972343
+      }
+    }
+  }
+}

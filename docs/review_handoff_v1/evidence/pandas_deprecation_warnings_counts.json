@@ -1,0 +1,75 @@
+{
+ "total": 13745,
+ "rows": [
+  {
+   "file": "nq_bot/sessions.py",
+   "line": 266,
+   "category": "Pandas4Warning",
+   "message": "Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.d",
+   "count": 10829
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 568,
+   "category": "Pandas4Warning",
+   "message": "Timestamp.dayofweek is deprecated and will be removed in a future version. Use Timestamp.d",
+   "count": 2900
+  },
+  {
+   "file": "nq_bot/sessions.py",
+   "line": 748,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 9
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 83,
+   "category": "Pandas4Warning",
+   "message": "The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed ",
+   "count": 1
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 345,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 515,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 519,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 520,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  },
+  {
+   "file": "tests/test_sessions.py",
+   "line": 612,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  },
+  {
+   "file": "scripts/sessions_calibration.py",
+   "line": 37,
+   "category": "Pandas4Warning",
+   "message": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use Datetim",
+   "count": 1
+  }
+ ]
+}

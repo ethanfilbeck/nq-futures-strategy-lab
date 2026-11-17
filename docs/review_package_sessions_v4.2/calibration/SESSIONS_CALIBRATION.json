@@ -1,0 +1,630 @@
+{
+  "synthetic_only": true,
+  "n_sessions": 1230,
+  "B": 999,
+  "mean_block": 20,
+  "seed_rule": "data rng = default_rng([scenario_id, rep, 1]); bootstrap rng = default_rng([scenario_id, rep, 2])",
+  "elapsed_seconds": 7290,
+  "scenarios": {
+    "V1_null_iid": {
+      "id": 1,
+      "description": "iid Gaussian, equal per-hour variance",
+      "reps": 20000,
+      "tests": {
+        "V1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1153,
+            "expected": 1000.0,
+            "rate": 0.05765,
+            "wilson95": [
+              0.054503870137727915,
+              0.06096602416378754
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 266,
+            "expected": 200.0,
+            "rate": 0.0133,
+            "wilson95": [
+              0.011803229427049146,
+              0.014983698472911455
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 57,
+            "expected": 40.0,
+            "rate": 0.00285,
+            "wilson95": [
+              0.002200583073983605,
+              0.0036903583796128897
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19691,
+            "expected": 19800.0,
+            "rate": 0.98455,
+            "wilson95": [
+              0.9827452900455576,
+              0.9861686078095362
+            ]
+          }
+        }
+      }
+    },
+    "V1_null_garch": {
+      "id": 2,
+      "description": "GARCH(1,1) clustering (a=0.08, b=0.90), equal per-hour unconditional variance",
+      "reps": 20000,
+      "tests": {
+        "V1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 6409,
+            "expected": 1000.0,
+            "rate": 0.32045,
+            "wilson95": [
+              0.3140176952243338,
+              0.32695126492450105
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 3884,
+            "expected": 200.0,
+            "rate": 0.1942,
+            "wilson95": [
+              0.18877652867413225,
+              0.19974092057963388
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 2304,
+            "expected": 40.0,
+            "rate": 0.1152,
+            "wilson95": [
+              0.11084902301058011,
+              0.11969876794052905
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 16020,
+            "expected": 19800.0,
+            "rate": 0.801,
+            "wilson95": [
+              0.7954092325737734,
+              0.8064751617186283
+            ]
+          }
+        }
+      }
+    },
+    "T_null_t4": {
+      "id": 3,
+      "description": "iid Student-t(4) in both series, different scales (same tail shape)",
+      "reps": 20000,
+      "tests": {
+        "T1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 641,
+            "expected": 1000.0,
+            "rate": 0.03205,
+            "wilson95": [
+              0.0296974113944706,
+              0.0345823151532725
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 67,
+            "expected": 200.0,
+            "rate": 0.00335,
+            "wilson95": [
+              0.0026389864595385126,
+              0.004251762957998849
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 5,
+            "expected": 40.0,
+            "rate": 0.00025,
+            "wilson95": [
+              0.0001067896338677111,
+              0.0005851504072362778
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19822,
+            "expected": 19800.0,
+            "rate": 0.9911,
+            "wilson95": [
+              0.989700775798977,
+              0.992310606383742
+            ]
+          }
+        },
+        "T2": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 609,
+            "expected": 1000.0,
+            "rate": 0.03045,
+            "wilson95": [
+              0.028157404825236456,
+              0.03292293623789587
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 55,
+            "expected": 200.0,
+            "rate": 0.00275,
+            "wilson95": [
+              0.0021135300840132046,
+              0.0035774497767951164
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 4,
+            "expected": 40.0,
+            "rate": 0.0002,
+            "wilson95": [
+              7.777875551032829e-05,
+              0.0005141804891995739
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19857,
+            "expected": 19800.0,
+            "rate": 0.99285,
+            "wilson95": [
+              0.9915839464189108,
+              0.9939267636376014
+            ]
+          }
+        }
+      }
+    },
+    "P1_null": {
+      "id": 4,
+      "description": "iid Gaussian, equal per-hour variance; volume share set to the population WPC 16.5/23",
+      "reps": 20000,
+      "tests": {
+        "P1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1181,
+            "expected": 1000.0,
+            "rate": 0.05905,
+            "wilson95": [
+              0.055867066222366826,
+              0.06240229037818305
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 266,
+            "expected": 200.0,
+            "rate": 0.0133,
+            "wilson95": [
+              0.011803229427049146,
+              0.014983698472911455
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 65,
+            "expected": 40.0,
+            "rate": 0.00325,
+            "wilson95": [
+              0.002550919992206292,
+              0.004139867832542896
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19675,
+            "expected": 19800.0,
+            "rate": 0.98375,
+            "wilson95": [
+              0.9819025352666946,
+              0.9854116698460937
+            ]
+          }
+        }
+      }
+    },
+    "L1_null": {
+      "id": 5,
+      "description": "iid Gaussian, equal per-session variance (delta-p = 0 by symmetry)",
+      "reps": 20000,
+      "tests": {
+        "L1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 969,
+            "expected": 1000.0,
+            "rate": 0.04845,
+            "wilson95": [
+              0.04555999077862746,
+              0.05151343698637606
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 218,
+            "expected": 200.0,
+            "rate": 0.0109,
+            "wilson95": [
+              0.009551982009886635,
+              0.012435867663157808
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 31,
+            "expected": 40.0,
+            "rate": 0.00155,
+            "wilson95": [
+              0.001092225193062455,
+              0.0021992155542877867
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19798,
+            "expected": 19800.0,
+            "rate": 0.9899,
+            "wilson95": [
+              0.9884170999634764,
+              0.9911947431057847
+            ]
+          }
+        }
+      }
+    },
+    "V1_coverage_ratio3": {
+      "id": 6,
+      "description": "iid Gaussian, per-hour variance ratio 3 (coverage only)",
+      "reps": 20000,
+      "tests": {
+        "V1": {
+          "true_theta": 1.0986122886681098,
+          "ci99_coverage": {
+            "covered": 19691,
+            "expected": 19800.0,
+            "rate": 0.98455,
+            "wilson95": [
+              0.9827452900455576,
+              0.9861686078095362
+            ]
+          }
+        }
+      }
+    },
+    "T_null_common_garch": {
+      "id": 7,
+      "description": "common GARCH volatility, t(4) innovations in both series",
+      "reps": 20000,
+      "mean_block": 20,
+      "diagnostic_only": false,
+      "tests": {
+        "T1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 589,
+            "expected": 1000.0,
+            "rate": 0.02945,
+            "wilson95": [
+              0.02719577860006637,
+              0.03188494653518423
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 64,
+            "expected": 200.0,
+            "rate": 0.0032,
+            "wilson95": [
+              0.002506955183277373,
+              0.004083851845077729
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 5,
+            "expected": 40.0,
+            "rate": 0.00025,
+            "wilson95": [
+              0.0001067896338677111,
+              0.0005851504072362778
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19834,
+            "expected": 19800.0,
+            "rate": 0.9917,
+            "wilson95": [
+              0.9903447880830315,
+              0.9928663636564167
+            ]
+          }
+        },
+        "T2": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 584,
+            "expected": 1000.0,
+            "rate": 0.0292,
+            "wilson95": [
+              0.02695548244635243,
+              0.03162533870692773
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 60,
+            "expected": 200.0,
+            "rate": 0.003,
+            "wilson95": [
+              0.0023315773959485366,
+              0.0038593064468302185
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 6,
+            "expected": 40.0,
+            "rate": 0.0003,
+            "wilson95": [
+              0.00013749971291305316,
+              0.0006544211245850223
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19855,
+            "expected": 19800.0,
+            "rate": 0.99275,
+            "wilson95": [
+              0.9914759160641613,
+              0.9938348323995627
+            ]
+          }
+        }
+      }
+    },
+    "P1_null_common_garch": {
+      "id": 8,
+      "description": "common GARCH volatility, Gaussian innovations, equal per-hour variance; volume share 16.5/23",
+      "reps": 20000,
+      "mean_block": 20,
+      "diagnostic_only": false,
+      "tests": {
+        "P1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1200,
+            "expected": 1000.0,
+            "rate": 0.06,
+            "wilson95": [
+              0.056792388138968086,
+              0.06337660359306944
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 300,
+            "expected": 200.0,
+            "rate": 0.015,
+            "wilson95": [
+              0.013406126117794605,
+              0.016780148859564945
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 66,
+            "expected": 40.0,
+            "rate": 0.0033,
+            "wilson95": [
+              0.002594930758415114,
+              0.004195837862728161
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19661,
+            "expected": 19800.0,
+            "rate": 0.98305,
+            "wilson95": [
+              0.9811660240573826,
+              0.9847484499058884
+            ]
+          }
+        }
+      }
+    },
+    "L1_null_common_garch": {
+      "id": 9,
+      "description": "common GARCH volatility, Gaussian innovations, equal per-session variance",
+      "reps": 20000,
+      "mean_block": 20,
+      "diagnostic_only": false,
+      "tests": {
+        "L1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 904,
+            "expected": 1000.0,
+            "rate": 0.0452,
+            "wilson95": [
+              0.04240717820399249,
+              0.04816749779539539
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 159,
+            "expected": 200.0,
+            "rate": 0.00795,
+            "wilson95": [
+              0.006810198782371896,
+              0.009278783903421437
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 31,
+            "expected": 40.0,
+            "rate": 0.00155,
+            "wilson95": [
+              0.001092225193062455,
+              0.0021992155542877867
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19857,
+            "expected": 19800.0,
+            "rate": 0.99285,
+            "wilson95": [
+              0.9915839464189108,
+              0.9939267636376014
+            ]
+          }
+        }
+      }
+    },
+    "V1_null_common_garch": {
+      "id": 10,
+      "description": "common GARCH volatility, Gaussian innovations, equal per-hour variance",
+      "reps": 20000,
+      "mean_block": 20,
+      "diagnostic_only": false,
+      "tests": {
+        "V1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1231,
+            "expected": 1000.0,
+            "rate": 0.06155,
+            "wilson95": [
+              0.0583026221729118,
+              0.06496577424734241
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 328,
+            "expected": 200.0,
+            "rate": 0.0164,
+            "wilson95": [
+              0.014730380075032305,
+              0.018255357201361674
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 72,
+            "expected": 40.0,
+            "rate": 0.0036,
+            "wilson95": [
+              0.002859905724891284,
+              0.00453074767461651
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 19645,
+            "expected": 19800.0,
+            "rate": 0.98225,
+            "wilson95": [
+              0.9803252571034025,
+              0.9839895241175631
+            ]
+          }
+        }
+      }
+    },
+    "DIAG_V1_garch_block40": {
+      "id": 11,
+      "description": "scenario 2 data, mean block 40 (= sensitivity S9's long block)",
+      "reps": 5000,
+      "mean_block": 40,
+      "diagnostic_only": true,
+      "tests": {
+        "V1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1246,
+            "expected": 250.0,
+            "rate": 0.2492,
+            "wilson95": [
+              0.23740614668331395,
+              0.26137893261839695
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 682,
+            "expected": 50.0,
+            "rate": 0.1364,
+            "wilson95": [
+              0.12716549360150423,
+              0.1461927792617417
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 346,
+            "expected": 10.0,
+            "rate": 0.0692,
+            "wilson95": [
+              0.062490974102372115,
+              0.07657047790391597
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 4294,
+            "expected": 4950.0,
+            "rate": 0.8588,
+            "wilson95": [
+              0.8488721199236794,
+              0.8681769771518634
+            ]
+          }
+        }
+      }
+    },
+    "DIAG_V1_garch_block100": {
+      "id": 12,
+      "description": "scenario 2 data, mean block 100 (diagnostic only)",
+      "reps": 5000,
+      "mean_block": 100,
+      "diagnostic_only": true,
+      "tests": {
+        "V1": {
+          "true_theta": 0.0,
+          "alpha_0.05": {
+            "rejections": 1088,
+            "expected": 250.0,
+            "rate": 0.2176,
+            "wilson95": [
+              0.20638227043396387,
+              0.22925132763143943
+            ]
+          },
+          "alpha_0.01": {
+            "rejections": 531,
+            "expected": 50.0,
+            "rate": 0.1062,
+            "wilson95": [
+              0.0979604907002791,
+              0.11504415136117924
+            ]
+          },
+          "alpha_0.002": {
+            "rejections": 269,
+            "expected": 10.0,
+            "rate": 0.0538,
+            "wilson95": [
+              0.047881746939797694,
+              0.0604033502867709
+            ]
+          },
+          "ci99_coverage": {
+            "covered": 4457,
+            "expected": 4950.0,
+            "rate": 0.8914,
+            "wilson95": [
+              0.8824734868070733,
+              0.8997255561008627
+            ]
+          }
+        }
+      }
+    }
+  },
+  "batches": [
+    "scenarios 1-6: 20,000 reps each (run 1)",
+    "scenarios 7-10: 20,000 reps each; 11-12: 5,000 reps each, diagnostic only (run 2)"
+  ],
+  "total_reps": 210000
+}

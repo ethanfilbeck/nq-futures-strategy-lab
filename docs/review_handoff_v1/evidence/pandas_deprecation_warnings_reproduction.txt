@@ -1,0 +1,40 @@
+# The 13,745 warnings in the Windows run: reproduction and source analysis (Claude, 2026-11-13 ~05:40 UTC)
+# Nothing was suppressed and no code was changed.
+
+Reproduction: the reconstructed handoff snapshot (bundle a48eaac + overlay, 55/55 matching the inventory) was run
+in a cloud virtual environment with Python 3.13.18, pandas 3.1.1, numpy 2.5.4, pytest 9.2.0:
+  python -m pytest tests/test_sessions.py -q -p no:cacheprovider
+  -> 136 passed, 13745 warnings in 155.11 s (second run with a counting plugin: 13,745 again, 149.96 s)
+The count equals the Windows count exactly. That suggests, but does not prove, that the Windows environment has
+pandas 3.1.x. The Windows numpy/pandas versions were not reported.
+
+Same tests, other pandas versions: pandas 2.3.3 (Linux shell on Ethan's PC) and pandas 3.0.5 (cloud default
+environment) -> 0 warnings.
+
+All 13,745 are pandas "Pandas4Warning" deprecations (features scheduled for removal in a future pandas major
+version). Counts by source line (per-test totals, from pytest's warning hook):
+  count  file:line                          deprecated feature                      replacement named by pandas
+  10829  nq_bot/sessions.py:266             Timestamp.dayofweek                     Timestamp.day_of_week
+   2900  tests/test_sessions.py:568         Timestamp.dayofweek                     Timestamp.day_of_week
+      9  nq_bot/sessions.py:748             DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  tests/test_sessions.py:83          DataFrame.join(lsuffix/rsuffix)          suffixes=
+      1  tests/test_sessions.py:345         DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  tests/test_sessions.py:515         DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  tests/test_sessions.py:519         DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  tests/test_sessions.py:520         DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  tests/test_sessions.py:612         DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+      1  scripts/sessions_calibration.py:37 DatetimeIndex.dayofweek                 DatetimeIndex.day_of_week
+  -----
+  13745 total (machine-readable: pandas_deprecation_warnings_counts.json)
+
+Meaning:
+- Today: no effect on any result. `dayofweek` and `day_of_week` return the same values; the warnings are emitted on
+  each call, and nq_bot/sessions.py:266 (the weekday column built per session in build_sample) is called once per
+  session in every synthetic run, hence the large count.
+- Future risk: when pandas removes these names, nq_bot/sessions.py:266 and :748 (study code, including the real-data
+  path) and scripts/sessions_calibration.py:37 would raise AttributeError, and the listed test lines would fail.
+  The frozen code therefore depends on a pandas version that still provides `dayofweek`.
+- Not fixed: changing sessions.py would alter the tested, hash-recorded snapshot. The rename is mechanical and does
+  not change methodology, but it needs Ethan's decision. Pinning pandas < 4 for any future real-data run is the
+  alternative.
+- Not suppressed: no warning filter was added.

@@ -1,0 +1,23 @@
+diff --git a/pytest.ini b/pytest.ini
+index 0e02926..59661f5 100644
+--- a/pytest.ini
++++ b/pytest.ini
+@@ -1,3 +1,5 @@
+ [pytest]
+ testpaths = tests
+ addopts = -p no:cacheprovider
++markers =
++    slow: Monte Carlo size/coverage checks (synthetic data)
+diff --git a/tests/test_tooling.py b/tests/test_tooling.py
+index a5d5bd2..95dc09c 100644
+--- a/tests/test_tooling.py
++++ b/tests/test_tooling.py
+@@ -56,7 +56,7 @@ def test_validation_warns_on_off_tick_prices_and_big_moves():
+ 
+ # Research code must never be able to reach a broker. Enforced by reading the imports, not by convention.
+ RESEARCH = ["backtest", "features", "metrics", "regime", "strategy", "momentum", "family2", "family3", "family4",
+-            "risk", "engine", "events", "contracts", "config", "report", "broker/sim", "broker/base"]
++            "risk", "engine", "events", "contracts", "config", "report", "broker/sim", "broker/base", "sessions"]
+ EXECUTION = {"ibkr", "live", "drill", "fomc_paper", "ib_async"}
+ 
+ 

@@ -1,0 +1,4 @@
+random p-vectors: 200,000; seed 1
+V1 not rejected under v4.1: 188,433
+  ...with any rejection-decision difference for T1/T2/P1/L1: 0
+  ...with any adjusted-p difference for T1/T2/P1/L1: 69,935 (37.1%)

@@ -1,0 +1,144 @@
+<string>:20: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+<string>:21: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+
+== DEV: sessions with >=1 RTH bar = 1417; full 390-bar = 1367; non-early sessions with <390 bars = 4 ['2020-03-09', '2020-03-12', '2020-03-16', '2020-03-18']
+standalone hits per rule: {'E1': 46, 'E2': 46, 'E3': 85, 'E4': 22, 'E5': 3, 'E6': 86}
+  sequential E1: -  46 -> 1371
+  sequential E2: -  39 -> 1332
+  sequential E3: -   0 -> 1332
+  sequential E4: -  21 -> 1311
+  sequential E5: -   3 -> 1308
+  sequential E6: -  78 -> 1230
+  E4 sessions also hit by another rule: {'2020-09-16': ['E6'], '2021-03-17': ['E6'], '2022-03-16': ['E6'], '2022-06-15': ['E6'], '2022-12-14': ['E6'], '2023-06-14': ['E6'], '2024-06-19': ['E1', 'E3'], '2024-09-18': ['E6'], '2025-06-18': ['E6']}
+  E5 sessions also hit by another rule: {}
+  E6 sessions also hit by another rule: {'2020-09-16': ['E4'], '2021-03-17': ['E4'], '2022-03-16': ['E4'], '2022-06-15': ['E4'], '2022-12-14': ['E4'], '2023-06-14': ['E4'], '2024-09-18': ['E4'], '2025-06-18': ['E4']}
+  E6 sessions in window: 86
+
+== HOLDOUT: sessions with >=1 RTH bar = 346; full 390-bar = 334; non-early sessions with <390 bars = 0 []
+standalone hits per rule: {'E1': 12, 'E2': 12, 'E3': 22, 'E4': 5, 'E5': 1, 'E6': 22}
+  sequential E1: -  12 -> 334
+  sequential E2: -  10 -> 324
+  sequential E3: -   0 -> 324
+  sequential E4: -   5 -> 319
+  sequential E5: -   1 -> 318
+  sequential E6: -  21 -> 297
+  E4 sessions also hit by another rule: {'2026-06-17': ['E6']}
+  E5 sessions also hit by another rule: {}
+  E6 sessions also hit by another rule: {'2026-06-17': ['E4']}
+  E6 sessions in window: 22
+
+FOMC exclusion list (both periods):
+  2020-01-28 Tue day before
+  2020-01-29 Wed statement day
+  2020-04-28 Tue day before
+  2020-04-29 Wed statement day
+  2020-06-09 Tue day before
+  2020-06-10 Wed statement day
+  2020-07-28 Tue day before
+  2020-07-29 Wed statement day
+  2020-09-15 Tue day before
+  2020-09-16 Wed statement day
+  2020-11-04 Wed day before
+  2020-11-05 Thu statement day
+  2020-12-15 Tue day before
+  2020-12-16 Wed statement day
+  2021-01-26 Tue day before
+  2021-01-27 Wed statement day
+  2021-03-16 Tue day before
+  2021-03-17 Wed statement day
+  2021-04-27 Tue day before
+  2021-04-28 Wed statement day
+  2021-06-15 Tue day before
+  2021-06-16 Wed statement day
+  2021-07-27 Tue day before
+  2021-07-28 Wed statement day
+  2021-09-21 Tue day before
+  2021-09-22 Wed statement day
+  2021-11-02 Tue day before
+  2021-11-03 Wed statement day
+  2021-12-14 Tue day before
+  2021-12-15 Wed statement day
+  2022-01-25 Tue day before
+  2022-01-26 Wed statement day
+  2022-03-15 Tue day before
+  2022-03-16 Wed statement day
+  2022-05-03 Tue day before
+  2022-05-04 Wed statement day
+  2022-06-14 Tue day before
+  2022-06-15 Wed statement day
+  2022-07-26 Tue day before
+  2022-07-27 Wed statement day
+  2022-09-20 Tue day before
+  2022-09-21 Wed statement day
+  2022-11-01 Tue day before
+  2022-11-02 Wed statement day
+  2022-12-13 Tue day before
+  2022-12-14 Wed statement day
+  2023-01-31 Tue day before
+  2023-02-01 Wed statement day
+  2023-03-21 Tue day before
+  2023-03-22 Wed statement day
+  2023-05-02 Tue day before
+  2023-05-03 Wed statement day
+  2023-06-13 Tue day before
+  2023-06-14 Wed statement day
+  2023-07-25 Tue day before
+  2023-07-26 Wed statement day
+  2023-09-19 Tue day before
+  2023-09-20 Wed statement day
+  2023-10-31 Tue day before
+  2023-11-01 Wed statement day
+  2023-12-12 Tue day before
+  2023-12-13 Wed statement day
+  2024-01-30 Tue day before
+  2024-01-31 Wed statement day
+  2024-03-19 Tue day before
+  2024-03-20 Wed statement day
+  2024-04-30 Tue day before
+  2024-05-01 Wed statement day
+  2024-06-11 Tue day before
+  2024-06-12 Wed statement day
+  2024-07-30 Tue day before
+  2024-07-31 Wed statement day
+  2024-09-17 Tue day before
+  2024-09-18 Wed statement day
+  2024-11-06 Wed day before
+  2024-11-07 Thu statement day
+  2024-12-17 Tue day before
+  2024-12-18 Wed statement day
+  2025-01-28 Tue day before
+  2025-01-29 Wed statement day
+  2025-03-18 Tue day before
+  2025-03-19 Wed statement day
+  2025-05-06 Tue day before
+  2025-05-07 Wed statement day
+  2025-06-17 Tue day before
+  2025-06-18 Wed statement day
+  2025-07-29 Tue day before
+  2025-07-30 Wed statement day
+  2025-09-16 Tue day before
+  2025-09-17 Wed statement day
+  2025-10-28 Tue day before
+  2025-10-29 Wed statement day
+  2025-12-09 Tue day before
+  2025-12-10 Wed statement day
+  2026-01-27 Tue day before
+  2026-01-28 Wed statement day
+  2026-03-17 Tue day before
+  2026-03-18 Wed statement day
+  2026-04-28 Tue day before
+  2026-04-29 Wed statement day
+  2026-06-16 Tue day before
+  2026-06-17 Wed statement day
+  2026-07-28 Tue day before
+  2026-07-29 Wed statement day
+  2026-09-15 Tue day before
+  2026-09-16 Wed statement day
+  2026-10-27 Tue day before
+  2026-10-28 Wed statement day
+
+No-RTH sessions:
+  session 2021-04-02 (Friday): 915 bars, first 2021-04-01 18:00:00-04:00, last 2021-04-02 09:14:00-04:00; next RTH session 2021-04-05; prev RTH session 2021-04-01
+  session 2023-04-07 (Friday): 915 bars, first 2023-04-06 18:00:00-04:00, last 2023-04-07 09:14:00-04:00; next RTH session 2023-04-10; prev RTH session 2023-04-06
+  session 2025-01-09 (Thursday): 930 bars, first 2025-01-08 18:00:00-05:00, last 2025-01-09 09:29:00-05:00; next RTH session 2025-01-10; prev RTH session 2025-01-08
+  session 2026-04-03 (Friday): 915 bars, first 2026-04-02 18:00:00-04:00, last 2026-04-03 09:14:00-04:00; next RTH session 2026-04-06; prev RTH session 2026-04-02

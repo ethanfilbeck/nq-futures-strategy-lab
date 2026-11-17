@@ -1,0 +1,37 @@
+# Reconstructed handoff snapshot in the cloud workspace: git clone of nq_bot_a48eaac.bundle, checkout a48eaac, extract working_tree_overlay.tar.gz; 55/55 overlay files matched WORKING_TREE_INVENTORY.txt
+# Python 3.13.18, numpy 2.5.4, pandas 3.0.5, pytest 9.1.1; no data/ folder present
+
+## python -m pytest tests/test_sessions.py -W error::RuntimeWarning
+...............                                                          [100%]
+
+======================= 136 passed in 209.70s (0:03:29) ========================
+
+## python scripts/check.py
+== Quality report ==
+FAIL               ruff             [*] 26 fixable with `--fix` (1 unsafe fix available with `--fix --unsafe-fixes`).  [0s]
+PASS               pytest           254 passed, 2 skipped in 216.01s (0:03:36)  [216s]
+PASS               prereg           OK: 11 pre-registrations match their frozen hashes.  [0s]
+PASS               prepublish       OK: 171 files checked, nothing secret or licensed found.  [0s]
+PASS               pip-audit        No known vulnerabilities found  [8s]
+FAIL               mypy             Found 20 errors in 4 files (checked 54 source files)  [11s]
+
+RESULT: FAILED
+
+## ruff failures by file (ruff check . --output-format concise)
+      5 docs/review_package_sessions_v4.2/code/tests/test_sessions.py
+     14 scripts/sessions_preflight/classify_holdout_exposure.py
+      2 scripts/sessions_preflight/coverage_audit.py
+      4 scripts/sessions_preflight/exposure_inventory.py
+     15 scripts/sessions_preflight/o2_population.py
+     14 scripts/sessions_preflight/reconcile_counts.py
+     11 scripts/sessions_preflight/verify_counts_and_rolls.py
+
+## mypy failures by file (python -m mypy nq_bot cli.py scripts)
+      5 scripts/sessions_preflight/classify_holdout_exposure.py
+      5 scripts/sessions_preflight/o2_population.py
+      6 scripts/sessions_preflight/reconcile_counts.py
+      4 scripts/sessions_preflight/verify_counts_and_rolls.py
+
+## same gates restricted to study code (excluding scripts/sessions_preflight and the docs/ package copies)
+All checks passed!
+Success: no issues found in 48 source files

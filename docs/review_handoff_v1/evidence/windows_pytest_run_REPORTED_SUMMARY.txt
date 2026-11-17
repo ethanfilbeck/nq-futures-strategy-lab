@@ -1,0 +1,31 @@
+# Windows test run of tests/test_sessions.py: SUMMARY AS REPORTED BY ETHAN (2026-11-12 23:23 CT)
+# This file is NOT the raw terminal output. The complete terminal output was not provided to Claude and is
+# not preserved here. See "To preserve the complete output" below.
+
+Environment (reported):
+  OS:          Windows 11
+  Shell:       PowerShell 7.7.0
+  Python:      3.12.10   (consistent with the cpython-312 .pyc files the run left in __pycache__/)
+  pytest:      9.2.0
+  numpy/pandas versions: not reported
+
+Working directory:  C:\Users\thebo\OneDrive\Documents\nq_bot
+Command:            py -m pytest tests/test_sessions.py -v
+
+Result (reported):
+  136 tests collected
+  136 passed, 0 failed, 0 skipped
+  13,745 warnings
+  Runtime: 146.03 s
+
+Earlier attempt (reported): run from C:\Windows\System32, which is not the project directory; it collected 0 tests.
+That attempt is not a test failure: pytest found no test files there.
+
+Tree state at the time (verified by Claude on the PC afterwards):
+  HEAD a48eaac8d7825ef8171d9762de27fcc33b3d3798; the 55 working-tree files match WORKING_TREE_INVENTORY.txt.
+  The run left __pycache__ files dated after the handoff manifest was written, and the working tree matched the
+  inventory both before and after it, so the run was on the handed-off tree.
+
+To preserve the complete output (PowerShell 7, from the project directory), run:
+  py -c "import sys,numpy,pandas,pytest; print(sys.version); print('numpy',numpy.__version__,'pandas',pandas.__version__,'pytest',pytest.__version__)" 2>&1 | Tee-Object -FilePath docs\review_handoff_v1\evidence\windows_pytest_test_sessions_full_output.txt
+  py -m pytest tests/test_sessions.py -v 2>&1 | Tee-Object -FilePath docs\review_handoff_v1\evidence\windows_pytest_test_sessions_full_output.txt -Append
