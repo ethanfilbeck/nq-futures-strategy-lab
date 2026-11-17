@@ -3,7 +3,7 @@
 # passes, so a new release must not be able to fail main unannounced. Dependabot proposes upgrades as pull
 # requests, where CI checks them first.
 ruff>=0.17.4,<0.18          # lint, import order, security rules (Bandit rule set), naive-datetime checks
-mypy>=2.4,<3              # type checking
+mypy>=2.4.1,<3              # type checking
 pip-audit>=2.10.1,<3        # known-vulnerability scan of dependencies
 types-PyYAML
 pandas-stubs>=3.1,<4      # typed pandas; the stubs target pandas 3.x
