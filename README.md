@@ -3,26 +3,30 @@
 > **Start here: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)** — the consolidated research status. No strategy in this project has been validated; that document says exactly where each one stands and what evidence would be needed.
 
 
-> **⚠️ Not a money-making bot.** 11 of 12 tested strategies failed. One (the pre-FOMC drift) passed and replicated
-> on two more markets (S&P 500 and Russell 2000), and is now being tested forward **on paper only**. This is a research and software-engineering
-> project, not trading advice. Nothing has been traded with real money.
+> **⚠️ Not a money-making bot. It never found one.** **All 12 tested strategies failed.** The last survivor,
+> the pre-FOMC drift, passed only on a price series contaminated by contract rolls; priced on the contracts a
+> trader actually held it fails its bar (t 2.50) and its holdout is **negative** (t −0.27). This is a research
+> and software-engineering project, not trading advice. **Nothing has been traded with real money, and nothing
+> here is a validated edge.**
 
 A Python research-and-execution system for Micro E-mini Nasdaq-100 futures (MNQ): causal feature pipeline,
 conservative bar-by-bar simulator, walk-forward and Monte Carlo testing, pre-registered hypotheses, a hard-limit
 risk engine, an **unattended paper-trading runner**, a TradingView port with an authenticated webhook receiver, and
 an Interactive Brokers **paper-only** execution adapter verified with 13 failure drills.
 
-The goal is **not** a bot that is forced to trade. It is a system that can say *no* — it said no 11 times — and
-that makes the one *yes* earn it.
+The goal is **not** a bot that is forced to trade. It is a system that can say *no*. It said no twelve times,
+including twice to results it had already published as passes. That is the result.
 
 ## Headline
 
 | | |
 |---|---|
 | Ideas tested (2019-05 → 2025-06 MNQ, real costs) | **12**, all but the first pre-registered and hashed before running |
-| Rejected | **11** |
-| Survivor | **H8 pre-FOMC drift**: passed on MNQ (t 3.02), weak but positive on 16 months of held-out MNQ data (t 0.34), **replicated on S&P 500 micro futures** (59 events, t 3.56) **and Russell 2000 micro futures** (59 events, t 2.45), beating random long holds in both |
-| Status of H8 | Replicated in two markets, **forward paper trading** on an IB paper account (`fomc-paper`), ~8 events a year. Not real money. |
+| Rejected | **12 — all of them** |
+| Survivors | **None.** H8 was retracted after a data defect was found in the series every result relied on |
+| What retracted it | Continuous futures splice **without back-adjustment**, so each quarterly roll printed the calendar spread as a price jump. That artifact was 16% of H8's net on MNQ and **60% on MES**. Priced on the actual contracts held: training **t 2.50** (bar 3.0), holdout **t −0.27** |
+| Post-search phase | Four further directions closed on published evidence before costing anything — see [`docs/RESEARCH_PHASE2_DAILY.md`](docs/RESEARCH_PHASE2_DAILY.md) |
+| Why no thirteenth idea | 7.5 years at t ≥ 3.5 needs a net Sharpe of **1.59** — above every published figure for a single liquid index future. [`scripts/preflight_power.py`](scripts/preflight_power.py) now refuses such tests before they cost a budget line |
 | Broker drills | 13 of 13 pass on an IB paper account; 3 bugs found and fixed |
 | Security review | Webhook receiver threat-modeled; 2 denial-of-service weaknesses found and fixed ([report](docs/SECURITY_WEBHOOK.md)) |
 
@@ -38,36 +42,64 @@ that makes the one *yes* earn it.
 | H5 VWAP pullback in a trend | pre-registered, t ≥ 3 | 1,399 | 0.94 | −$2,336 | **Fail** — [details](docs/RESULTS_FAMILY2.md) |
 | H6 turn of the month | pre-registered, t ≥ 3 + beat random longs | 73 | 1.14 | +$2,892 | **Fail** (worse than random long holds) — [details](docs/RESULTS_FAMILY3.md) |
 | H7 overnight-gap reversal | pre-registered, t ≥ 3 | 439 | 0.92 | −$3,742 | **Fail** — [details](docs/RESULTS_FAMILY3.md) |
-| **H8 pre-FOMC drift** (Lucca & Moench 2015) | pre-registered, t ≥ 3 + beat random longs | 48 | 3.34 | +$7,115 | **Pass** (t 3.02) — [details](docs/RESULTS_FAMILY3.md) |
-| ↳ H8 on held-out MNQ (2025-07 → 2026-10) | run once, rule frozen | 11 | — | +$368 | Consistent, weak (t 0.34) |
-| ↳ H8 on S&P 500 micro (MES), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 3.55 | +$5,141 (MES) | **Replicates** (t 3.56) — [details](docs/RESULTS_H8_ES_REPLICATION.md) |
-| ↳ H8 on Russell 2000 micro (M2K), 2019-05 → 2026-10 | pre-registered replication, run once | 59 | 2.29 | +$2,325 (M2K) | **Replicates** (t 2.45) — [details](docs/RESULTS_H8_M2K_REPLICATION.md) |
+| **H8 pre-FOMC drift** (Lucca & Moench 2015) | pre-registered, t ≥ 3 + beat random longs | 59 | — | — | **Fail** — see the retraction below |
+| ↳ H8 **on the actual contracts held** (definitive) | 31 individual MNQ contracts, 250,846 bars, entry and exit forced onto one contract | 59 | — | — | **Fail**: training **t 2.50**, holdout **t −0.27**, all-59 2.18 — [details](docs/RESULTS_H8_CONTRACT_LEVEL.md) |
+| ↳ ~~H8 on MNQ, spliced series~~ | *superseded* | 48 | 3.34 | +$7,115 | ~~Pass (t 3.02)~~ — **16% of this net was roll gaps** |
+| ↳ ~~H8 on S&P 500 micro (MES)~~ | *superseded* | 59 | 3.55 | +$5,141 | ~~Replicates (t 3.56)~~ — **60% of this net was roll gaps**; 1.66 adjusted |
+| ↳ ~~H8 on Russell 2000 micro (M2K)~~ | *superseded* | 59 | 2.29 | +$2,325 | ~~Replicates (t 2.45)~~ — **44% roll gaps**; 1.44 adjusted |
 | ↳ H8 on **gold** (MGC) — *negative control*, 2019-05 → 2026-10 | pre-registered, run once; clearing the bar would count **against** H8 | 55 | 1.41 | +$1,648 (MGC) | **Inconclusive** (t 0.59; −0.13 without its best trade) — [details](docs/RESULTS_H8_GOLD_CONTROL.md) |
 | H9 CPI / jobs-report days | pre-registered, t ≥ 3.5 + beat random longs | 141 | 1.05 | +$1,247 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 | H10 pre-holiday | pre-registered, t ≥ 3.5 + beat random longs | 59 | 1.84 | +$3,876 | **Fail** (t 1.70) — [details](docs/RESULTS_FAMILY4.md) |
 | H11 opening-hour trend after a high-range day | pre-registered, t ≥ 3.5 | 253 | 1.08 | +$1,983 | **Fail** — [details](docs/RESULTS_FAMILY4.md) |
 
-**Why H8 is still not "proven":** all three markets were tested on the same Fed meetings (48 of the 59 are the MNQ
-training dates), so luck specific to those particular meetings would show up in all three. The Russell 2000 test is the
-more informative replication (it moves less with the Nasdaq, and random long holds there lost money), but it is
-weaker (t 2.45) and rests on a few good meetings.
+**How H8 was retracted — the part of this project worth reading.** H8 cleared its bar, replicated on two more
+markets, and passed a placebo test that is still the strongest evidence it ever produced. Then an audit of the
+data pipeline found that a Databento continuous symbol splices quarterly contracts **without back-adjustment**,
+so every roll prints the calendar spread as a one-minute jump of +0.64% to +1.38%. Any hold spanning a roll
+booked that gap as profit it never received — and because quarterly rolls and FOMC meetings both land in the
+third week of March, June, September and December, the contamination was *systematic*, not random.
 
-A **negative control on gold** was then pre-registered and run once: gold carries no equity risk premium, so a
-drift there would have meant the effect belongs to those 59 dates rather than to stocks. Gold came in at t 0.59,
-and at −0.13 once its single best event is removed — no drift that clears the bar, which is what the equity
-explanation predicts. It is weak evidence rather than none: with 55 events the test could only have caught a
-large effect, and gold is not fully inert to the Fed because it tracks real interest rates. **No outcome of that
-control could have raised H8's status, and none did.** Paid replication stops here; the next real evidence is
-forward. Published
-research found the drift had faded in 2016–2019; it reappeared in 2020–2026, a period of unusual rate
-uncertainty. The deciding evidence is forward: FOMC meetings no test has seen.
+It was worth **16%** of H8's net on MNQ, **60%** on MES and **44%** on M2K ([`docs/AUDIT_2026_11_ROLLS.md`](docs/AUDIT_2026_11_ROLLS.md)).
+
+Adjusting a spliced series is only a proxy, so the fix was to buy the 31 individual MNQ contracts covering all
+59 events — 250,846 bars for $0.92 — and re-run with an enforced invariant that entry and exit occur on the
+*same* contract. Result: training **t 2.50** against a 3.0 bar, holdout **t −0.27**, all 59 events 2.18.
+([`docs/RESULTS_H8_CONTRACT_LEVEL.md`](docs/RESULTS_H8_CONTRACT_LEVEL.md).) The record is **0 of 12**.
+
+Two further things the audit established, both of which generalise past this project:
+
+- **Eleven of twelve fail at literally zero execution cost.** Set commissions and slippage to zero and only H8
+  clears t 3.0. The gross edges were smaller than one tick, so the problem was never costs.
+- **Selection among the intraday family was actively harmful.** Probability of backtest overfitting is 11.3%
+  across all twelve but **56.6% within the intraday family, with a negative out-of-sample Sharpe**
+  ([`docs/PBO_ANALYSIS.md`](docs/PBO_ANALYSIS.md), independently audited).
+
+The gold negative control, the placebo tests and the Nikkei attempt are described in `docs/`. None of them
+changed the verdict, because the verdict was decided by the data defect rather than by any of them.
+
+**What happened after the search closed.** Four more directions were assessed and closed **before spending
+anything**, mostly on published out-of-sample refutations:
+
+| Direction | Closed because |
+|---|---|
+| Calendar-spread carry | Needs net Sharpe 1.28–1.59; the owned data has **0** timestamps with two contracts quoted at once, so it cannot price a spread at all ([feasibility](docs/FEASIBILITY_CALENDAR_SPREAD.md)) |
+| Time-series momentum | Huang et al., JFE 2020: for **individual** assets, 45 of 55 have negative out-of-sample R² |
+| Volatility management | Cederburg et al., JFE 2020: market-factor OOS Sharpe **0.42 managed vs 0.46 unmanaged** |
+| FOMC-cycle even weeks | Knox & Vissing-Jorgensen (FEDS 2026-023), **by an original author**: no even-week premium apart from day 0, and a sign flip in 2017–2021 ([audit](docs/FOMC_CYCLE_LITERATURE_AUDIT.md)) |
+
+The last of those also exposed a failure in the research process itself: rebuttals were searched for on the
+candidates being *discarded* but not on the one being advanced. `docs/RESEARCH_PROTOCOL.md` now requires a
+documented refutation search — including later work by the original authors — before any candidate may be
+called researchable.
 
 **Methodology checks:** H3 reproduced a published finding (the 2–3 a.m. ET drift was +2.27 pts/day before 2021 and
 +0.16 after). Long-only calendar ideas (H6, H9, H10) are benchmarked against random long holds of the same length,
 because in a rising market any long-only rule looks profitable.
 
-**Strategy search on this data is closed.** Each extra idea tested on the same data raises the odds of a lucky pass;
-the bar rose from t ≥ 3.0 to t ≥ 3.5 as the count grew. New ideas need new data.
+**The search is closed, and the bar did not move to accommodate it.** Each extra idea tested on the same data
+raises the odds of a lucky pass; the bar rose from t ≥ 3.0 to t ≥ 3.5 as the count grew and never fell.
+`scripts/preflight_power.py` now refuses a hypothesis whose sample cannot reach its bar *even if the hypothesis
+is true* — which, on 7.5 years of MNQ at t ≥ 3.5, is all of them.
 
 ## Automated paper trading (Sniper Den-style architecture, simulated orders only)
 
@@ -164,7 +196,7 @@ scripts/validate_data.py    sanity-checks a bar file before a backtest uses it
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env                                    # then fill in keys
-pytest -q                                               # 79 passed, 2 skipped (those need licensed data)
+pytest -q                                               # 249 passed, 7 skipped (those need licensed data)
 ```
 
 ## Quality gates
@@ -193,7 +225,9 @@ python cli.py walkforward --csv data/mnq_train.csv --folds 5
 python cli.py paper                        # IBKR paper account, needs TWS/Gateway running
 python cli.py reset-kill                   # clear the drawdown kill switch, deliberately
 python cli.py drill status                 # IB paper drills for the execution mechanics (docs/PAPER_DRILLS.md)
-python cli.py fomc-paper                   # forward paper test of H8 at the next FOMC (docs/FOMC_PAPER.md)
+python cli.py fomc-paper                   # paper-only FOMC runner. H8 is RETRACTED (see above); the
+                                           # forward pre-registration is unsigned, so this is plumbing,
+                                           # not a test of anything (docs/FOMC_PAPER.md)
 python cli.py paper-replay --csv data/mnq_train.csv --days 5   # rehearse the paper runner on real past sessions
 python cli.py paper-live                   # live data, SIMULATED orders (needs Databento live)
 python cli.py paper-live --strategy tradingview --webhook   # TradingView alerts in, simulated orders out
