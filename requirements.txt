@@ -6,4 +6,4 @@ pytest>=8.0
 # real-time paper/live trading via Interactive Brokers (TWS or IB Gateway must be running)
 ib_async>=1.0
 # historical CME data download (needs DATABENTO_API_KEY)
-databento>=0.40
+databento>=0.90.0
